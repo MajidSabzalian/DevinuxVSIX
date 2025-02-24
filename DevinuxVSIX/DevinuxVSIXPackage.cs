@@ -48,6 +48,9 @@ namespace DevinuxVSIX
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await ClassContextMenuCommand.InitializeAsync(this);
+            await CreateServicesFromClass.InitializeAsync(this);
+            await CreateRepositoriesFromClass.InitializeAsync(this);
+            await CreateInterfacesFromClass.InitializeAsync(this);
         }
 
         #endregion

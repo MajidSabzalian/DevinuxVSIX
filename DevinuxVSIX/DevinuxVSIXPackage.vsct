@@ -1,15 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-	<Extern href="stdidcmd.h"/>
-	<Extern href="vsshlids.h"/>
+	<Extern href="stdidcmd.h" />
+	<Extern href="vsshlids.h" />
 	<Commands package="guidDevinuxVSIXPackage">
 		<Groups>
 			<Group guid="guidDevinuxVSIXPackageCmdSet" id="MyMenuGroup" priority="0x0600">
-				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
 			</Group>
 
 			<Group guid="guidDevinuxVSIXPackageCmdSet" id="SubMenuGroup" priority="0x0602">
 				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="SubMenu" />
+			</Group>
+			<Group guid="guidDevinuxVSIXPackageCmdSet" id="MyMenuGroup" priority="0x0600">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
 			</Group>
 		</Groups>
 
@@ -27,7 +30,28 @@
 				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="SubMenuGroup" />
 				<!--<Icon guid="guidImages" id="bmpPic1" />-->
 				<Strings>
-					<ButtonText>Create DDD Folders</ButtonText>
+					<ButtonText>Create DDD-Architectories Folders</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidDevinuxVSIXPackageCmdSet" id="cmdidCreateServicesFromClass" priority="0x0100" type="Button">
+				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="MyMenuGroup" />
+				<Icon guid="guidImages1" id="bmpPic1" />
+				<Strings>
+					<ButtonText>Create Application Services from Class</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidDevinuxVSIXPackageCmdSet" id="cmdidCreateRepositoriesFromClass" priority="0x0100" type="Button">
+				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="MyMenuGroup" />
+				<Icon guid="guidImages2" id="bmpPic1" />
+				<Strings>
+					<ButtonText>Create Repositories from Class</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidDevinuxVSIXPackageCmdSet" id="cmdidCreateInterfacesFromClass" priority="0x0100" type="Button">
+				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="MyMenuGroup" />
+				<Icon guid="guidImages3" id="bmpPic1" />
+				<Strings>
+					<ButtonText>Create Interfaces from Class</ButtonText>
 				</Strings>
 			</Button>
 		</Buttons>
@@ -35,6 +59,11 @@
 		<!--<Bitmaps>
 			<Bitmap guid="guidImages" href="Resources\Images.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows"/>
 		</Bitmaps>-->
+		<Bitmaps>
+			<Bitmap guid="guidImages1" href="Resources\CreateServicesFromClass.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+			<Bitmap guid="guidImages2" href="Resources\CreateRepositoriesFromClass.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+			<Bitmap guid="guidImages3" href="Resources\CreateInterfacesFromClass.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+		</Bitmaps>
 	</Commands>
 	<Symbols>
 		<!-- This is the package guid. -->
@@ -42,13 +71,45 @@
 
 		<!-- This is the guid used to group the menu commands together -->
 		<GuidSymbol name="guidDevinuxVSIXPackageCmdSet" value="{91a50506-7139-42b0-ac62-e378bc222b5a}">
-			<IDSymbol name="SubMenu" value="0x1001"/>
-			<IDSymbol name="SubMenuGroup" value="0x1000"/>
+			<IDSymbol name="SubMenu" value="0x1001" />
+			<IDSymbol name="SubMenuGroup" value="0x1000" />
 			<IDSymbol name="MyMenuGroup" value="0x1020" />
 			<IDSymbol name="cmdidMyCommand" value="0x0100" />
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidCreateServicesFromClass" />
+			<IDSymbol value="4129" name="cmdidCreateRepositoriesFromClass" />
+			<IDSymbol value="4130" name="cmdidCreateInterfacesFromClass" />
 		</GuidSymbol>
 
 		<GuidSymbol name="guidImages" value="{1577c5dc-9ef7-4039-8117-3229dcb107c8}">
+			<IDSymbol name="bmpPic1" value="1" />
+			<IDSymbol name="bmpPic2" value="2" />
+			<IDSymbol name="bmpPicSearch" value="3" />
+			<IDSymbol name="bmpPicX" value="4" />
+			<IDSymbol name="bmpPicArrows" value="5" />
+			<IDSymbol name="bmpPicStrikethrough" value="6" />
+		</GuidSymbol>
+
+
+		<GuidSymbol value="{57280e59-d763-4a02-bf03-5ce4d9c2534e}" name="guidImages1">
+			<IDSymbol name="bmpPic1" value="1" />
+			<IDSymbol name="bmpPic2" value="2" />
+			<IDSymbol name="bmpPicSearch" value="3" />
+			<IDSymbol name="bmpPicX" value="4" />
+			<IDSymbol name="bmpPicArrows" value="5" />
+			<IDSymbol name="bmpPicStrikethrough" value="6" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{ff71cd9d-7f50-411d-b769-f3ae2504a493}" name="guidImages2">
+			<IDSymbol name="bmpPic1" value="1" />
+			<IDSymbol name="bmpPic2" value="2" />
+			<IDSymbol name="bmpPicSearch" value="3" />
+			<IDSymbol name="bmpPicX" value="4" />
+			<IDSymbol name="bmpPicArrows" value="5" />
+			<IDSymbol name="bmpPicStrikethrough" value="6" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{e27eaf1e-fd6b-400d-a15f-698fe8caa2fe}" name="guidImages3">
 			<IDSymbol name="bmpPic1" value="1" />
 			<IDSymbol name="bmpPic2" value="2" />
 			<IDSymbol name="bmpPicSearch" value="3" />
