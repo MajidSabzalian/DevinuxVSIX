@@ -7,12 +7,8 @@
 			<Group guid="guidDevinuxVSIXPackageCmdSet" id="MyMenuGroup" priority="0x0600">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
 			</Group>
-
 			<Group guid="guidDevinuxVSIXPackageCmdSet" id="SubMenuGroup" priority="0x0602">
 				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="SubMenu" />
-			</Group>
-			<Group guid="guidDevinuxVSIXPackageCmdSet" id="MyMenuGroup" priority="0x0600">
-				<Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
 			</Group>
 		</Groups>
 
@@ -25,7 +21,7 @@
 			</Menu>
 		</Menus>
 
-		<Buttons>
+		<Buttons >
 			<Button guid="guidDevinuxVSIXPackageCmdSet" id="cmdidMyCommand" priority="0x0100" type="Button">
 				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="SubMenuGroup" />
 				<!--<Icon guid="guidImages" id="bmpPic1" />-->
@@ -34,21 +30,21 @@
 				</Strings>
 			</Button>
 			<Button guid="guidDevinuxVSIXPackageCmdSet" id="cmdidCreateServicesFromClass" priority="0x0100" type="Button">
-				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="MyMenuGroup" />
+				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="SubMenuGroup" />
 				<Icon guid="guidImages1" id="bmpPic1" />
 				<Strings>
 					<ButtonText>Create Application Services from Class</ButtonText>
 				</Strings>
 			</Button>
 			<Button guid="guidDevinuxVSIXPackageCmdSet" id="cmdidCreateRepositoriesFromClass" priority="0x0100" type="Button">
-				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="MyMenuGroup" />
+				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="SubMenuGroup" />
 				<Icon guid="guidImages2" id="bmpPic1" />
 				<Strings>
 					<ButtonText>Create Repositories from Class</ButtonText>
 				</Strings>
 			</Button>
 			<Button guid="guidDevinuxVSIXPackageCmdSet" id="cmdidCreateInterfacesFromClass" priority="0x0100" type="Button">
-				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="MyMenuGroup" />
+				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="SubMenuGroup" />
 				<Icon guid="guidImages3" id="bmpPic1" />
 				<Strings>
 					<ButtonText>Create Interfaces from Class</ButtonText>
@@ -75,10 +71,9 @@
 			<IDSymbol name="SubMenuGroup" value="0x1000" />
 			<IDSymbol name="MyMenuGroup" value="0x1020" />
 			<IDSymbol name="cmdidMyCommand" value="0x0100" />
-			<IDSymbol value="4128" name="MyMenuGroup" />
-			<IDSymbol value="256" name="cmdidCreateServicesFromClass" />
-			<IDSymbol value="4129" name="cmdidCreateRepositoriesFromClass" />
-			<IDSymbol value="4130" name="cmdidCreateInterfacesFromClass" />
+			<IDSymbol name="cmdidCreateServicesFromClass" value="0x2001" />
+			<IDSymbol name="cmdidCreateRepositoriesFromClass" value="0x2002" />
+			<IDSymbol name="cmdidCreateInterfacesFromClass" value="0x2003" />
 		</GuidSymbol>
 
 		<GuidSymbol name="guidImages" value="{1577c5dc-9ef7-4039-8117-3229dcb107c8}">

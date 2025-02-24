@@ -17,7 +17,7 @@ namespace DevinuxVSIX
         /// <summary>
         /// Command ID.
         /// </summary>
-        public const int CommandId = 256;
+        public const int CommandId = 0x2001;
 
         /// <summary>
         /// Command menu group (command set GUID).
