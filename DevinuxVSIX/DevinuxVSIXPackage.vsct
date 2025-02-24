@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<Extern href="stdidcmd.h"/>
+	<Extern href="vsshlids.h"/>
+	<Commands package="guidDevinuxVSIXPackage">
+		<Groups>
+			<Group guid="guidDevinuxVSIXPackageCmdSet" id="MyMenuGroup" priority="0x0600">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+			</Group>
+
+			<Group guid="guidDevinuxVSIXPackageCmdSet" id="SubMenuGroup" priority="0x0602">
+				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="SubMenu" />
+			</Group>
+		</Groups>
+
+		<Menus>
+			<Menu guid="guidDevinuxVSIXPackageCmdSet" id="SubMenu" priority="0x0200" type="Menu">
+				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="MyMenuGroup" />
+				<Strings>
+					<ButtonText>Devinux</ButtonText>
+				</Strings>
+			</Menu>
+		</Menus>
+
+		<Buttons>
+			<Button guid="guidDevinuxVSIXPackageCmdSet" id="cmdidMyCommand" priority="0x0100" type="Button">
+				<Parent guid="guidDevinuxVSIXPackageCmdSet" id="SubMenuGroup" />
+				<!--<Icon guid="guidImages" id="bmpPic1" />-->
+				<Strings>
+					<ButtonText>Create DDD Folders</ButtonText>
+				</Strings>
+			</Button>
+		</Buttons>
+
+		<!--<Bitmaps>
+			<Bitmap guid="guidImages" href="Resources\Images.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows"/>
+		</Bitmaps>-->
+	</Commands>
+	<Symbols>
+		<!-- This is the package guid. -->
+		<GuidSymbol name="guidDevinuxVSIXPackage" value="{280a3c85-a8ac-4431-a3cd-5ce227e01fee}" />
+
+		<!-- This is the guid used to group the menu commands together -->
+		<GuidSymbol name="guidDevinuxVSIXPackageCmdSet" value="{91a50506-7139-42b0-ac62-e378bc222b5a}">
+			<IDSymbol name="SubMenu" value="0x1001"/>
+			<IDSymbol name="SubMenuGroup" value="0x1000"/>
+			<IDSymbol name="MyMenuGroup" value="0x1020" />
+			<IDSymbol name="cmdidMyCommand" value="0x0100" />
+		</GuidSymbol>
+
+		<GuidSymbol name="guidImages" value="{1577c5dc-9ef7-4039-8117-3229dcb107c8}">
+			<IDSymbol name="bmpPic1" value="1" />
+			<IDSymbol name="bmpPic2" value="2" />
+			<IDSymbol name="bmpPicSearch" value="3" />
+			<IDSymbol name="bmpPicX" value="4" />
+			<IDSymbol name="bmpPicArrows" value="5" />
+			<IDSymbol name="bmpPicStrikethrough" value="6" />
+		</GuidSymbol>
+	</Symbols>
+</CommandTable>
