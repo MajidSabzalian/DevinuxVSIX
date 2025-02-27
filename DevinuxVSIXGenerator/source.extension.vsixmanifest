@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="DevinuxVSIX.b7284a02-2f5a-49b0-bfa1-6e7fb971d52c" Version="1.0" Language="en-US" Publisher="Company" />
-    <DisplayName>DevinuxVSIX</DisplayName>
+    <Identity Id="DevinuxVSIXGenerator.183c2fb4-3b00-49b1-b8c8-925889766c67" Version="1.0" Language="en-US" Publisher="Company" />
+    <DisplayName>DevinuxVSIXGenerator</DisplayName>
     <Description>Empty VSIX Project.</Description>
   </Metadata>
   <Installation>

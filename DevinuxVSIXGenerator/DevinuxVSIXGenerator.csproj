@@ -10,11 +10,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{A319F5A8-79E3-4A8F-83D2-6383C75CEBE1}</ProjectGuid>
+    <ProjectGuid>{0D907BD1-AE05-470C-B774-5ADC38C310F8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DevinuxVSIX</RootNamespace>
-    <AssemblyName>DevinuxVSIX</AssemblyName>
+    <RootNamespace>DevinuxVSIXGenerator</RootNamespace>
+    <AssemblyName>DevinuxVSIXGenerator</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <UseCodebase>true</UseCodebase>
@@ -45,12 +45,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ClassContextMenuCommand.cs" />
-    <Compile Include="CreateInterfacesFromClass.cs" />
-    <Compile Include="CreateRepositoriesFromClass.cs" />
-    <Compile Include="CreateServicesFromClass.cs" />
+    <Compile Include="Commands.cs" />
+    <Compile Include="DevinuxCommand.cs" />
+    <Compile Include="DevinuxVSIXGeneratorPackage1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DevinuxVSIXGeneratorPackage.vsct</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DevinuxVSIXPackage.cs" />
+    <Compile Include="DevinuxVSIXGeneratorPackage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="source.extension.vsixmanifest">
@@ -71,15 +74,14 @@
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.12.2069" />
   </ItemGroup>
   <ItemGroup>
-    <VSCTCompile Include="DevinuxVSIXPackage.vsct">
+    <VSCTCompile Include="DevinuxVSIXGeneratorPackage.vsct">
+      <Generator>VsctGenerator</Generator>
       <ResourceName>Menus.ctmenu</ResourceName>
+      <LastGenOutput>DevinuxVSIXGeneratorPackage1.cs</LastGenOutput>
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\ClassContextMenuCommand.png" />
-    <Content Include="Resources\CreateInterfacesFromClass.png" />
-    <Content Include="Resources\CreateRepositoriesFromClass.png" />
-    <Content Include="Resources\CreateServicesFromClass.png" />
+    <Content Include="Resources\Command1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

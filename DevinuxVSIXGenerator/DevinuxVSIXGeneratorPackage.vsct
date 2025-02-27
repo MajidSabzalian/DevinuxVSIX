@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<Extern href="stdidcmd.h"/>
+	<Extern href="vsshlids.h"/>
+	<Commands package="guidDevinuxVSIXGeneratorPackage">
+		<Groups>
+			<Group guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuGroup" priority="0x0600">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+			</Group>
+			<Group guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenuGroup" priority="0x0601">
+				<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenu"/>
+			</Group>
+		</Groups>
+		<Menus>
+			<Menu guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenu"  priority="0x0200" type="Menu">
+				<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuGroup" />
+				<Strings>
+					<ButtonText>Devinux</ButtonText>
+				</Strings>
+			</Menu>
+		</Menus>
+		<Buttons>
+			<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateDDDFolders" priority="0x0100" type="Button">
+				<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenuGroup" />
+				<Strings>
+					<ButtonText>Create DDD-Architectories Folders</ButtonText>
+				</Strings>
+			</Button>
+		<!--</Buttons>
+		<Buttons>-->
+			<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateApplicationServices" priority="0x0200" type="Button">
+				<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenuGroup" />
+				<Strings>
+					<ButtonText>Create Application Services from Class</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="sep1" priority="0x0201" type="Button">
+				<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenuGroup" />
+				<Strings>
+					<ButtonText>-</ButtonText>
+				</Strings>
+			</Button>
+		</Buttons>
+	</Commands>
+
+	<Symbols>
+		<GuidSymbol name="guidDevinuxVSIXGeneratorPackage" value="{94b7ee34-2d2d-435f-a20a-4ea0bd39677e}" />
+		<GuidSymbol name="guidDevinuxVSIXGeneratorPackageCmdSet" value="{5be1864c-4c5d-44cd-b147-50b40b38c8e4}">
+			<IDSymbol name="DevinuxMenuGroup" value="0x1000" />
+			<IDSymbol name="DevinuxMenuSubmenu" value="0x1001" />
+			<IDSymbol name="DevinuxMenuSubmenuGroup" value="0x1002" />
+			<IDSymbol name="CreateDDDFolders" value="0x1003" />
+			<!-- -->
+			<IDSymbol name="CreateApplicationService" value="0x1004" />
+			<IDSymbol name="CreateApplicationInterface" value="0x1005" />
+			<IDSymbol name="CreateApplicationMapper" value="0x1006" />
+			<IDSymbol name="CreateApplicationModel" value="0x1007" />
+			<!-- -->
+			<IDSymbol name="CreatePersistenceDatabaseContext" value="0x1008" />
+			<IDSymbol name="CreatePersistenceInterface" value="0x1009" />
+			<IDSymbol name="CreatePersistenceRepository" value="0x1010" />
+			<!-- -->
+			<IDSymbol name="CreateApiInterface" value="0x1010" />
+			<IDSymbol name="sep1" value="0x9090" />
+		</GuidSymbol>
+	</Symbols>
+</CommandTable>
