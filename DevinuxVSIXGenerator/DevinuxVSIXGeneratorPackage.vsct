@@ -2,12 +2,22 @@
 <CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<Extern href="stdidcmd.h"/>
 	<Extern href="vsshlids.h"/>
+
 	<Commands package="guidDevinuxVSIXGeneratorPackage">
 		<Groups>
 			<Group guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuGroup" priority="0x0600">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
 			</Group>
-			<Group guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenuGroup" priority="0x0601">
+			<Group guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddMain" priority="0x0601">
+				<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenu"/>
+			</Group>
+			<Group guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsApplication" priority="0x0602">
+				<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenu"/>
+			</Group>
+			<Group guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsPersistence" priority="0x0603">
+				<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenu"/>
+			</Group>
+			<Group guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsInterface" priority="0x0604">
 				<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenu"/>
 			</Group>
 		</Groups>
@@ -19,49 +29,127 @@
 				</Strings>
 			</Menu>
 		</Menus>
+
 		<Buttons>
-			<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateDDDFolders" priority="0x0100" type="Button">
-				<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenuGroup" />
-				<Strings>
-					<ButtonText>Create DDD-Architectories Folders</ButtonText>
-				</Strings>
-			</Button>
-		<!--</Buttons>
-		<Buttons>-->
-			<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateApplicationServices" priority="0x0200" type="Button">
-				<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenuGroup" />
-				<Strings>
-					<ButtonText>Create Application Services from Class</ButtonText>
-				</Strings>
-			</Button>
-			<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="sep1" priority="0x0201" type="Button">
-				<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="DevinuxMenuSubmenuGroup" />
-				<Strings>
-					<ButtonText>-</ButtonText>
-				</Strings>
-			</Button>
+			<Buttons>
+				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateDDDFolders" priority="0x0100" type="Button">
+					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddMain" />
+					<Strings>
+						<ButtonText>Create DDD-Arch Folders</ButtonText>
+					</Strings>
+				</Button>
+			</Buttons>
+			<Buttons>
+				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateApplicationService" priority="0x0100" type="Button">
+					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsApplication" />
+					<Strings>
+						<ButtonText>Create Application Service</ButtonText>
+					</Strings>
+				</Button>
+
+				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateApplicationInterface" priority="0x0100" type="Button">
+					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsApplication" />
+					<Strings>
+						<ButtonText>Create Application Interface</ButtonText>
+					</Strings>
+				</Button>
+
+				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateApplicationMapper" priority="0x0100" type="Button">
+					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsApplication" />
+					<Strings>
+						<ButtonText>Create Application Mapper</ButtonText>
+					</Strings>
+				</Button>
+
+				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateApplicationModel" priority="0x0100" type="Button">
+					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsApplication" />
+					<Strings>
+						<ButtonText>Create Application Model</ButtonText>
+					</Strings>
+				</Button>
+			</Buttons>
+			<Buttons>
+				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreatePersistenceDbContext" priority="0x0100" type="Button">
+					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsPersistence" />
+					<Strings>
+						<ButtonText>Create Persistence DbContext</ButtonText>
+					</Strings>
+				</Button>
+
+				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreatePersistenceDbContextInterface" priority="0x0100" type="Button">
+					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsPersistence" />
+					<Strings>
+						<ButtonText>Create Persistence DbContext Interface</ButtonText>
+					</Strings>
+				</Button>
+
+				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreatePersistenceInterface" priority="0x0100" type="Button">
+					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsPersistence" />
+					<Strings>
+						<ButtonText>Create Persistence Interface</ButtonText>
+					</Strings>
+				</Button>
+
+				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreatePersistenceRepository" priority="0x0100" type="Button">
+					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsPersistence" />
+					<Strings>
+						<ButtonText>Create Persistence Repository</ButtonText>
+					</Strings>
+				</Button>
+			</Buttons>
+			<Buttons>
+				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateApiController" priority="0x0100" type="Button">
+					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsInterface" />
+					<Strings>
+						<ButtonText>Create Api Controller</ButtonText>
+					</Strings>
+				</Button>
+
+				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateApiModel" priority="0x0100" type="Button">
+					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsInterface" />
+					<Strings>
+						<ButtonText>Create Api Model</ButtonText>
+					</Strings>
+				</Button>
+
+				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateApiMapper" priority="0x0100" type="Button">
+					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsInterface" />
+					<Strings>
+						<ButtonText>Create Api Mapper</ButtonText>
+					</Strings>
+				</Button>
+			</Buttons>
 		</Buttons>
 	</Commands>
 
 	<Symbols>
 		<GuidSymbol name="guidDevinuxVSIXGeneratorPackage" value="{94b7ee34-2d2d-435f-a20a-4ea0bd39677e}" />
 		<GuidSymbol name="guidDevinuxVSIXGeneratorPackageCmdSet" value="{5be1864c-4c5d-44cd-b147-50b40b38c8e4}">
+			<!-- ////// ////// ////// ////// ////// ////// ////// ////// ////// ////// -->
 			<IDSymbol name="DevinuxMenuGroup" value="0x1000" />
 			<IDSymbol name="DevinuxMenuSubmenu" value="0x1001" />
-			<IDSymbol name="DevinuxMenuSubmenuGroup" value="0x1002" />
+			<!-- ////// ////// ////// ////// ////// ////// ////// ////// ////// ////// -->
+			<IDSymbol name="GroupDddMain" value="0x2001" />
+			<IDSymbol name="GroupDddCqrsApplication" value="0x2002" />
+			<IDSymbol name="GroupDddCqrsPersistence" value="0x2003" />
+			<IDSymbol name="GroupDddCqrsInterface" value="0x2004" />
 			<IDSymbol name="CreateDDDFolders" value="0x1003" />
-			<!-- -->
+			<!-- ////// ////// ////// ////// ////// ////// ////// ////// ////// ////// -->
 			<IDSymbol name="CreateApplicationService" value="0x1004" />
 			<IDSymbol name="CreateApplicationInterface" value="0x1005" />
 			<IDSymbol name="CreateApplicationMapper" value="0x1006" />
 			<IDSymbol name="CreateApplicationModel" value="0x1007" />
-			<!-- -->
-			<IDSymbol name="CreatePersistenceDatabaseContext" value="0x1008" />
-			<IDSymbol name="CreatePersistenceInterface" value="0x1009" />
-			<IDSymbol name="CreatePersistenceRepository" value="0x1010" />
-			<!-- -->
-			<IDSymbol name="CreateApiInterface" value="0x1010" />
-			<IDSymbol name="sep1" value="0x9090" />
+			<!-- ////// ////// ////// ////// ////// ////// ////// ////// ////// ////// -->
+			<IDSymbol name="CreatePersistenceDbContext" value="0x1008" />
+			<IDSymbol name="CreatePersistenceDbContextInterface" value="0x1009" />
+			<IDSymbol name="CreatePersistenceInterface" value="0x1010" />
+			<IDSymbol name="CreatePersistenceRepository" value="0x1011" />
+			<!-- ////// ////// ////// ////// ////// ////// ////// ////// ////// ////// -->
+			<IDSymbol name="CreateApiController" value="0x1012" />
+			<IDSymbol name="CreateApiModel" value="0x1013" />
+			<IDSymbol name="CreateApiMapper" value="0x1014" />
+			<!-- ////// ////// ////// ////// ////// ////// ////// ////// ////// ////// -->
+			<!-- ////// ////// ////// ////// ////// ////// ////// ////// ////// ////// -->
 		</GuidSymbol>
 	</Symbols>
 </CommandTable>

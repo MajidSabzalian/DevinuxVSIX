@@ -25,16 +25,21 @@ namespace DevinuxVSIXGenerator
     {
         public const int DevinuxMenuGroup = 0x1000;
         public const int DevinuxMenuSubmenu = 0x1001;
-        public const int DevinuxMenuSubmenuGroup = 0x1002;
+        public const int GroupDddMain = 0x2001;
+        public const int GroupDddCqrsApplication = 0x2002;
+        public const int GroupDddCqrsPersistence = 0x2003;
+        public const int GroupDddCqrsInterface = 0x2004;
         public const int CreateDDDFolders = 0x1003;
         public const int CreateApplicationService = 0x1004;
         public const int CreateApplicationInterface = 0x1005;
         public const int CreateApplicationMapper = 0x1006;
         public const int CreateApplicationModel = 0x1007;
-        public const int CreatePersistenceDatabaseContext = 0x1008;
-        public const int CreatePersistenceInterface = 0x1009;
-        public const int CreatePersistenceRepository = 0x1010;
-        public const int CreateApiInterface = 0x1010;
-        public const int sep1 = 0x9090;
+        public const int CreatePersistenceDbContext = 0x1008;
+        public const int CreatePersistenceDbContextInterface = 0x1009;
+        public const int CreatePersistenceInterface = 0x1010;
+        public const int CreatePersistenceRepository = 0x1011;
+        public const int CreateApiController = 0x1012;
+        public const int CreateApiModel = 0x1013;
+        public const int CreateApiMapper = 0x1014;
     }
 }
