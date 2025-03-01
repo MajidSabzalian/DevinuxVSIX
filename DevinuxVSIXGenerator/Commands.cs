@@ -152,6 +152,64 @@ using Devinux.AutoDI;
     }}
     ".SaveFile($"{GetActiveProjectFolderPath()}//{DDDArchitectoriesInformation.Application}//Services//{model.Name}//Commands//Delete//DeleteCommandHandler.cs"); ;
                     }
+                    // select query
+                    {
+                        $@"
+    using AutoMapper;
+    using {NameSpace}.Application.Contracts.Repositories;
+    using {NameSpace}.Common.Application.CommandPattern;
+    using {NameSpace}.Common.Application.ResponseModel.Genereic;
+{_using}
+
+    namespace {NameSpace}.{DDDArchitectoriesInformation.Application}.Services.{model.Name}.Queries.Select;
+    [DevinuxServiceScope]
+    public class SelectQueryHandler : IQueryHandler<SelectQuery, SelectQueryDto>
+    {{
+        private readonly IMapper _mapper;
+        private readonly I{model.Name}QueryRepository _qryRepo;
+        public SelectQueryHandler(I{model.Name}QueryRepository qryRepo,IMapper mapper)
+        {{
+            _qryRepo = qryRepo;
+            _mapper = mapper;
+        }}
+
+        public async Task<SelectQueryDto> Handle(SelectQuery query, CancellationToken ct)
+        {{
+            var _model = await _qryRepo.SelectAsync(query.Id , ct);
+            return _mapper.Map<SelectQueryDto>(_model);
+        }}
+    }}
+    ".SaveFile($"{GetActiveProjectFolderPath()}//{DDDArchitectoriesInformation.Application}//Services//{model.Name}//Queries//Select//SelectQueryHandler.cs"); ;
+                    }
+                    // List query
+                    {
+                        $@"
+    using AutoMapper;
+    using {NameSpace}.Application.Contracts.Repositories;
+    using {NameSpace}.Common.Application.CommandPattern;
+    using {NameSpace}.Common.Application.ResponseModel.Genereic;
+{_using}
+
+    namespace {NameSpace}.{DDDArchitectoriesInformation.Application}.Services.{model.Name}.Queries.List;
+    [DevinuxServiceScope]
+    public class ListQueryHandler : IQueryHandler<ListQuery, List<ListQueryDto>>
+    {{
+        private readonly IMapper _mapper;
+        private readonly I{model.Name}QueryRepository _qryRepo;
+        public ListQueryHandler(I{model.Name}QueryRepository qryRepo,IMapper mapper)
+        {{
+            _qryRepo = qryRepo;
+            _mapper = mapper;
+        }}
+
+        public async Task<List<ListQueryDto>> Handle(ListQuery query, CancellationToken ct)
+        {{
+            var _model = await _qryRepo.ListAsync(query.Page , query.PageSize , ct);
+            return _model.Select(x => _mapper.Map<ListQueryDto>(x)).ToList();
+        }}
+    }}
+    ".SaveFile($"{GetActiveProjectFolderPath()}//{DDDArchitectoriesInformation.Application}//Services//{model.Name}//Queries//List//ListQueryHandler.cs"); ;
+                    }
                 }
             }
             else
@@ -241,6 +299,50 @@ using Devinux.AutoDI;
         public bool Result {{ set; get; }}
     }}
     ".SaveFile($"{GetActiveProjectFolderPath()}//{DDDArchitectoriesInformation.Application}//Services//{model.Name}//Commands//Delete//DeleteCommandDto.cs");
+                    }
+                    // select query
+                    {
+                        $@"
+    namespace {NameSpace}.{DDDArchitectoriesInformation.Application}.Services.{model.Name}.Queries.Select;
+
+    public class SelectQuery : IQuery
+    {{
+        public SelectQuery() {{ }}
+        public int Id {{ set; get; }}
+    
+    }}
+    ".SaveFile($"{GetActiveProjectFolderPath()}//{DDDArchitectoriesInformation.Application}//Services//{model.Name}//Queries//Select//SelectQuery.cs");
+                        $@"
+    namespace {NameSpace}.{DDDArchitectoriesInformation.Application}.Services.{model.Name}.Queries.Select;
+
+    public class SelectQueryDto 
+    {{
+        public SelectQueryDto() {{ }}
+{model.Items.Select(c => $"    {c.TypeName} {c.Name} {{ set; get; }}").ToArray().StringJoin("\n")}
+    }}
+    ".SaveFile($"{GetActiveProjectFolderPath()}//{DDDArchitectoriesInformation.Application}//Services//{model.Name}//Queries//Select//SelectQueryDto.cs");
+                    }
+                    // List query
+                    {
+                        $@"
+    namespace {NameSpace}.{DDDArchitectoriesInformation.Application}.Services.{model.Name}.Queries.List;
+
+    public class ListQuery : IQuery
+    {{
+        public SelectQuery() {{ }}
+        public string SearchText {{ set; get; }}
+    
+    }}
+    ".SaveFile($"{GetActiveProjectFolderPath()}//{DDDArchitectoriesInformation.Application}//Services//{model.Name}//Queries//List//ListQuery.cs");
+                        $@"
+    namespace {NameSpace}.{DDDArchitectoriesInformation.Application}.Services.{model.Name}.Queries.List;
+
+    public class ListQueryDto 
+    {{
+        public SelectQueryDto() {{ }}
+{model.Items.Select(c => $"    {c.TypeName} {c.Name} {{ set; get; }}").ToArray().StringJoin("\n")}
+    }}
+    ".SaveFile($"{GetActiveProjectFolderPath()}//{DDDArchitectoriesInformation.Application}//Services//{model.Name}//Queries//List//ListQueryDto.cs");
                     }
                 }
             }
