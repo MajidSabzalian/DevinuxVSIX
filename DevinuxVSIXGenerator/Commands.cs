@@ -1,12 +1,11 @@
 ﻿using EnvDTE;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Linq;
 
 namespace DevinuxVSIXGenerator
 {
-    public class DDDArchitectoriesInformation {
+    public class DDDArchitectoriesInformation
+    {
         public const string Domain = "Domain";
         public const string Application = "Application";
         public const string Persistence = "Persistence";
