@@ -1,10 +1,14 @@
 <?xml version="1.0" ?>
 
 <database>
-	<operator id="91f37b8e-77c8-4a0e-b129-270ba898108d" title="Create Application Services" group="DDD Architectories" description="s">
+	<operator id="91f37b8e-77c8-4a0e-b129-270ba898108d" title="Application Services Insert Model" group="DDD" description="">
 		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-var fc = `
+file(`/Application/Services/${model.Name}/Commands/InsertCommand.cs`,`
+using ${ns}.Common.Interfaces;
 namespace ${ns}.Application.Service.${model.Name}.Commands.Insert;
 
 public class InsertCommand : ICommand
@@ -16,25 +20,281 @@ public class InsertCommandDto
 {
 	public bool Result { set; get; }
 }
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+	
+]]>
+	</operator>
+	<operator id="cab21c43-b9fa-4065-b0ce-6a2160df36cc" title="Application Services Insert Handler" group="DDD" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Application/Services/${model.Name}/Commands/InsertCommandHandler.cs`,`
+using ${ns}.Common.Interfaces;
+namespace ${ns}.Application.Service.${model.Name}.Commands.Insert;
 
 public class InsertCommandHandler : IComandHandler<InsertCommand,InsertCommandDto>
 {
 	private readonly IMapper mapper;
-	public InsertCommandHandler(IMapper _mapper)
+	private readonly I{model.Name}CommandRepository _cmdRepo;
+	public InsertCommandHandler(I{model.Name}CommandRepository cmdRepo,IMapper mapper)
 	{
-		mapper = _mapper;
+        _cmdRepo = cmdRepo;
+        _mapper = mapper;
 	}
 
-	public Task<InsertCommandDto> Handle(InsertCommand cmd , CancelToken c)
+	public async Task<InsertCommandDto> Handle(InsertCommand cmd , CancellationToken ct)
 	{
+		var _model = _mapper.Map<Domain.Entities.{model.Name}>(command);
+        var result = await _cmdRepo.InsertAsync(_model, ct);
+        return new InsertCommandDto() {{ Result = result > 0 }};
 	}
 }
-`;
-file(`/Application/Services/${model.Name}/Commands/InsertCommand.cs`,fc);
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 		
 ]]>
 	</operator>
-	<operator id="8917ac93-ad52-49bd-980b-58245f91191d" title="Create Application Model" group="DDD Architectories" description="s">
-		<![CDATA[]]>
+	<operator id="6c8d66e5-3538-4b28-9285-21d18ab1e5f5" title="Application Services Update Model" group="DDD" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Application/Services/${model.Name}/Commands/UpdateCommand.cs`,`
+using ${ns}.Common.Interfaces;
+namespace ${ns}.Application.Service.${model.Name}.Commands.Update;
+
+public class UpdateCommand : ICommand
+{
+	${model.Items.map(m=>`public ${m.TypeName} ${m.Name} { set; get; } `).join('\n')}
+}
+
+public class UpdateCommandDto
+{
+	public bool Result { set; get; }
+}
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+	
+]]>
+	</operator>
+	<operator id="d34289fd-26a0-495b-95d0-d694e74bac7e" title="Application Services Update Handler" group="DDD" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Application/Services/${model.Name}/Commands/UpdateCommandHandler.cs`,`
+using ${ns}.Common.Interfaces;
+namespace ${ns}.Application.Service.${model.Name}.Commands.Update;
+
+public class UpdateCommandHandler : IComandHandler<InsertCommand,UpdateCommandDto>
+{
+	private readonly IMapper mapper;
+	private readonly I{model.Name}CommandRepository _cmdRepo;
+	public UpdateCommandHandler(I{model.Name}CommandRepository cmdRepo,IMapper mapper)
+	{
+        _cmdRepo = cmdRepo;
+        _mapper = mapper;
+	}
+
+	public async Task<InsertCommandDto> Handle(InsertCommand cmd , CancellationToken ct)
+	{
+		var _model = _mapper.Map<Domain.Entities.{model.Name}>(command);
+        var result = await _cmdRepo.InsertAsync(_model, ct);
+        return new UpdateCommandDto() {{ Result = result > 0 }};
+	}
+}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+	<operator id="55e7d5bf-a1c5-4b21-9c8f-bba93910e8fb" title="Application Services Delete Model" group="DDD" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Application/Services/${model.Name}/Commands/DeleteCommand.cs`,`
+using ${ns}.Common.Interfaces;
+namespace ${ns}.Application.Service.${model.Name}.Commands.Delete;
+
+public class DeleteCommand : ICommand
+{
+	public int Id { set; get; }
+}
+
+public class DeleteCommandDto
+{
+	public bool Result { set; get; }
+}
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+	
+]]>
+	</operator>
+	<operator id="7da8a394-2742-4186-ae12-596efed0260c" title="Application Services Delete Handler" group="DDD" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Application/Services/${model.Name}/Commands/DeleteCommandHandler.cs`,`
+using ${ns}.Common.Interfaces;
+namespace ${ns}.Application.Service.${model.Name}.Commands.Delete;
+
+public class DeleteCommandHandler : IComandHandler<InsertCommand,DeleteCommandDto>
+{
+	private readonly IMapper mapper;
+	private readonly I{model.Name}CommandRepository _cmdRepo;
+	public DeleteCommandHandler(I{model.Name}CommandRepository cmdRepo,IMapper mapper)
+	{
+        _cmdRepo = cmdRepo;
+        _mapper = mapper;
+	}
+
+	public async Task<InsertCommandDto> Handle(InsertCommand cmd , CancellationToken ct)
+	{
+        var result = await _cmdRepo.DeleteAsync(model.Id, ct);
+        return new DeleteCommandDto() {{ Result = result > 0 }};
+	}
+}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+	<operator id="4924aa86-cc90-46e0-b226-88fc8b6f6a44" title="Application Services Select Model" group="DDD" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Application/Services/${model.Name}/Queries/SelectQuery.cs`,`
+using ${ns}.Common.Interfaces;
+namespace ${ns}.Application.Service.${model.Name}.Queries.Select;
+
+public class SelectQuery : IQuery
+{
+	public int Id { set; get; }
+}
+
+public class SelectQueryDto
+{
+${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('\n')}
+}
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+	
+]]>
+	</operator>
+	<operator id="a8646e32-cab7-4e86-8c31-7929802507ce" title="Application Services Select Handler" group="DDD" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Application/Services/${model.Name}/Queries/SelectQueryHandler.cs`,`
+using ${ns}.Common.Interfaces;
+namespace ${ns}.Application.Service.${model.Name}.Queries.Select;
+
+public class SelectQueryHandler : IQueryHandler<SelectCommand,SelectCommandDto>
+{
+	private readonly IMapper mapper;
+	private readonly I{model.Name}QueryRepository _qryRepo;
+	public SelectQueryHandler(I{model.Name}QueryRepository qryRepo,IMapper mapper)
+	{
+        _qryRepo = qryRepo;
+        _mapper = mapper;
+	}
+
+	public async Task<SelectQueryDto> Handle(SelectQuery qry , CancellationToken ct)
+	{
+        var result = await _qryRepo.SelectAsync(qry.Id, ct);
+        return _mapper.Map<SelectQueryDto>(result);
+	}
+}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+	<operator id="097a2aa7-0a79-4ac4-b86e-f2f3ce49b9c3" title="Application Services List Model" group="DDD" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Application/Services/${model.Name}/Queries/ListQuery.cs`,`
+using ${ns}.Common.Interfaces;
+namespace ${ns}.Application.Service.${model.Name}.Queries.List;
+
+public class ListQuery : IQuery
+{
+	public int Id { set; get; }
+}
+
+public class ListQueryDto
+{
+${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('\n')}
+}
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+	
+]]>
+	</operator>
+	<operator id="a0b353e5-48f2-4a82-a1a1-8b730f4599ba" title="Application Services List Handler" group="DDD" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Application/Services/${model.Name}/Queries/ListQueryHandler.cs`,`
+using ${ns}.Common.Interfaces;
+namespace ${ns}.Application.Service.${model.Name}.Queries.List;
+
+public class ListQueryHandler : IQueryHandler<ListCommand,List<ListCommandDto>>
+{
+	private readonly IMapper mapper;
+	private readonly I{model.Name}QueryRepository _qryRepo;
+	public ListQueryHandler(I{model.Name}QueryRepository qryRepo,IMapper mapper)
+	{
+        _qryRepo = qryRepo;
+        _mapper = mapper;
+	}
+
+	public async Task<List<ListQueryDto>> Handle(ListQuery qry , CancellationToken ct)
+	{
+        var result = await _qryRepo.ListAsync(ct);
+        return result.select(m => _mapper.Map<ListQueryDto>(m)).ToList();
+	}
+}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+	<operator id="675cb2f5-85c7-4d03-89fe-79ae9e95aeda" title="Common Interfaces ICommand/IQuery Handlers" group="DDD" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Common/Interfaces/ICommandQuery.cs`,`
+namespace ${ns}.Common.Interfaces;
+
+public interface IQuery {}
+public interface IQueryHandler<TQuery,TResult> where TQuery is IQuery {}
+    public interface IQuery { }
+    public interface ICommand { }
+    public interface IQueryHandler<TQuery,TResponse> where TQuery : IQuery { 
+        Task<TResponse> Handle(TQuery qry , CancellationToken ct);
+    }
+    public interface ICommandHandler<TCommand,TResponse> where TCommand : ICommand {
+        Task<TResponse> Handle(TCommand cmd, CancellationToken ct);
+    }
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
 	</operator>
 </database>

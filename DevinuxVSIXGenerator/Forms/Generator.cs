@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
@@ -14,11 +16,30 @@ namespace DevinuxVSIXGenerator.Forms
         public Generator(DevinuxEntityModel[] m, string defaultNameSpace , string currentProjectPath)
         {
             InitializeComponent();
+            btnGenerate.Enabled = false;
             this.Load += (s, e) => {
                 LoadDb();
                 textBox1.Text = string.Join("\r\n", m.Select(x => x.GetCSharpCode()));
             };
-
+            btnUpdate.Click += (s, e) => {
+                try
+                {
+                    using (WebClient w = new WebClient())
+                    {
+                        var str = w.DownloadString("https://github.com/MajidSabzalian/DevinuxVSIX/raw/refs/heads/master/Database.xml");
+                        if (str.StartsWith("<?xml"))
+                        {
+                            SaveDb(str);
+                            LoadDb();
+                        }
+                        else
+                        {
+                            new Exception(str).ShowMessage();
+                        }
+                    }
+                }
+                catch (Exception ex) { ex.ShowMessage(); }
+            };
             btnGenerate.Click += (s, e) =>
             {
                 if (checkedListBox1.CheckedItems != null && checkedListBox1.CheckedItems.Count > 0)
@@ -51,11 +72,16 @@ var ns = '{defaultNameSpace}';
                 }
             };
         }
+        private string pt = (Application.StartupPath + "//operator.xml");
+        void SaveDb(string content)
+        {
+            System.IO.File.WriteAllText(pt, content, Encoding.UTF8);
+            "save update database".ShowMessage();
+        }
         void LoadDb()
         {
             try
             {
-                var pt = (Application.StartupPath + "//operator.xml");
                 if (System.IO.File.Exists(pt))
                 {
                     var f = new System.IO.FileInfo(pt);
@@ -66,10 +92,13 @@ var ns = '{defaultNameSpace}';
                         var op = (Database)serializer.Deserialize(reader);
                         checkedListBox1.Items.Clear();
                         checkedListBox1.Items.AddRange(op.Operator.ToArray());
+                        btnGenerate.Enabled = true;
+
                     }
                 }
                 else
                 {
+                    btnGenerate.Enabled = false;
                     "your db file has not found . please download before do it".ShowMessage();
                 }
             }
