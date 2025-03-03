@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+
+<database>
+	<operator id="91f37b8e-77c8-4a0e-b129-270ba898108d" title="Create Application Services" group="DDD Architectories" description="s">
+		<![CDATA[
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+var fc = `
+namespace ${ns}.Application.Service.${model.Name}.Commands.Insert;
+
+public class InsertCommand : ICommand
+{
+	${model.Items.map(m=>`public ${m.TypeName} ${m.Name} { set; get; } `).join('\n')}
+}
+
+public class InsertCommandDto
+{
+	public bool Result { set; get; }
+}
+
+public class InsertCommandHandler : IComandHandler<InsertCommand,InsertCommandDto>
+{
+	private readonly IMapper mapper;
+	public InsertCommandHandler(IMapper _mapper)
+	{
+		mapper = _mapper;
+	}
+
+	public Task<InsertCommandDto> Handle(InsertCommand cmd , CancelToken c)
+	{
+	}
+}
+`;
+file(`/Application/Services/${model.Name}/Commands/InsertCommand.cs`,fc);
+		
+]]>
+	</operator>
+	<operator id="8917ac93-ad52-49bd-980b-58245f91191d" title="Create Application Model" group="DDD Architectories" description="s">
+		<![CDATA[]]>
+	</operator>
+</database>
