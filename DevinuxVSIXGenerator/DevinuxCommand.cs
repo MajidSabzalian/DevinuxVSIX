@@ -12,10 +12,16 @@ namespace DevinuxVSIXGenerator
     public class DevinuxEntityModel { 
         public string Name { set; get; }
         public List<DevinuxEntityModelProps> Items { set; get; } = new List<DevinuxEntityModelProps>();
+        public string GetCSharpCode() => $@"public class {Name} 
+{{
+{(this.Items != null && this.Items.Count > 0 ? Items.Select(x => "    " + x.GetCSharpCode()).ToArray().StringJoin("\r\n") : "")}
+}}";
     }
     public class DevinuxEntityModelProps { 
         public string Name { set; get; }
         public string TypeName { set; get; }
+
+        public string GetCSharpCode() => $"public {TypeName} {Name} {{ set; get; }}";
     }
 
     public abstract class DevinuxCommand

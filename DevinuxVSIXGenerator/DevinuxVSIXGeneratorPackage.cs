@@ -36,6 +36,7 @@ namespace DevinuxVSIXGenerator
             commands.Add(new CreateDddFoldersCommands(dte));
             commands.Add(new CreateApplicationServiceCommands(dte));
             commands.Add(new CreateApplicationModelCommands(dte));
+            commands.Add(new CreateModelRefactorCommands(dte));
             
             await InitialMenusAsync(commands);
         }

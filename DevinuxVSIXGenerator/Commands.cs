@@ -1,4 +1,5 @@
-﻿using EnvDTE;
+﻿using DevinuxVSIXGenerator.Forms;
+using EnvDTE;
 using System;
 using System.Linq;
 
@@ -344,6 +345,31 @@ using Devinux.AutoDI;
     ".SaveFile($"{GetActiveProjectFolderPath()}//{DDDArchitectoriesInformation.Application}//Services//{model.Name}//Queries//List//ListQueryDto.cs");
                     }
                 }
+            }
+            else
+            {
+                "selection text is not class".ShowMessage();
+            }
+        }
+    }
+    public class CreateModelRefactorCommands : DevinuxCommand
+    {
+        public override int MenuCommandId { get => PackageIds.CreateModelRefactor; }
+        public CreateModelRefactorCommands(DTE _dte)
+        {
+            dte = _dte;
+        }
+        public override void OnClick(object sender, EventArgs e)
+        {
+            string selectedText = GetSelectionText();
+            string _using = @"
+using Devinux.AutoDI;
+";
+            var _props = GetEntitiesFromClassDefinitions(selectedText);
+            if (_props != null && _props.Count() > 0)
+            {
+                Generator g = new Generator(_props.ToArray(),GetActiveProjectNameSpace() , GetActiveProjectFolderPath());
+                g.ShowDialog();
             }
             else
             {

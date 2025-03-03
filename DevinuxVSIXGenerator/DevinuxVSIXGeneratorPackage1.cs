@@ -41,5 +41,6 @@ namespace DevinuxVSIXGenerator
         public const int CreateApiController = 0x1012;
         public const int CreateApiModel = 0x1013;
         public const int CreateApiMapper = 0x1014;
+        public const int CreateModelRefactor = 0x3000;
     }
 }

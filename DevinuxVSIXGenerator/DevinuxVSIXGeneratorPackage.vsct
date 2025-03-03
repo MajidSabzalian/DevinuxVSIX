@@ -40,6 +40,14 @@
 				</Button>
 			</Buttons>
 			<Buttons>
+				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateModelRefactor" priority="0x0100" type="Button">
+					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsApplication" />
+					<Strings>
+						<ButtonText>Refactoring Generator...</ButtonText>
+					</Strings>
+				</Button>
+			</Buttons>
+			<!--<Buttons>
 				<Button guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="CreateApplicationService" priority="0x0100" type="Button">
 					<Parent guid="guidDevinuxVSIXGeneratorPackageCmdSet" id="GroupDddCqrsApplication" />
 					<Strings>
@@ -118,7 +126,7 @@
 						<ButtonText>Create Api Mapper</ButtonText>
 					</Strings>
 				</Button>
-			</Buttons>
+			</Buttons>-->
 		</Buttons>
 	</Commands>
 
@@ -149,6 +157,7 @@
 			<IDSymbol name="CreateApiModel" value="0x1013" />
 			<IDSymbol name="CreateApiMapper" value="0x1014" />
 			<!-- ////// ////// ////// ////// ////// ////// ////// ////// ////// ////// -->
+			<IDSymbol name="CreateModelRefactor" value="0x3000" />
 			<!-- ////// ////// ////// ////// ////// ////// ////// ////// ////// ////// -->
 		</GuidSymbol>
 	</Symbols>

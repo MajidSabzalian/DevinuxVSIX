@@ -3,37 +3,47 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace DevinuxVSIXGenerator.Forms
 {
     public partial class Generator : Form
     {
-        public Generator(DevinuxEntityModel[] m)
+        public Generator(DevinuxEntityModel[] m, string defaultNameSpace , string currentProjectPath)
         {
             InitializeComponent();
             this.Load += (s, e) => {
                 LoadDb();
+                textBox1.Text = string.Join("\r\n", m.Select(x => x.GetCSharpCode()));
             };
 
             btnGenerate.Click += (s, e) =>
             {
-
                 if (checkedListBox1.CheckedItems != null && checkedListBox1.CheckedItems.Count > 0)
                 {
                     using (Jint.Engine eng = new Jint.Engine(cfg => { cfg.AllowClr(); }))
                     {
-                        eng.SetValue("file", new Action<string, string>((string Path, string content) => { }));
-                        foreach (GeneratorDBOperation item in checkedListBox1.CheckedItems)
+                        eng.SetValue("file", new Action<string, string>((string Path, string content) => {
+                            content.SaveFile(currentProjectPath + Path);
+                        }));
+                        foreach (Operator item in checkedListBox1.CheckedItems)
                         {
                             foreach (DevinuxEntityModel model in m)
                             {
-                                var jscode = $@"var model = {JsonConvert.SerializeObject(model)};
-{item.ScriptBody}";
+                                var jscode = $@"
+var model = {JsonConvert.SerializeObject(model)};
+var ns = '{defaultNameSpace}';
+
+{item.Text}
+
+";
                                 eng.Execute(jscode);
                             }
                         }
                     }
+                    "done".ShowMessage();
                 }
                 else
                 {
@@ -45,12 +55,18 @@ namespace DevinuxVSIXGenerator.Forms
         {
             try
             {
-                var pt = (Application.StartupPath + "//operator.json");
+                var pt = (Application.StartupPath + "//operator.xml");
                 if (System.IO.File.Exists(pt))
                 {
-                    var op = JsonConvert.DeserializeObject<GeneratorDB>(System.IO.File.ReadAllText(pt));
-                    checkedListBox1.Items.Clear();
-                    checkedListBox1.Items.AddRange(op.Operators.ToArray());
+                    var f = new System.IO.FileInfo(pt);
+                    label1.Text = $"Last Writed Database File : {f.LastWriteTime}";
+                    XmlSerializer serializer = new XmlSerializer(typeof(Database));
+                    using (StringReader reader = new StringReader(System.IO.File.ReadAllText(pt)))
+                    {
+                        var op = (Database)serializer.Deserialize(reader);
+                        checkedListBox1.Items.Clear();
+                        checkedListBox1.Items.AddRange(op.Operator.ToArray());
+                    }
                 }
                 else
                 {
@@ -60,19 +76,36 @@ namespace DevinuxVSIXGenerator.Forms
             catch (Exception ex) { ex.ShowMessage(); }
         }
     }
-    public class GeneratorDB { 
-        public List<GeneratorDBOperation> Operators { set; get; }
-    }
-    public class GeneratorDBOperation {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public string Title { set; get; }
-        public string Group { set; get; }
-        public string Description { set; get; }
-        public string ScriptBody { set; get; }
+    [XmlRoot(ElementName = "operator")]
+    public class Operator
+    {
+
+        [XmlAttribute(AttributeName = "id")]
+        public string Id { get; set; }
+
+        [XmlAttribute(AttributeName = "title")]
+        public string Title { get; set; }
+
+        [XmlAttribute(AttributeName = "group")]
+        public string Group { get; set; }
+
+        [XmlAttribute(AttributeName = "description")]
+        public string Description { get; set; }
+
+        [XmlText]
+        public string Text { get; set; }
 
         public override string ToString()
         {
-            return Group + " > " + Title;
+            return $"{Group} > {Title}";
         }
+    }
+
+    [XmlRoot(ElementName = "database")]
+    public class Database
+    {
+
+        [XmlElement(ElementName = "operator")]
+        public List<Operator> Operator { get; set; }
     }
 }
