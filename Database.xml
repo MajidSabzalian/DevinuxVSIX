@@ -273,7 +273,7 @@ public class ListQueryHandler : IQueryHandler<ListCommand,List<ListCommandDto>>
 		
 ]]>
 	</operator>
-	<operator id="675cb2f5-85c7-4d03-89fe-79ae9e95aeda" title="Common Interfaces ICommand/IQuery Handlers" group="DDD" description="">
+	<operator id="675cb2f5-85c7-4d03-89fe-79ae9e95aeda" title="Common Application Interfaces ICommand/IQuery Handlers" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -282,16 +282,39 @@ public class ListQueryHandler : IQueryHandler<ListCommand,List<ListCommandDto>>
 file(`/Common/Interfaces/ICommandQuery.cs`,`
 namespace ${ns}.Common.Interfaces;
 
-public interface IQuery {}
-public interface IQueryHandler<TQuery,TResult> where TQuery is IQuery {}
-    public interface IQuery { }
-    public interface ICommand { }
-    public interface IQueryHandler<TQuery,TResponse> where TQuery : IQuery { 
-        Task<TResponse> Handle(TQuery qry , CancellationToken ct);
-    }
-    public interface ICommandHandler<TCommand,TResponse> where TCommand : ICommand {
-        Task<TResponse> Handle(TCommand cmd, CancellationToken ct);
-    }
+	public interface IQuery { }
+	public interface ICommand { }
+	public interface IQueryHandler<TQuery,TResponse> where TQuery : IQuery { 
+		Task<TResponse> Handle(TQuery qry , CancellationToken ct);
+	}
+	public interface ICommandHandler<TCommand,TResponse> where TCommand : ICommand {
+		Task<TResponse> Handle(TCommand cmd, CancellationToken ct);
+	}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+	<operator id="f9e4f741-0783-464c-8506-90b90da032dc" title="Common Persistence Interfaces Repository" group="DDD" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Common/Interfaces/Repositories/${model.Name}/I${model.Name}CommandRepository.cs`,`
+namespace ${ns}.Common.Interfaces.${model.Name};
+
+public interface I${model.Name}CommandRepository { 
+	Task<int> InsertAsync(${model.Name} cmd, CancellationToken ct);
+	Task<int> UpdateAsync(${model.Name} cmd, CancellationToken ct);
+	Task<int> DeleteAsync(${model.Name} cmd, CancellationToken ct);
+}
+`);
+file(`/Common/Interfaces/Repositories/${model.Name}/I${model.Name}QueryRepository.cs`,`
+public interface I${model.Name}QueryRepository { 
+	Task<${model.Name}> SelectAsync(int Id, CancellationToken ct);
+	Task<List<${model.Name}>> ListAsync(CancellationToken ct);
+}
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 		
