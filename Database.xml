@@ -31,14 +31,16 @@ public class InsertCommandDto
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Application/Services/${model.Name}/Commands/InsertCommandHandler.cs`,`
+using AutoMapper;
 using ${ns}.Common.Interfaces;
+
 namespace ${ns}.Application.Service.${model.Name}.Commands.Insert;
 
-public class InsertCommandHandler : IComandHandler<InsertCommand,InsertCommandDto>
+public class InsertCommandHandler : ICommandHandler<InsertCommand,InsertCommandDto>
 {
 	private readonly IMapper mapper;
-	private readonly I{model.Name}CommandRepository _cmdRepo;
-	public InsertCommandHandler(I{model.Name}CommandRepository cmdRepo,IMapper mapper)
+	private readonly I${model.Name}CommandRepository _cmdRepo;
+	public InsertCommandHandler(I${model.Name}CommandRepository cmdRepo,IMapper mapper)
 	{
         _cmdRepo = cmdRepo;
         _mapper = mapper;
@@ -87,23 +89,24 @@ public class UpdateCommandDto
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Application/Services/${model.Name}/Commands/UpdateCommandHandler.cs`,`
+using AutoMapper;
 using ${ns}.Common.Interfaces;
 namespace ${ns}.Application.Service.${model.Name}.Commands.Update;
 
-public class UpdateCommandHandler : IComandHandler<InsertCommand,UpdateCommandDto>
+public class UpdateCommandHandler : ICommandHandler<UpdateCommand,UpdateCommandDto>
 {
 	private readonly IMapper mapper;
-	private readonly I{model.Name}CommandRepository _cmdRepo;
-	public UpdateCommandHandler(I{model.Name}CommandRepository cmdRepo,IMapper mapper)
+	private readonly I${model.Name}CommandRepository _cmdRepo;
+	public UpdateCommandHandler(I${model.Name}CommandRepository cmdRepo,IMapper mapper)
 	{
         _cmdRepo = cmdRepo;
         _mapper = mapper;
 	}
 
-	public async Task<InsertCommandDto> Handle(InsertCommand cmd , CancellationToken ct)
+	public async Task<UpdateCommandDto> Handle(UpdateCommand cmd , CancellationToken ct)
 	{
 		var _model = _mapper.Map<Domain.Entities.{model.Name}>(command);
-        var result = await _cmdRepo.InsertAsync(_model, ct);
+        var result = await _cmdRepo.UpdateAsync(_model, ct);
         return new UpdateCommandDto() {{ Result = result > 0 }};
 	}
 }
@@ -143,20 +146,21 @@ public class DeleteCommandDto
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Application/Services/${model.Name}/Commands/DeleteCommandHandler.cs`,`
+using AutoMapper;
 using ${ns}.Common.Interfaces;
 namespace ${ns}.Application.Service.${model.Name}.Commands.Delete;
 
-public class DeleteCommandHandler : IComandHandler<InsertCommand,DeleteCommandDto>
+public class DeleteCommandHandler : ICommandHandler<DeleteCommand,DeleteCommandDto>
 {
 	private readonly IMapper mapper;
-	private readonly I{model.Name}CommandRepository _cmdRepo;
-	public DeleteCommandHandler(I{model.Name}CommandRepository cmdRepo,IMapper mapper)
+	private readonly I${model.Name}CommandRepository _cmdRepo;
+	public DeleteCommandHandler(I${model.Name}CommandRepository cmdRepo,IMapper mapper)
 	{
         _cmdRepo = cmdRepo;
         _mapper = mapper;
 	}
 
-	public async Task<InsertCommandDto> Handle(InsertCommand cmd , CancellationToken ct)
+	public async Task<DeleteCommandDto> Handle(DeleteCommand cmd , CancellationToken ct)
 	{
         var result = await _cmdRepo.DeleteAsync(model.Id, ct);
         return new DeleteCommandDto() {{ Result = result > 0 }};
@@ -198,14 +202,15 @@ ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Application/Services/${model.Name}/Queries/SelectQueryHandler.cs`,`
+using AutoMapper;
 using ${ns}.Common.Interfaces;
 namespace ${ns}.Application.Service.${model.Name}.Queries.Select;
 
 public class SelectQueryHandler : IQueryHandler<SelectCommand,SelectCommandDto>
 {
 	private readonly IMapper mapper;
-	private readonly I{model.Name}QueryRepository _qryRepo;
-	public SelectQueryHandler(I{model.Name}QueryRepository qryRepo,IMapper mapper)
+	private readonly I${model.Name}QueryRepository _qryRepo;
+	public SelectQueryHandler(I${model.Name}QueryRepository qryRepo,IMapper mapper)
 	{
         _qryRepo = qryRepo;
         _mapper = mapper;
@@ -252,15 +257,17 @@ ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Application/Services/${model.Name}/Queries/ListQueryHandler.cs`,`
+file(`/Application/Services/${model.Name}/Queries/ListQueryHandler.cs`,`using AutoMapper;
+using AutoMapper;
 using ${ns}.Common.Interfaces;
+
 namespace ${ns}.Application.Service.${model.Name}.Queries.List;
 
 public class ListQueryHandler : IQueryHandler<ListCommand,List<ListCommandDto>>
 {
 	private readonly IMapper mapper;
-	private readonly I{model.Name}QueryRepository _qryRepo;
-	public ListQueryHandler(I{model.Name}QueryRepository qryRepo,IMapper mapper)
+	private readonly I${model.Name}QueryRepository _qryRepo;
+	public ListQueryHandler(I${model.Name}QueryRepository qryRepo,IMapper mapper)
 	{
         _qryRepo = qryRepo;
         _mapper = mapper;
@@ -317,11 +324,81 @@ public interface I${model.Name}CommandRepository {
 file(`/Common/Interfaces/Repositories/${model.Name}/I${model.Name}QueryRepository.cs`,`
 public interface I${model.Name}QueryRepository { 
 	Task<${model.Name}> SelectAsync(int Id, CancellationToken ct);
-	Task<List<${model.Name}>> ListAsync(CancellationToken ct);
+	Task<List<${model.Name}>> ListAsync(int page ,int pagesize ,CancellationToken ct);
 }
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 		
 ]]>
 	</operator>
+	<operator id="9ea84cbd-e12f-434a-9920-c0a0f725e74b" title="Common Application Result" group="DDD" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Common/Application/Result.cs`,`
+namespace ${ns}.Common.Application;
+
+public interface IApplicationResult { }
+public class ApplicationResult : IApplicationResult
+{
+	public static ApplicationResult<T>(T data) => return new ApplicationResult<T>() {Data = data};
+	public static ApplicationResult<T>(T data , int count) => return new ApplicationResult<T>() {Data = data , Count = count};
+}
+public class ApplicationResult<T> : ApplicationResult
+{
+	public T Data { set; get; }
+	public int Count { set; get; }
+}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+	<operator id="76c26d03-9463-4ca8-b6ee-777501f8fdd0" title="Persistence Repositories" group="DDD" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Persistence/Repositories/${model.Name}/${model.Name}CommandRepository.cs`,`
+namespace ${ns}.Persistence.Repositories.${model.Name};
+
+public class ${model.Name}CommandRepository : I${model.Name}CommandRepository
+{
+	private readonly IDatabaseContext _db;
+	public ${model.Name}CommandRepository(IDatabaseContext db) { _db = db; }
+	public async Task<int> InsertAsync(${model.Name} cmd, CancellationToken ct)
+	{
+	}
+	public async Task<int> UpdateAsync(${model.Name} cmd, CancellationToken ct)
+	{
+	}
+	public async Task<int> DeleteAsync(${model.Name} cmd, CancellationToken ct)
+	{
+	}
+}
+`);
+file(`/Persistence/Repositories/${model.Name}/${model.Name}QueryRepository.cs`,`
+namespace ${ns}.Persistence.Repositories.${model.Name};
+public class ${model.Name}QueryRepository : I${model.Name}QueryRepository 
+{ 
+	private readonly IDatabaseContext _db;
+	public ${model.Name}QueryRepository(IDatabaseContext db) { _db = db; }
+	public async Task<${model.Name}> SelectAsync(int Id, CancellationToken ct)
+	{
+		return _db.${model.Name}.Where(m => m.Id == Id).FirstOfDefault();
+	}
+	public async Task<List<${model.Name}>> ListAsync(CancellationToken ct)
+	{
+		return _db.${model.Name}.Where(m => m.Id == Id).FirstOfDefault();
+	}
+}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+
 </database>
