@@ -33,6 +33,7 @@ public class InsertCommandDto
 file(`/Application/Services/${model.Name}/Commands/InsertCommandHandler.cs`,`
 using AutoMapper;
 using Devinux.AutoDI;
+using ${ns}.Common.Application;
 using ${ns}.Common.Interfaces;
 
 namespace ${ns}.Application.Service.${model.Name}.Commands.Insert;
@@ -40,9 +41,9 @@ namespace ${ns}.Application.Service.${model.Name}.Commands.Insert;
 [DevinuxServiceScope]
 public class InsertCommandHandler : ICommandHandler<InsertCommand,InsertCommandDto>
 {
-	private readonly IMapper mapper;
-	private readonly I${model.Name}CommandRepository _cmdRepo;
-	public InsertCommandHandler(I${model.Name}CommandRepository cmdRepo,IMapper mapper)
+	private readonly IMapper _mapper;
+	private readonly I${model.Name}Repository _cmdRepo;
+	public InsertCommandHandler(I${model.Name}Repository cmdRepo,IMapper mapper)
 	{
         _cmdRepo = cmdRepo;
         _mapper = mapper;
@@ -50,9 +51,9 @@ public class InsertCommandHandler : ICommandHandler<InsertCommand,InsertCommandD
 
 	public async Task<ApplicationResult<InsertCommandDto>> Handle(InsertCommand cmd , CancellationToken ct)
 	{
-		var _model = _mapper.Map<Domain.Entities.{model.Name}>(command);
-        var result = await _cmdRepo.InsertAsync(_model, ct);
-        return new ApplicationResult( InsertCommandDto() {{ Result = result > 0 }});
+		var _model = _mapper.Map<Domain.Entities.${model.Name}>(cmd);
+        _cmdRepo.Add(_model);
+        return new ApplicationResult<InsertCommandDto>(new InsertCommandDto() { Result = true });
 	}
 }
 `);
@@ -92,14 +93,19 @@ public class UpdateCommandDto
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Application/Services/${model.Name}/Commands/UpdateCommandHandler.cs`,`
 using AutoMapper;
+using Devinux.AutoDI;
+using ${ns}.Common.Application;
 using ${ns}.Common.Interfaces;
+using ${ns}.Common.Interfaces.${model.Name};
+
 namespace ${ns}.Application.Service.${model.Name}.Commands.Update;
 
+[DevinuxServiceScope]
 public class UpdateCommandHandler : ICommandHandler<UpdateCommand,UpdateCommandDto>
 {
-	private readonly IMapper mapper;
-	private readonly I${model.Name}CommandRepository _cmdRepo;
-	public UpdateCommandHandler(I${model.Name}CommandRepository cmdRepo,IMapper mapper)
+	private readonly IMapper _mapper;
+	private readonly I${model.Name}Repository _cmdRepo;
+	public UpdateCommandHandler(I${model.Name}Repository cmdRepo,IMapper mapper)
 	{
         _cmdRepo = cmdRepo;
         _mapper = mapper;
@@ -107,9 +113,11 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand,UpdateCommandD
 
 	public async Task<ApplicationResult<UpdateCommandDto>> Handle(UpdateCommand cmd , CancellationToken ct)
 	{
-		var _model = _mapper.Map<Domain.Entities.{model.Name}>(command);
-        var result = await _cmdRepo.UpdateAsync(_model, ct);
-        return new ApplicationResult( UpdateCommandDto() {{ Result = result > 0 }});
+		var _model = _cmdRepo.GetId(cmd.Id);
+		if (_model == null) throw new Exception("Record Not Found");
+${model.Items.map(m=>`if (_cmd.${m.Name} != null ) _model.${m.Name} = _cmd.${m.Name};`).join('\n')}
+        _cmdRepo.Update(_model);
+		return new ApplicationResult<UpdateCommandDto>(new UpdateCommandDto() { Result = true });
 	}
 }
 `);
@@ -149,14 +157,19 @@ public class DeleteCommandDto
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Application/Services/${model.Name}/Commands/DeleteCommandHandler.cs`,`
 using AutoMapper;
+using Devinux.AutoDI;
+using ${ns}.Common.Application;
 using ${ns}.Common.Interfaces;
+using ${ns}.Common.Interfaces.${model.Name};
+
 namespace ${ns}.Application.Service.${model.Name}.Commands.Delete;
 
+[DevinuxServiceScope]
 public class DeleteCommandHandler : ICommandHandler<DeleteCommand,DeleteCommandDto>
 {
-	private readonly IMapper mapper;
-	private readonly I${model.Name}CommandRepository _cmdRepo;
-	public DeleteCommandHandler(I${model.Name}CommandRepository cmdRepo,IMapper mapper)
+	private readonly IMapper _mapper;
+	private readonly I${model.Name}Repository _cmdRepo;
+	public DeleteCommandHandler(I${model.Name}Repository cmdRepo,IMapper mapper)
 	{
         _cmdRepo = cmdRepo;
         _mapper = mapper;
@@ -164,8 +177,10 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand,DeleteCommandD
 
 	public async Task<ApplicationResult<DeleteCommandDto>> Handle(DeleteCommand cmd , CancellationToken ct)
 	{
-        var result = await _cmdRepo.DeleteAsync(model.Id, ct);
-        return  new ApplicationResult( DeleteCommandDto() {{ Result = result > 0 }});
+        var _model = _cmdRepo.GetId(cmd.Id);
+		if (_model == null) throw new Exception("Record Not Found");
+        _cmdRepo.Remove(_model);
+        return  new ApplicationResult<DeleteCommandDto>(new DeleteCommandDto() { Result = true });
 	}
 }
 `);
@@ -205,9 +220,15 @@ ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Application/Services/${model.Name}/Queries/SelectQueryHandler.cs`,`
 using AutoMapper;
-using ${ns}.Common.Interfaces;
+using Devinux.AutoDI;
+using Pronode.Common.Application;
+using Pronode.Common.Interfaces;
+using Pronode.Common.Interfaces.User;
+
+
 namespace ${ns}.Application.Service.${model.Name}.Queries.Select;
 
+[DevinuxServiceScope]
 public class SelectQueryHandler : IQueryHandler<SelectQuery,SelectQueryDto>
 {
 	private readonly IMapper mapper;
@@ -220,8 +241,8 @@ public class SelectQueryHandler : IQueryHandler<SelectQuery,SelectQueryDto>
 
 	public async Task<ApplicationResult<SelectQueryDto>> Handle(SelectQuery qry , CancellationToken ct)
 	{
-        var result = await _qryRepo.SelectAsync(qry.Id, ct);
-        return new ApplicationResult(_mapper.Map<SelectQueryDto>(result));
+        var result = _qryRepo.GetId(qry.Id);
+        return new ApplicationResult<SelectQueryDto>(_mapper.Map<SelectQueryDto>(result));
 	}
 }
 `);
@@ -263,16 +284,19 @@ public class ListQueryDto
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Application/Services/${model.Name}/Queries/ListQueryHandler.cs`,`using AutoMapper;
 using AutoMapper;
-using ${ns}.Common.Interfaces;
-using ${ns}.Persistence.Repositories.User
+using Devinux.AutoDI;
+using Pronode.Common.Application;
+using Pronode.Common.Interfaces;
+using Pronode.Common.Interfaces.User;
 
 namespace ${ns}.Application.Service.${model.Name}.Queries.List;
 
-public class ListQueryHandler : IQueryHandler<ListCommand,List<ListQueryDto>>
+[DevinuxServiceScope]
+public class ListQueryHandler : IQueryHandler<ListQuery,List<ListQueryDto>>
 {
 	private readonly IMapper _mapper;
-	private readonly I${model.Name}QueryRepository _qryRepo;
-	public ListQueryHandler(I${model.Name}QueryRepository qryRepo,IMapper mapper)
+	private readonly I${model.Name}Repository _qryRepo;
+	public ListQueryHandler(I${model.Name}Repository qryRepo,IMapper mapper)
 	{
         _qryRepo = qryRepo;
         _mapper = mapper;
@@ -280,8 +304,9 @@ public class ListQueryHandler : IQueryHandler<ListCommand,List<ListQueryDto>>
 
 	public async Task<ApplicationResult<List<ListQueryDto>>> Handle(ListQuery qry , CancellationToken ct)
 	{
-        var result = await _qryRepo.ListAsync(qry.Page, qry.PageSize, ct);
-        return new ApplicationResult(result.select(m => _mapper.Map<ListQueryDto>(m));
+		var allCount = _qryRepo.GetListCount(null);
+        var result = await _qryRepo.GetPagedListAsync(null, qry.Page, qry.PageSize);
+		return new ApplicationResult<List<ListQueryDto>>(result.Select(m => _mapper.Map<ListQueryDto>(m)).ToList(), allCount);
 	}
 }
 `);
@@ -375,8 +400,11 @@ public interface IBaseRepository<TEntity> where TEntity : class
     Task<TEntity> GetIdAsync(int id);
     TEntity Get(Expression<Func<TEntity, bool>> predicate);
     Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate);
-    IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate);
-    Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate);
+    IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate = null);
+    Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate = null);
+    IEnumerable<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20);
+    Task<IEnumerable<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20);
+	int GetListCount(Expression<Func<TEntity, bool>> predicate = null);
     IEnumerable<TEntity> GetAll();
     Task<IEnumerable<TEntity>> GetAllAsync();
     int Count();
@@ -470,16 +498,30 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     {
         return await _context.Set<TEntity>().FirstOrDefaultAsync(predicate);
     }
-
-    public IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate)
+    public IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate = null)
     {
+        if (predicate == null) _context.Set<TEntity>().ToList();
         return _context.Set<TEntity>().Where<TEntity>(predicate).ToList();
     }
-
-    public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate)
+    public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate = null)
     {
-        return await Task.Run(() =>
-            _context.Set<TEntity>().Where<TEntity>(predicate));
+        return await Task.Run(() => GetList(predicate));
+    }
+    public IEnumerable<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20) {
+        var q = _context.Set<TEntity>().Where<TEntity>(predicate);
+        if (pageindex > 1) return q.Skip((pageindex - 1) * pagesize).Take(pagesize).ToList();
+        else return q.Take(pagesize).ToList();
+    }
+    public async Task<IEnumerable<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20) {
+
+        return await Task.Run(() => {
+           return GetPagedList(predicate, pageindex, pagesize);
+        });
+    }
+	public int GetListCount(Expression<Func<TEntity, bool>> predicate = null)
+    {
+        var s = _context.Set<TEntity>();
+        return (predicate == null) ? s.Count() : s.Where(predicate).Count();
     }
 
     public IEnumerable<TEntity> GetAll()
@@ -534,7 +576,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Persistence/Repositories/${model.Name}/${model.Name}CommandRepository.cs`,`
 using Devinux.AutoDI;
-using ${ns}.Common.Interfaces.${model.Name}
+using ${ns}.Common.Interfaces.${model.Name};
 
 namespace ${ns}.Persistence.Repositories.${model.Name};
 
@@ -545,7 +587,7 @@ public class ${model.Name}CommandRepository : BaseRepository<Domain.Entities.${m
 `);
 file(`/Persistence/Repositories/${model.Name}/${model.Name}QueryRepository.cs`,`
 using Devinux.AutoDI;
-using ${ns}.Common.Interfaces.${model.Name}
+using ${ns}.Common.Interfaces.${model.Name};
 
 namespace ${ns}.Persistence.Repositories.${model.Name};
 
