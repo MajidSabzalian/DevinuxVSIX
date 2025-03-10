@@ -264,12 +264,13 @@ public class ListQueryDto
 file(`/Application/Services/${model.Name}/Queries/ListQueryHandler.cs`,`using AutoMapper;
 using AutoMapper;
 using ${ns}.Common.Interfaces;
+using ${ns}.Persistence.Repositories.User
 
 namespace ${ns}.Application.Service.${model.Name}.Queries.List;
 
 public class ListQueryHandler : IQueryHandler<ListCommand,List<ListQueryDto>>
 {
-	private readonly IMapper mapper;
+	private readonly IMapper _mapper;
 	private readonly I${model.Name}QueryRepository _qryRepo;
 	public ListQueryHandler(I${model.Name}QueryRepository qryRepo,IMapper mapper)
 	{
@@ -320,7 +321,7 @@ namespace ${ns}.Common.Interfaces;
 file(`/Common/Interfaces/Repositories/${model.Name}/I${model.Name}Repository.cs`,`
 namespace ${ns}.Common.Interfaces.${model.Name};
 
-public interface I${model.Name}Repository : IBaseRepository<{model.Name}>
+public interface I${model.Name}Repository : IBaseRepository<Domain.Entities.${model.Name}>
 {
      //here you can place other implementations your repository doesn't have
 }
@@ -537,7 +538,7 @@ using Devinux.AutoDI;
 namespace ${ns}.Persistence.Repositories.${model.Name};
 
 [DevinuxServiceScope]
-public class ${model.Name}CommandRepository : BaseRepository<${ns}.Domain.Entities.${model.Name}>
+public class ${model.Name}CommandRepository : I${model.Name}Repository
 {
 }
 `);
@@ -547,7 +548,7 @@ using Devinux.AutoDI;
 namespace ${ns}.Persistence.Repositories.${model.Name};
 
 [DevinuxServiceScope]
-public class ${model.Name}QueryRepository : BaseRepository<${ns}.Domain.Entities.${model.Name}>
+public class ${model.Name}QueryRepository : I${model.Name}Repository
 { 
 }
 `);
