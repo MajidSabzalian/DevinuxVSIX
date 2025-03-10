@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 <database>
-	<operator id="" title="Application Services Insert Model" group="DDD" description="">
+	<operator id="" title="Application Services Insert Model" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -24,7 +24,7 @@ public class InsertCommandDto
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 ]]>
 	</operator>
-	<operator id="" title="Application Services Insert Handler" group="DDD" description="">
+	<operator id="" title="Application Services Insert Handler" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -36,6 +36,7 @@ using Devinux.AutoDI;
 using ${ns}.Common.Application;
 using ${ns}.Common.Interfaces;
 using ${ns}.Common.Interfaces.${model.Name};
+
 
 namespace ${ns}.Application.Service.${model.Name}.Commands.Insert;
 
@@ -62,7 +63,7 @@ public class InsertCommandHandler : ICommandHandler<InsertCommand,InsertCommandD
 	
 ]]>
 	</operator>
-	<operator id="" title="Application Services Update Model" group="DDD" description="">
+	<operator id="" title="Application Services Update Model" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -86,7 +87,7 @@ public class UpdateCommandDto
 	
 ]]>
 	</operator>
-	<operator id="" title="Application Services Update Handler" group="DDD" description="">
+	<operator id="" title="Application Services Update Handler" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -116,7 +117,7 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand,UpdateCommandD
 	{
 		var _model = _cmdRepo.GetId(cmd.Id);
 		if (_model == null) throw new Exception("Record Not Found");
-${model.Items.map(m=>`if (_cmd.${m.Name} != null ) _model.${m.Name} = _cmd.${m.Name};`).join('\n')}
+${model.Items.map(m=>`if (cmd.${m.Name} != null ) _model.${m.Name} = cmd.${m.Name};`).join('\n')}
         _cmdRepo.Update(_model);
 		return new ApplicationResult<UpdateCommandDto>(new UpdateCommandDto() { Result = true });
 	}
@@ -126,7 +127,7 @@ ${model.Items.map(m=>`if (_cmd.${m.Name} != null ) _model.${m.Name} = _cmd.${m.N
 		
 ]]>
 	</operator>
-	<operator id="" title="Application Services Delete Model" group="DDD" description="">
+	<operator id="" title="Application Services Delete Model" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -150,7 +151,7 @@ public class DeleteCommandDto
 	
 ]]>
 	</operator>
-	<operator id="" title="Application Services Delete Handler" group="DDD" description="">
+	<operator id="" title="Application Services Delete Handler" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -189,7 +190,7 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand,DeleteCommandD
 		
 ]]>
 	</operator>
-	<operator id="" title="Application Services Select Model" group="DDD" description="">
+	<operator id="" title="Application Services Select Model" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -213,7 +214,7 @@ ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('
 	
 ]]>
 	</operator>
-	<operator id="" title="Application Services Select Handler" group="DDD" description="">
+	<operator id="" title="Application Services Select Handler" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -251,7 +252,7 @@ public class SelectQueryHandler : IQueryHandler<SelectQuery,SelectQueryDto>
 		
 ]]>
 	</operator>
-	<operator id="" title="Application Services List Model" group="DDD" description="">
+	<operator id="" title="Application Services List Model" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -276,7 +277,7 @@ ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('
 	
 ]]>
 	</operator>
-	<operator id="" title="Application Services List Handler" group="DDD" description="">
+	<operator id="" title="Application Services List Handler" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -314,7 +315,7 @@ public class ListQueryHandler : IQueryHandler<ListQuery,List<ListQueryDto>>
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Application Interfaces ICommand/IQuery Handlers" group="DDD" description="">
+	<operator id="" title="Common Application Interfaces ICommand/IQuery Handlers" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -337,7 +338,7 @@ namespace ${ns}.Common.Interfaces;
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Persistence Interfaces Repository" group="DDD" description="">
+	<operator id="" title="Common Persistence Interfaces Repository" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -355,7 +356,7 @@ public interface I${model.Name}Repository : IBaseRepository<Domain.Entities.${mo
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Persistence Interfaces DatabaseContext" group="DDD" description="">
+	<operator id="" title="Common Persistence Interfaces DatabaseContext" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -381,7 +382,7 @@ public interface IDatabaseContext : IDisposable
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Persistence Generic Interfaces Repository" group="DDD" description="">
+	<operator id="" title="Common Persistence Generic Interfaces Repository" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -417,7 +418,7 @@ public interface IBaseRepository<TEntity> where TEntity : class
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Application Result" group="DDD" description="">
+	<operator id="" title="Common Application Result" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -442,7 +443,7 @@ public class ApplicationResult<T> : ApplicationResult
 		
 ]]>
 	</operator>
-	<operator id="" title="Persistence Generic Repository" group="DDD" description="">
+	<operator id="" title="Persistence Generic Repository" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -568,7 +569,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 		
 ]]>
 	</operator>
-	<operator id="" title="Persistence Repositories (Generic)" group="DDD" description="">
+	<operator id="" title="Persistence Repositories (Generic)" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
