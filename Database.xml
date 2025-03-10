@@ -35,6 +35,7 @@ using AutoMapper;
 using Devinux.AutoDI;
 using ${ns}.Common.Application;
 using ${ns}.Common.Interfaces;
+using ${ns}.Common.Interfaces.${model.Name};
 
 namespace ${ns}.Application.Service.${model.Name}.Commands.Insert;
 
@@ -231,9 +232,9 @@ namespace ${ns}.Application.Service.${model.Name}.Queries.Select;
 [DevinuxServiceScope]
 public class SelectQueryHandler : IQueryHandler<SelectQuery,SelectQueryDto>
 {
-	private readonly IMapper mapper;
-	private readonly I${model.Name}QueryRepository _qryRepo;
-	public SelectQueryHandler(I${model.Name}QueryRepository qryRepo,IMapper mapper)
+	private readonly IMapper _mapper;
+	private readonly I${model.Name}Repository _qryRepo;
+	public SelectQueryHandler(I${model.Name}Repository qryRepo,IMapper mapper)
 	{
         _qryRepo = qryRepo;
         _mapper = mapper;
@@ -268,8 +269,7 @@ public class ListQuery : IQuery
 }
 public class ListQueryDto
 {
-	public List<ListQueryDtoItem> Data { set; get; }
-	public int Count { set; get; }
+${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('\n')}
 }
 `);	
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
