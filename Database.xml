@@ -2,7 +2,7 @@
 
 <database>
 	<!-- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -->
-	<operator id="91f37b8e-77c8-4a0e-b129-270ba898108d" title="Application Services Insert Model" group="DDD" description="">
+	<operator id="" title="Application Services Insert Model" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -25,7 +25,7 @@ public class InsertCommandDto
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 ]]>
 	</operator>
-	<operator id="cab21c43-b9fa-4065-b0ce-6a2160df36cc" title="Application Services Insert Handler" group="DDD" description="">
+	<operator id="" title="Application Services Insert Handler" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -61,7 +61,7 @@ public class InsertCommandHandler : ICommandHandler<InsertCommand,InsertCommandD
 	
 ]]>
 	</operator>
-	<operator id="6c8d66e5-3538-4b28-9285-21d18ab1e5f5" title="Application Services Update Model" group="DDD" description="">
+	<operator id="" title="Application Services Update Model" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -85,7 +85,7 @@ public class UpdateCommandDto
 	
 ]]>
 	</operator>
-	<operator id="d34289fd-26a0-495b-95d0-d694e74bac7e" title="Application Services Update Handler" group="DDD" description="">
+	<operator id="" title="Application Services Update Handler" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -118,7 +118,7 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand,UpdateCommandD
 		
 ]]>
 	</operator>
-	<operator id="55e7d5bf-a1c5-4b21-9c8f-bba93910e8fb" title="Application Services Delete Model" group="DDD" description="">
+	<operator id="" title="Application Services Delete Model" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -142,7 +142,7 @@ public class DeleteCommandDto
 	
 ]]>
 	</operator>
-	<operator id="7da8a394-2742-4186-ae12-596efed0260c" title="Application Services Delete Handler" group="DDD" description="">
+	<operator id="" title="Application Services Delete Handler" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -174,7 +174,7 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand,DeleteCommandD
 		
 ]]>
 	</operator>
-	<operator id="4924aa86-cc90-46e0-b226-88fc8b6f6a44" title="Application Services Select Model" group="DDD" description="">
+	<operator id="" title="Application Services Select Model" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -198,7 +198,7 @@ ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('
 	
 ]]>
 	</operator>
-	<operator id="a8646e32-cab7-4e86-8c31-7929802507ce" title="Application Services Select Handler" group="DDD" description="">
+	<operator id="" title="Application Services Select Handler" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -230,7 +230,7 @@ public class SelectQueryHandler : IQueryHandler<SelectCommand,SelectCommandDto>
 		
 ]]>
 	</operator>
-	<operator id="097a2aa7-0a79-4ac4-b86e-f2f3ce49b9c3" title="Application Services List Model" group="DDD" description="">
+	<operator id="" title="Application Services List Model" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -260,7 +260,7 @@ ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('
 	
 ]]>
 	</operator>
-	<operator id="a0b353e5-48f2-4a82-a1a1-8b730f4599ba" title="Application Services List Handler" group="DDD" description="">
+	<operator id="" title="Application Services List Handler" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -293,8 +293,7 @@ public class ListQueryHandler : IQueryHandler<ListCommand,ListQueryResultDto>
 		
 ]]>
 	</operator>
-	<!-- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -->
-	<operator id="675cb2f5-85c7-4d03-89fe-79ae9e95aeda" title="Common Application Interfaces ICommand/IQuery Handlers" group="DDD" description="">
+	<operator id="" title="Common Application Interfaces ICommand/IQuery Handlers" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -317,7 +316,7 @@ namespace ${ns}.Common.Interfaces;
 		
 ]]>
 	</operator>
-	<operator id="f9e4f741-0783-464c-8506-90b90da032dc" title="Common Persistence Interfaces Repository" group="DDD" description="">
+	<operator id="" title="Common Persistence Interfaces Repository" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -335,7 +334,7 @@ public interface I${model.Name}Repository : IBaseRepository<{model.Name}>
 		
 ]]>
 	</operator>
-	<operator id="f9e4f741-0783-464c-8506-90b90da032dc" title="Common Persistence Interfaces DatabaseContext" group="DDD" description="">
+	<operator id="" title="Common Persistence Interfaces DatabaseContext" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -343,7 +342,6 @@ public interface I${model.Name}Repository : IBaseRepository<{model.Name}>
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Common/Interfaces/IDatabaseContext.cs`,`
 using Microsoft.EntityFrameworkCore;
-
 namespace ${ns}.Common.Interfaces;
 
 public interface IDatabaseContext
@@ -360,7 +358,7 @@ public interface IDatabaseContext
 		
 ]]>
 	</operator>
-	<operator id="d67d9497-5f5b-44a6-958a-8e0b11a68674" title="Common Persistence Generic Interfaces Repository" group="DDD" description="">
+	<operator id="" title="Common Persistence Generic Interfaces Repository" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -391,7 +389,7 @@ public interface IBaseRepository<TEntity> where TEntity : class
 		
 ]]>
 	</operator>
-	<operator id="9ea84cbd-e12f-434a-9920-c0a0f725e74b" title="Common Application Result" group="DDD" description="">
+	<operator id="" title="Common Application Result" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -416,8 +414,7 @@ public class ApplicationResult<T> : ApplicationResult
 		
 ]]>
 	</operator>
-	<!-- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -->
-	<operator id="75af1132-a1f6-481c-94e5-bc484a9da6e7" title="Persistence Generic Repository" group="DDD" description="">
+	<operator id="" title="Persistence Generic Repository" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -524,7 +521,7 @@ public class BaseRepository<TEntity> : IRepositoryBase<TEntity> where TEntity : 
 		
 ]]>
 	</operator>
-	<operator id="76c26d03-9463-4ca8-b6ee-777501f8fdd0" title="Persistence Repositories" group="DDD" description="">
+	<operator id="" title="Persistence Repositories" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -571,5 +568,4 @@ public class ${model.Name}QueryRepository : I${model.Name}QueryRepository
 		
 ]]>
 	</operator>
-	<!-- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -->
 </database>
