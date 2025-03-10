@@ -538,7 +538,7 @@ using Devinux.AutoDI;
 namespace ${ns}.Persistence.Repositories.${model.Name};
 
 [DevinuxServiceScope]
-public class ${model.Name}CommandRepository : I${model.Name}Repository
+public class ${model.Name}CommandRepository : BaseRepository<${model.Name}>, I${model.Name}Repository
 {
 }
 `);
@@ -548,7 +548,7 @@ using Devinux.AutoDI;
 namespace ${ns}.Persistence.Repositories.${model.Name};
 
 [DevinuxServiceScope]
-public class ${model.Name}QueryRepository : I${model.Name}Repository
+public class ${model.Name}QueryRepository : BaseRepository<${model.Name}>, I${model.Name}Repository
 { 
 }
 `);
