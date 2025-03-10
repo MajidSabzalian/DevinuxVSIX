@@ -524,7 +524,7 @@ public class BaseRepository<TEntity> : IRepositoryBase<TEntity> where TEntity : 
 		
 ]]>
 	</operator>
-	<operator id="" title="Persistence Repositories" group="DDD" description="">
+	<operator id="76c26d03-9463-4ca8-b6ee-777501f8fdd0" title="Persistence Repositories" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
