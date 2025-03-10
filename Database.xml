@@ -363,8 +363,10 @@ public interface IDatabaseContext
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Common/Interfaces/Repositories/IBaseRepository.cs`,`
-namespace ${ns}.Persistence.Repositories;
+file(`/Common/Interfaces/IBaseRepository.cs`,`
+using System.Linq.Expressions;
+
+namespace ${ns}.Common.Interfaces;
 
 public interface IBaseRepository<TEntity> where TEntity : class
 {
@@ -520,7 +522,7 @@ public class BaseRepository<TEntity> : IRepositoryBase<TEntity> where TEntity : 
 		
 ]]>
 	</operator>
-	<operator id="" title="Persistence Repositories" group="DDD" description="">
+	<operator id="" title="Persistence Repositories (Generic)" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -531,36 +533,17 @@ using Devinux.AutoDI;
 namespace ${ns}.Persistence.Repositories.${model.Name};
 
 [DevinuxServiceScope]
-public class ${model.Name}CommandRepository : I${model.Name}CommandRepository
+public class ${model.Name}CommandRepository : BaseRepository<${model.Name}>
 {
-	private readonly IDatabaseContext _db;
-	public ${model.Name}CommandRepository(IDatabaseContext db) { _db = db; }
-	public async Task<int> InsertAsync(${model.Name} cmd, CancellationToken ct)
-	{
-	}
-	public async Task<int> UpdateAsync(${model.Name} cmd, CancellationToken ct)
-	{
-	}
-	public async Task<int> DeleteAsync(${model.Name} cmd, CancellationToken ct)
-	{
-	}
 }
 `);
 file(`/Persistence/Repositories/${model.Name}/${model.Name}QueryRepository.cs`,`
+using Devinux.AutoDI;
 namespace ${ns}.Persistence.Repositories.${model.Name};
-public class ${model.Name}QueryRepository : I${model.Name}QueryRepository 
+
+[DevinuxServiceScope]
+public class ${model.Name}QueryRepository : BaseRepository<${model.Name}>
 { 
-	private readonly IDatabaseContext _db;
-	public ${model.Name}QueryRepository(IDatabaseContext db) { _db = db; }
-	public async Task<${model.Name}> SelectAsync(int Id, CancellationToken ct)
-	{
-		return _db.${model.Name}.Where(m => m.Id == Id).FirstOfDefault();
-	}
-	public async Task<KeyValuePair<int,List<${model.Name}>>> ListAsync(CancellationToken ct)
-	{
-		var q = _db.${model.Name};
-		rewturn new KeyValuePair<int,List<${model.Name}>>(q.Count(),q.ToList());
-	}
 }
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
