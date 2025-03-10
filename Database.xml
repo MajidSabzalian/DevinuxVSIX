@@ -315,6 +315,40 @@ public class ListQueryHandler : IQueryHandler<ListQuery,List<ListQueryDto>>
 		
 ]]>
 	</operator>
+	<operator id="" title="Application Mapper Class" group="Devinux Clean" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Application/Mapper/${model.Name}Mapper.cs`,
+`
+using AutoMapper;
+using ${ns}.Application.Service.${model.Name}.Commands.Insert;
+using ${ns}.Application.Service.${model.Name}.Commands.Update;
+using ${ns}.Application.Service.${model.Name}.Queries.List;
+using ${ns}.Application.Service.${model.Name}.Queries.Select;
+using ${ns}.Domain.Entities;
+
+namespace ${ns}.Application.Mapper
+{
+    public class ${model.Name}Mapper : Profile
+    {
+        public UserMapper()
+        {
+            this.CreateMap<${model.Name}, InsertCommand>().ReverseMap();
+            this.CreateMap<${model.Name}, UpdateCommand>().ReverseMap();
+            this.CreateMap<${model.Name}, SelectQueryDto>().ReverseMap();
+            this.CreateMap<${model.Name}, ListQueryDto>().ReverseMap();
+        }
+    }
+}
+
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
 	<operator id="" title="Common Application Interfaces ICommand/IQuery Handlers" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
