@@ -1,7 +1,6 @@
 <?xml version="1.0" ?>
 
 <database>
-	<!-- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -->
 	<operator id="" title="Application Services Insert Model" group="DDD" description="">
 		<![CDATA[
 // ► file(path,content);
