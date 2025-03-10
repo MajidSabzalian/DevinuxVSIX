@@ -534,21 +534,23 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Persistence/Repositories/${model.Name}/${model.Name}CommandRepository.cs`,`
 using Devinux.AutoDI;
+using ${ns}.Common.Interfaces.${model.Name}
 
 namespace ${ns}.Persistence.Repositories.${model.Name};
 
 [DevinuxServiceScope]
-public class ${model.Name}CommandRepository : BaseRepository<${model.Name}>, I${model.Name}Repository
+public class ${model.Name}CommandRepository : BaseRepository<Domain.Entities.${model.Name}>, I${model.Name}Repository
 {
 }
 `);
 file(`/Persistence/Repositories/${model.Name}/${model.Name}QueryRepository.cs`,`
 using Devinux.AutoDI;
+using ${ns}.Common.Interfaces.${model.Name}
 
 namespace ${ns}.Persistence.Repositories.${model.Name};
 
 [DevinuxServiceScope]
-public class ${model.Name}QueryRepository : BaseRepository<${model.Name}>, I${model.Name}Repository
+public class ${model.Name}QueryRepository : BaseRepository<Domain.Entities.${model.Name}>, I${model.Name}Repository
 { 
 }
 `);
