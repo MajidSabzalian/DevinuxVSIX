@@ -48,11 +48,11 @@ public class InsertCommandHandler : ICommandHandler<InsertCommand,InsertCommandD
         _mapper = mapper;
 	}
 
-	public async Task<InsertCommandDto> Handle(InsertCommand cmd , CancellationToken ct)
+	public async Task<ApplicationResult<InsertCommandDto>> Handle(InsertCommand cmd , CancellationToken ct)
 	{
 		var _model = _mapper.Map<Domain.Entities.{model.Name}>(command);
         var result = await _cmdRepo.InsertAsync(_model, ct);
-        return new InsertCommandDto() {{ Result = result > 0 }};
+        return new ApplicationResult( InsertCommandDto() {{ Result = result > 0 }});
 	}
 }
 `);
@@ -105,11 +105,11 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand,UpdateCommandD
         _mapper = mapper;
 	}
 
-	public async Task<UpdateCommandDto> Handle(UpdateCommand cmd , CancellationToken ct)
+	public async Task<ApplicationResult<UpdateCommandDto>> Handle(UpdateCommand cmd , CancellationToken ct)
 	{
 		var _model = _mapper.Map<Domain.Entities.{model.Name}>(command);
         var result = await _cmdRepo.UpdateAsync(_model, ct);
-        return new UpdateCommandDto() {{ Result = result > 0 }};
+        return new ApplicationResult( UpdateCommandDto() {{ Result = result > 0 }});
 	}
 }
 `);
@@ -162,10 +162,10 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand,DeleteCommandD
         _mapper = mapper;
 	}
 
-	public async Task<DeleteCommandDto> Handle(DeleteCommand cmd , CancellationToken ct)
+	public async Task<ApplicationResult<DeleteCommandDto>> Handle(DeleteCommand cmd , CancellationToken ct)
 	{
         var result = await _cmdRepo.DeleteAsync(model.Id, ct);
-        return new DeleteCommandDto() {{ Result = result > 0 }};
+        return  new ApplicationResult( DeleteCommandDto() {{ Result = result > 0 }});
 	}
 }
 `);
@@ -208,7 +208,7 @@ using AutoMapper;
 using ${ns}.Common.Interfaces;
 namespace ${ns}.Application.Service.${model.Name}.Queries.Select;
 
-public class SelectQueryHandler : IQueryHandler<SelectCommand,SelectCommandDto>
+public class SelectQueryHandler : IQueryHandler<SelectQuery,SelectQueryDto>
 {
 	private readonly IMapper mapper;
 	private readonly I${model.Name}QueryRepository _qryRepo;
@@ -218,10 +218,10 @@ public class SelectQueryHandler : IQueryHandler<SelectCommand,SelectCommandDto>
         _mapper = mapper;
 	}
 
-	public async Task<SelectQueryDto> Handle(SelectQuery qry , CancellationToken ct)
+	public async Task<ApplicationResult<SelectQueryDto>> Handle(SelectQuery qry , CancellationToken ct)
 	{
         var result = await _qryRepo.SelectAsync(qry.Id, ct);
-        return _mapper.Map<SelectQueryDto>(result);
+        return new ApplicationResult(_mapper.Map<SelectQueryDto>(result));
 	}
 }
 `);
@@ -250,10 +250,6 @@ public class ListQueryDto
 	public List<ListQueryDtoItem> Data { set; get; }
 	public int Count { set; get; }
 }
-public class ListQueryDtoItem
-{
-${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('\n')}
-}
 `);	
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 	
@@ -271,7 +267,7 @@ using ${ns}.Common.Interfaces;
 
 namespace ${ns}.Application.Service.${model.Name}.Queries.List;
 
-public class ListQueryHandler : IQueryHandler<ListCommand,ListQueryResultDto>
+public class ListQueryHandler : IQueryHandler<ListCommand,List<ListQueryDto>>
 {
 	private readonly IMapper mapper;
 	private readonly I${model.Name}QueryRepository _qryRepo;
@@ -281,10 +277,10 @@ public class ListQueryHandler : IQueryHandler<ListCommand,ListQueryResultDto>
         _mapper = mapper;
 	}
 
-	public async Task<List<ListQueryDto>> Handle(ListQuery qry , CancellationToken ct)
+	public async Task<ApplicationResult<List<ListQueryDto>>> Handle(ListQuery qry , CancellationToken ct)
 	{
         var result = await _qryRepo.ListAsync(qry.Page, qry.PageSize, ct);
-        return new ListQueryResultDto(){Data = result.select(m => _mapper.Map<ListQueryDtoItem>(m)).ToList();
+        return new ApplicationResult(result.select(m => _mapper.Map<ListQueryDto>(m));
 	}
 }
 `);
@@ -343,15 +339,17 @@ file(`/Common/Interfaces/IDatabaseContext.cs`,`
 using Microsoft.EntityFrameworkCore;
 namespace ${ns}.Common.Interfaces;
 
-public interface IDatabaseContext
+public interface IDatabaseContext : IDisposable
 {
-	public DbSet<TEntity> Set<TEntity>() where TEntity : class;
-	public DbSet<TEntity> Set<TEntity>(string name) where TEntity : class;
-	public int SaveChanges();
-	public int SaveChanges(bool acceptAllChangesOnSuccess);
-	public Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default);
-	public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-}
+        public DbSet<TEntity> Set<TEntity>() where TEntity : class;
+        public DbSet<TEntity> Set<TEntity>(string name) where TEntity : class;
+        public int SaveChanges();
+        public int SaveChanges(bool acceptAllChangesOnSuccess);
+        public Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default);
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        public EntityEntry Entry(object entity);
+        public EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
+
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 		
@@ -423,13 +421,18 @@ public class ApplicationResult<T> : ApplicationResult
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 
 file(`/Persistence/Repositories/BaseRepository.cs`,`
+
+using Microsoft.EntityFrameworkCore;
+using ${ns}.Common.Interfaces;
+using System.Linq.Expressions;
+
 namespace ${ns}.Persistence.Repositories;
 
-public class BaseRepository<TEntity> : IRepositoryBase<TEntity> where TEntity : class
+public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
 {
     #region Fields
 
-    protected readonly IDatabaseContext _context = new IDatabaseContext();
+    protected readonly IDatabaseContext _context;
 
     #endregion
 
