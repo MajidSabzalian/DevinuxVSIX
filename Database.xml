@@ -75,6 +75,7 @@ namespace ${ns}.Application.Service.${model.Name}.Commands.Update;
 
 public class UpdateCommand : ICommand
 {
+	public int Id { set; get; }
 	${model.Items.map(m=>`public ${m.TypeName} ${m.Name} { set; get; } `).join('\n')}
 }
 
@@ -262,11 +263,9 @@ file(`/Application/Services/${model.Name}/Queries/ListQuery.cs`,`
 using ${ns}.Common.Interfaces;
 namespace ${ns}.Application.Service.${model.Name}.Queries.List;
 
-public class ListQuery : IQuery
+public class ListQuery : IQuery , IPagination
 {
 	public int Id { set; get; }
-	public int Page { set; get; }
-	public int PageSize { set; get; }
 }
 public class ListQueryDto
 {
@@ -366,6 +365,24 @@ namespace ${ns}.Common.Interfaces;
 	}
 	public interface ICommandHandler<TCommand,TResponse> where TCommand : ICommand {
 		Task<TResponse> Handle(TCommand cmd, CancellationToken ct);
+	}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+	<operator id="" title="Common Application Interfaces IPagination" group="Devinux Clean" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Common/Interfaces/IPagination.cs`,`
+namespace ${ns}.Common.Interfaces;
+
+	public interface IPagination { 
+		public int Page { set; get; }
+		public int PageSize { set; get; }
 	}
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
@@ -473,6 +490,44 @@ public class ApplicationResult<T> : ApplicationResult
 	public int Count { set; get; }
 }
 `);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+	<operator id="" title="Common Endpoint ActionResult" group="Devinux Clean" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Common/Endpoint/ActionResult.cs`,`
+
+namespace ${ns}.Endpoint
+
+public enum ${ns}ActionResultStatusType {
+	Success = 1 , Error = 2 
+}
+public class ${ns}ActionResult : IActionResult
+{
+	public ${ns}ActionResult(IPronodeActionResultStatusType status, Object data, string msg = "")
+	{
+		Status = status;
+		Data = data;
+	}
+	public ${ns}ActionResultStatusType Status { set; get; }
+	public object Data { set; get; }
+	public string Message { set; get; } = "";
+	public Task ExecuteResultAsync(ActionContext context)
+	{
+		context.HttpContext.Response.WriteAsJsonAsync(new { @status = Status, @data = Data, @msg = Message });
+		return Task.CompletedTask;
+	}
+
+	public static ${ns}ActionResult Success(Object data) => new ${ns}ActionResult( ${ns}ActionResultStatusType.Success , data);
+	public static ${ns}ActionResult Error(string msg) => new ${ns}ActionResult(${ns}ActionResultStatusType.Error, null, msg);
+	public static ${ns}ActionResult Exception(Exception ex) => new ${ns}ActionResult(${ns}ActionResultStatusType.Error, ex, ex.Message);
+}
+	
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 		
 ]]>
@@ -630,6 +685,96 @@ namespace ${ns}.Persistence.Repositories.${model.Name};
 public class ${model.Name}QueryRepository : BaseRepository<Domain.Entities.${model.Name}>, I${model.Name}Repository
 { 
 }
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+	<operator id="" title="Domain Base Entity" group="Devinux Clean" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Domain/Entities/BaseEntity.cs`,`
+
+using System.ComponentModel.DataAnnotations;
+
+namespace ${ns}.Domain.Entities
+{
+    public abstract class BaseEntity
+    {
+        [Key]
+        public int Id { get; set; }
+    }
+}
+
+
+
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+	<operator id="" title="Interface Base Controller" group="Devinux Clean" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Controller/_BaseController.cs`,`
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace ${ns}.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class BaseController : ControllerBase
+    {
+        public readonly IDevinuxCommandServiceRunner cbus;
+        public readonly IDevinuxQueryServiceRunner qbus;
+        public readonly IMapper mapper;
+        public BaseController(IDevinuxCommandServiceRunner cb , IDevinuxQueryServiceRunner qb , IMapper _mapper)
+        {
+            mapper = _mapper;
+            qbus = qb;
+            cbus = cb;
+        }
+    }
+}
+
+
+
+
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+	<operator id="" title="Interface Controller" group="Devinux Clean" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Controller/${model.Name}Controller.cs`,`
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace ${ns}.Controllers
+{
+    public class ${model.Name}Controller : ControllerBase
+    {
+        public ${model.Name}Controller(IDevinuxCommandServiceRunner cb , IDevinuxQueryServiceRunner qb , IMapper _mapper) : base(cb, qb, _mapper)
+        {
+        }
+    }
+}
+
+
+
+
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 		
