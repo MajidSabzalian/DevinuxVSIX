@@ -479,14 +479,12 @@ file(`/Common/Application/Result.cs`,`
 namespace ${ns}.Common.Application;
 
 public interface IApplicationResult { }
-public class ApplicationResult : IApplicationResult
+
+public class ApplicationResult<T> : IApplicationResult
 {
-	public static ApplicationResult<T>(T data) => return new ApplicationResult<T>() {Data = data};
-	public static ApplicationResult<T>(T data , int count) => return new ApplicationResult<T>() {Data = data , Count = count};
-}
-public class ApplicationResult<T> : ApplicationResult
-{
-	public T Data { set; get; }
+    public ApplicationResult(T data ) { Data = data; }
+    public ApplicationResult(T data , int count) { Data = data; Count = count; }
+    public T Data { set; get; }
 	public int Count { set; get; }
 }
 `);
@@ -529,7 +527,7 @@ public class ${ns}ActionResult : IActionResult
 }
 	
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-		
+');
 ]]>
 	</operator>
 	<operator id="" title="Persistence Generic Repository" group="Devinux Clean" description="">
