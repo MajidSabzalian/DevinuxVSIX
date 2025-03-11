@@ -500,14 +500,14 @@ public class ApplicationResult<T> : IApplicationResult
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Common/Endpoint/ActionResult.cs`,`
 
-namespace ${ns}.Endpoint
+namespace ${ns}.Common.Endpoint;
 
 public enum ${ns}ActionResultStatusType {
 	Success = 1 , Error = 2 
 }
 public class ${ns}ActionResult : IActionResult
 {
-	public ${ns}ActionResult(IPronodeActionResultStatusType status, Object data, string msg = "")
+	public ${ns}ActionResult(${ns}ActionResultStatusType status, Object data, string msg = "")
 	{
 		Status = status;
 		Data = data;
