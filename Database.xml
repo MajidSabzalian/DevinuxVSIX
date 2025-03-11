@@ -224,9 +224,9 @@ ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('
 file(`/Application/Services/${model.Name}/Queries/SelectQueryHandler.cs`,`
 using AutoMapper;
 using Devinux.AutoDI;
-using Pronode.Common.Application;
-using Pronode.Common.Interfaces;
-using Pronode.Common.Interfaces.User;
+using ${ns}.Common.Application;
+using ${ns}.Common.Interfaces;
+using ${ns}.Common.Interfaces.User;
 
 
 namespace ${ns}.Application.Service.${model.Name}.Queries.Select;
@@ -285,9 +285,9 @@ ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('
 file(`/Application/Services/${model.Name}/Queries/ListQueryHandler.cs`,`using AutoMapper;
 using AutoMapper;
 using Devinux.AutoDI;
-using Pronode.Common.Application;
-using Pronode.Common.Interfaces;
-using Pronode.Common.Interfaces.User;
+using ${ns}.Common.Application;
+using ${ns}.Common.Interfaces;
+using ${ns}.Common.Interfaces.User;
 
 namespace ${ns}.Application.Service.${model.Name}.Queries.List;
 
@@ -348,6 +348,7 @@ namespace ${ns}.Application.Mapper
 		
 ]]>
 	</operator>
+	
 	<operator id="" title="Common Application Interfaces ICommand/IQuery Handlers" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
@@ -499,6 +500,7 @@ public class ApplicationResult<T> : IApplicationResult
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Common/Endpoint/ActionResult.cs`,`
+using Microsoft.AspNetCore.Mvc;
 
 namespace ${ns}.Common.Endpoint;
 
@@ -530,6 +532,61 @@ public class ${ns}ActionResult : IActionResult
 `);
 ]]>
 	</operator>
+	<operator id="" title="Common Endpoint CQRS Bus" group="Devinux Clean" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Common/Endpoint/ActionResult.cs`,`
+
+using Devinux.AutoDI;
+using ${ns}.Common.Application;
+using ${ns}.Common.Interfaces;
+
+namespace ${ns}.Common.EndPoint
+{
+    public interface IQueryBus { 
+        Task<ApplicationResult<TResult>> RunService<TQuery, TResult>(TQuery r, CancellationToken c = default) where TQuery : IQuery;
+    }
+    [DevinuxServiceScope(Devinux.AutoDI.Enums.DevinuxServiceScopeType.Singleton)]
+    public class QueryBus : IQueryBus
+    {
+        private readonly IServiceProvider _sp;
+        public QueryBus(IServiceProvider sp)
+        {
+            _sp = sp;
+        }
+        public async Task<ApplicationResult<TResult>> RunService<TQuery, TResult>(TQuery r, CancellationToken c = default) where TQuery : IQuery
+        {
+            var s = _sp.CreateScope().ServiceProvider.GetRequiredService<IQueryHandler<TQuery, TResult>>();
+            return await s.Handle(r, c);
+        }
+    }
+    public interface ICommandBus {
+        Task<ApplicationResult<TResult>> RunService<TCommand, TResult>(TCommand r, CancellationToken c = default) where TCommand : ICommand;
+    }
+    [DevinuxServiceScope(Devinux.AutoDI.Enums.DevinuxServiceScopeType.Singleton)]
+    public class CommandBus :ICommandBus {
+        private readonly IServiceProvider _sp;
+        public CommandBus(IServiceProvider sp)
+        {
+            _sp = sp;
+        }
+        public async Task<ApplicationResult<TResult>> RunService<TCommand, TResult>(TCommand r, CancellationToken c = default) where TCommand : ICommand
+        {
+            var s = _sp.CreateScope().ServiceProvider.GetRequiredService<ICommandHandler<TCommand, TResult>>();
+            return await s.Handle(r, c);
+        }
+    }
+}
+
+	
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+`);
+]]>
+	</operator>
+	
 	<operator id="" title="Persistence Generic Repository" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
@@ -596,7 +653,8 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         return await Task.Run(() => GetList(predicate));
     }
     public IEnumerable<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20) {
-        var q = _context.Set<TEntity>().Where<TEntity>(predicate);
+        var q = _context.Set<TEntity>().AsQueryable();
+        if (predicate != null) q = q.Where<TEntity>(predicate);
         if (pageindex > 1) return q.Skip((pageindex - 1) * pagesize).Take(pagesize).ToList();
         else return q.Take(pagesize).ToList();
     }
@@ -688,6 +746,7 @@ public class ${model.Name}QueryRepository : BaseRepository<Domain.Entities.${mod
 		
 ]]>
 	</operator>
+	
 	<operator id="" title="Domain Base Entity" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
@@ -714,6 +773,7 @@ namespace ${ns}.Domain.Entities
 		
 ]]>
 	</operator>
+	
 	<operator id="" title="Interface Base Controller" group="Devinux Clean" description="">
 		<![CDATA[
 // ► file(path,content);
@@ -758,18 +818,55 @@ namespace ${ns}.Controllers
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Controller/${model.Name}Controller.cs`,`
 
+
+
+
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using ${ns}.Application.Service.${model.Name}.Commands.Delete;
+using ${ns}.Application.Service.${model.Name}.Commands.Insert;
+using ${ns}.Application.Service.${model.Name}.Commands.Update;
+using ${ns}.Application.Service.${model.Name}.Queries.List;
+using ${ns}.Application.Service.${model.Name}.Queries.Select;
+using ${ns}.Common;
+using ${ns}.Common.Endpoint;
 
 namespace ${ns}.Controllers
 {
-    public class ${model.Name}Controller : ControllerBase
+    public class ${model.Name}Controller : BaseController
     {
-        public ${model.Name}Controller(IDevinuxCommandServiceRunner cb , IDevinuxQueryServiceRunner qb , IMapper _mapper) : base(cb, qb, _mapper)
+        public ${model.Name}Controller(ICommandBus cb, IQueryBus qb, IMapper _mapper) : base(cb, qb, _mapper)
         {
+        }
+        [HttpGet]
+        public async Task<IActionResult> Select([FromQuery] SelectQuery qry, CancellationToken cancellationToken)
+        {
+            return ${ns}ActionResult.Success(
+                (await qbus.RunService<SelectQuery, SelectQueryDto>(qry, cancellationToken))
+                );
+        }
+        [HttpPost]
+        public async Task<IActionResult> List([FromBody] ListQuery qry, CancellationToken cancellationToken)
+        {
+            return ${ns}ActionResult.Success(await qbus.RunService<ListQuery, List<ListQueryDto>>(qry, cancellationToken));
+        }
+        [HttpPost]
+        public async Task<IActionResult> Insert([FromBody] InsertCommand cmd, CancellationToken cancellationToken)
+        {
+            return ${ns}ActionResult.Success(await cbus.RunService<InsertCommand, InsertCommandDto>(cmd, cancellationToken));
+        }
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateCommand cmd, CancellationToken cancellationToken)
+        {
+            return ${ns}ActionResult.Success(await cbus.RunService<UpdateCommand, UpdateCommandDto>(cmd, cancellationToken));
+        }
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] DeleteCommand cmd, CancellationToken cancellationToken)
+        {
+            return ${ns}ActionResult.Success(await cbus.RunService<DeleteCommand, DeleteCommandDto>(cmd, cancellationToken));
         }
     }
 }
-
 
 
 
