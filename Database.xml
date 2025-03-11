@@ -527,7 +527,7 @@ public class ${ns}ActionResult : IActionResult
 }
 	
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-');
+`);
 ]]>
 	</operator>
 	<operator id="" title="Persistence Generic Repository" group="Devinux Clean" description="">
