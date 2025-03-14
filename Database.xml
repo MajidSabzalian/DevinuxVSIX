@@ -822,7 +822,7 @@ namespace ${ns}.Controllers
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Controller/${model.Name}Controller.cs`,`
+file(`/Controllers/${model.Name}Controller.cs`,`
 
 
 
@@ -952,9 +952,9 @@ export class ${model.Name}List extends DevinuxClientComponentPage {
 
                     let grid = new DevinuxClientComponentGrid('Role-list-container-gridcontainer-list').renderload(pgridform)
                         .addColumn(new DevinuxClientComponentGridColumn({ Fill: false, Caption: 'شناسه', Name: 'id', Id: 'id', Type: 'number', Value: (m) => m.id }))
-$(model.Items.map(m=>`
+${model.Items.map(m=>`
 .addColumn(new DevinuxClientComponentGridColumn({ Fill: false, Caption: '${m.Name}', Name: '${m.Name}', Id: '${m.Name}', Type: 'string', Value: (m) => m.${m.Name} }))
-`).join(''))						
+`).join('')}
                         .setRowCheck((tr,r) => { })
                         .onEvent(DevinuxClientComponentGrid._event_enum.page, (p) => { this.filter.page = p; this.getTable(); })
                         .onEvent(DevinuxClientComponentGrid._event_enum.pagesize, (p) => { this.filter.page = 1; this.filter.pagesize = p; this.getTable(); })
@@ -1017,11 +1017,11 @@ export class ${model.Name}Info extends DevinuxClientComponentPage {
                 let pccf = new DevinuxClientComponentForm("pcf-form").renderload(pccstart).makeResponsive();
                 this.forms.push(pccf);
 
-$(model.Items.map(m=>`
+${model.Items.map(m=>`
                 let txttitle = new DevinuxClientComponentField("${m.Name}").renderload(pccf.Root.container).makeText({ caption: '${m.Name}', id: '${m.Name}', name: '${m.Name}' }).sizeAll(12);
                 if (this.info.id > 0) { txttitle.setValue(this.info.${m.Name}); }
                 if (this.info.readonly) txttitle.setReadonly();
-`))
+`).join('')}
             }
             
             if (!this.info.readonly) {
@@ -1091,9 +1091,6 @@ $(model.Items.map(m=>`
         return $('<div class="page ${model.Name}-info"></div>');
     }
 }
-
-
-
 `);
 ]]>
 	</operator>
