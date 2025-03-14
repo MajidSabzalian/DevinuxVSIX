@@ -903,9 +903,9 @@ export class ${model.Name}List extends DevinuxClientComponentPage {
     }
     load() {
         let e = $(this.Root.e);
-        let pcontainer = new DevinuxClientComponentPanel(`Role-list-container`).renderload(e).setFlex().setFlexRows().setFlexGap().setAbsolutePosition();
+        let pcontainer = new DevinuxClientComponentPanel('Role-list-container').renderload(e).setFlex().setFlexRows().setFlexGap().setAbsolutePosition();
         {
-            let pgrid = new DevinuxClientComponentPanel(`Role-list-container-gridcontainer`).renderload(pcontainer).setFlexCenter();
+            let pgrid = new DevinuxClientComponentPanel('Role-list-container-gridcontainer').renderload(pcontainer).setFlexCenter();
             {
 
                 let pgridform = new DevinuxClientComponentForm('Role-list-container-grid-form').renderload(pgrid).setCaption('').setAbsolutePosition(true);
