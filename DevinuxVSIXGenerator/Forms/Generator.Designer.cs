@@ -38,6 +38,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnGenerate = new System.Windows.Forms.Button();
+            this.btnOpenDatabase = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -125,6 +126,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btnOpenDatabase);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.btnUpdate);
             this.panel2.Controls.Add(this.btnGenerate);
@@ -167,6 +169,17 @@
             this.btnGenerate.Text = "Generate";
             this.btnGenerate.UseVisualStyleBackColor = true;
             // 
+            // btnOpenDatabase
+            // 
+            this.btnOpenDatabase.AutoSize = true;
+            this.btnOpenDatabase.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnOpenDatabase.Location = new System.Drawing.Point(177, 15);
+            this.btnOpenDatabase.Name = "btnOpenDatabase";
+            this.btnOpenDatabase.Size = new System.Drawing.Size(124, 34);
+            this.btnOpenDatabase.TabIndex = 3;
+            this.btnOpenDatabase.Text = "Open Database Folder";
+            this.btnOpenDatabase.UseVisualStyleBackColor = true;
+            // 
             // Generator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -208,5 +221,6 @@
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button btnOpenDatabase;
     }
 }

@@ -1018,9 +1018,9 @@ export class ${model.Name}Info extends DevinuxClientComponentPage {
                 this.forms.push(pccf);
 
 ${model.Items.map(m=>`
-                let txttitle = new DevinuxClientComponentField("${m.Name}").renderload(pccf.Root.container).makeText({ caption: '${m.Name}', id: '${m.Name}', name: '${m.Name}' }).sizeAll(12);
-                if (this.info.id > 0) { txttitle.setValue(this.info.${m.Name}); }
-                if (this.info.readonly) txttitle.setReadonly();
+                let inp_${m.Name} = new DevinuxClientComponentField("${m.Name}").renderload(pccf.Root.container).makeText({ caption: '${m.Name}', id: '${m.Name}', name: '${m.Name}' }).sizeAll(12);
+                if (this.info.id > 0) { inp_${m.Name}.setValue(this.info.${m.Name}); }
+                if (this.info.readonly) inp_${m.Name}.setReadonly();
 `).join('')}
             }
             

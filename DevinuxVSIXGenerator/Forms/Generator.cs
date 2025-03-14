@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -26,6 +27,7 @@ namespace DevinuxVSIXGenerator.Forms
                 {
                     using (WebClient w = new WebClient())
                     {
+                        w.Encoding = Encoding.UTF8;
                         var str = w.DownloadString("https://github.com/MajidSabzalian/DevinuxVSIX/raw/refs/heads/master/Database.xml");
                         if (str.StartsWith("<?xml"))
                         {
@@ -40,38 +42,51 @@ namespace DevinuxVSIXGenerator.Forms
                 }
                 catch (Exception ex) { ex.ShowMessage(); }
             };
+            btnOpenDatabase.Click += (s, e) => {
+                try
+                {
+                    SelectFileInExplorer(pt);
+                }
+                catch (Exception ex) { ex.ShowMessage(); }
+            };
             btnGenerate.Click += (s, e) =>
             {
-                if (checkedListBox1.CheckedItems != null && checkedListBox1.CheckedItems.Count > 0)
+                try
                 {
-                    using (Jint.Engine eng = new Jint.Engine(cfg => { cfg.AllowClr(); }))
+                    if (checkedListBox1.CheckedItems != null && checkedListBox1.CheckedItems.Count > 0)
                     {
-                        eng.SetValue("file", new Action<string, string>((string Path, string content) => {
-                            content.SaveFile(currentProjectPath + Path);
-                        }));
-                        foreach (Operator item in checkedListBox1.CheckedItems)
+                        using (Jint.Engine eng = new Jint.Engine(cfg => { cfg.AllowClr(); cfg.CatchClrExceptions(); }))
                         {
-                            foreach (DevinuxEntityModel model in m)
+                            eng.SetValue("file", new Action<string, string>((string Path, string content) =>
                             {
-                                var jscode = $@"
+                                content.SaveFile(currentProjectPath + Path);
+                            }));
+                            foreach (Operator item in checkedListBox1.CheckedItems)
+                            {
+                                foreach (DevinuxEntityModel model in m)
+                                {
+                                    var jscode = $@"
 var model = {JsonConvert.SerializeObject(model)};
 var ns = '{defaultNameSpace}';
 
 {item.Text}
 
 ";
-                                eng.Execute(jscode);
+                                    eng.Execute(jscode);
+                                }
                             }
                         }
+                        "done".ShowMessage();
                     }
-                    "done".ShowMessage();
+                    else
+                    {
+                        "please select item".ShowMessage();
+                    }
                 }
-                else
-                {
-                    "please select item".ShowMessage();
-                }
+                catch (Exception ex) { ex.ShowMessage(); }
             };
         }
+        private static void SelectFileInExplorer(string filePath) => Process.Start("explorer.exe", $@"/select,""{filePath}""");
         private string pt = (Application.StartupPath + "//operator.xml");
         void SaveDb(string content)
         {
