@@ -875,4 +875,221 @@ namespace ${ns}.Controllers
 		
 ]]>
 	</operator>
+	<operator id="" title="UI Forms" group="Devinux Javascript Form" description="">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/wwwroot/app/pages/${model.Name}/${model.Name}.js`,`
+
+import { DevinuxClientCommon, DevinuxClientComponentButton, DevinuxClientComponentButtons, DevinuxClientComponentField, DevinuxClientComponentForm, DevinuxClientComponentGrid, DevinuxClientComponentGridColumn, DevinuxClientComponentPage, DevinuxClientComponentPanel } from "../../../scripts/clientcomponent.js";
+import Backend, { Api } from "../backend.js";
+
+export class ${model.Name}List extends DevinuxClientComponentPage {
+    constructor(Id = '${model.Name}list') {
+        super(Id, '${model.Name}طلاعات کاربران', 'fad fa-cogs');
+        this.filter = {
+            pagesize: 20,
+            page: 1,
+        }
+        this.selection = undefined;
+    }
+    load() {
+        let e = $(this.Root.e);
+        let pcontainer = new DevinuxClientComponentPanel(`Role-list-container`).renderload(e).setFlex().setFlexRows().setFlexGap().setAbsolutePosition();
+        {
+            let pgrid = new DevinuxClientComponentPanel(`Role-list-container-gridcontainer`).renderload(pcontainer).setFlexCenter();
+            {
+
+                let pgridform = new DevinuxClientComponentForm('Role-list-container-grid-form').renderload(pgrid).setCaption('').setAbsolutePosition(true);
+                {
+                    let btnNew = new DevinuxClientComponentButton("btn-new").setCaption("جدید").setIcon("fal fa-plus")
+                    let btnUpdate = new DevinuxClientComponentButton("btn-new").setCaption("ویرایش").setIcon("fal fa-edit")
+                    let btnDelete = new DevinuxClientComponentButton("btn-new").setCaption("حذف").setIcon("fal fa-times")
+                    let btnView = new DevinuxClientComponentButton("btn-new").setCaption("نمایش").setIcon("fal fa-search")
+                    btnNew.onEvent(DevinuxClientComponentButton._event_enum.click, () => {
+                        // let pageshi = new RoleInfo("ri",0,'');
+                        // pageshi.show(this, { width: "80%", height: "80%" });
+                        // pageshi.onEvent(DevinuxClientComponentPage._event_enum.dialogresult, () => {
+                        //     pageshi.close();
+                        //     this.getTable();
+                        // });
+                    });
+                    btnUpdate.onEvent(DevinuxClientComponentButton._event_enum.click, () => {
+                        // let pageshi = new RoleInfo("shi",this.selection.id,this.selection.roleName || '');
+                        // pageshi.show(this, { width: "80%", height: "80%" });
+                        // pageshi.onEvent(DevinuxClientComponentPage._event_enum.dialogresult, () => {
+                        //     pageshi.close();
+                        //     this.getTable();
+                        // });
+                    });
+                    btnDelete.onEvent(DevinuxClientComponentButton._event_enum.click, () => {
+                        let result = confirm("Want to delete ?");
+                        if (result) {
+                            let ci = DevinuxClientCommon.CreateTask();
+                            Api.${model.Name}_delete(this.selection.id)
+                            .setOk((ok) => {
+                                this.findFirst("notify").addSuccess({msg: "عملیات حذف با موفقیت انجام شد"});
+                            }).setError((e) => {
+                                this.findFirst("notify").addError({ msg: e && e.msg || 'عملیات ناموفق انجام گردید' });
+                            }).setDone((done) => {
+                                this.getTable();
+                                RBCommon.RemoveTask(ci);
+                            }).send();
+                        }
+                    });
+                    btnView.onEvent(DevinuxClientComponentButton._event_enum.click, () => {
+                        // let pageshi = new RoleInfo("shi",this.selection.id,this.selection.roleName || '',true);
+                        // pageshi.show(this, { width: "80%", height: "80%" });
+                    });
+
+                    let grid = new DevinuxClientComponentGrid('Role-list-container-gridcontainer-list').renderload(pgridform)
+                        .addColumn(new DevinuxClientComponentGridColumn({ Fill: false, Caption: 'شناسه', Name: 'id', Id: 'id', Type: 'number', Value: (m) => m.id }))
+$(model.Items.map(m=>`
+.addColumn(new DevinuxClientComponentGridColumn({ Fill: false, Caption: '${m.Name}', Name: '${m.Name}', Id: '${m.Name}', Type: 'string', Value: (m) => m.${m.Name} }))
+`))						
+                        .setRowCheck((tr,r) => { })
+                        .onEvent(DevinuxClientComponentGrid._event_enum.page, (p) => { this.filter.page = p; this.getTable(); })
+                        .onEvent(DevinuxClientComponentGrid._event_enum.pagesize, (p) => { this.filter.page = 1; this.filter.pagesize = p; this.getTable(); })
+                        .onEvent(DevinuxClientComponentGrid._event_enum.rowselect, (m) => { 
+                            if (m) {
+                                this.selection = m;
+                                btnsConstraint.forEach((m) => m.setUnLock());
+                            } else {
+                                this.selection = undefined
+                                btnsConstraint.forEach((m) => m.setLock());
+                            }
+                        });
+
+                    let btnsNormal = [btnNew];
+                    let btnsConstraint = [btnUpdate, btnDelete, btnView];
+                    [...btnsNormal, ...btnsConstraint].forEach((m) => grid.addButton(m));
+
+                    this.grid = grid;
+                    this.getTable();
+                }
+            }
+        }
+    }
+    getTable() {
+        let _tid = DevinuxClientCommon.CreateTask();
+        Backend.admin_${model.Name}_list({
+            pageSize: this.filter.pagesize || 20,
+            page: this.filter.page || 1
+        })
+            .setOk(ok => {
+                this.grid
+                    .setDataSource(ok.data)
+                    .setPagination({ Page: this.filter.page, RowCount: ok.count, PageSize: this.filter.pagesize, Radius: 2 })
+                    .print();})
+            .setError(err => { console.log(err) })
+            .setDone(done => { DevinuxClientCommon.RemoveTask(_tid); })
+            .send();
+    }
+    render() {
+        return $(`<div class="page ${model.Name}-list"></div>`);
+    }
+}
+export class ${model.Name}Info extends DevinuxClientComponentPage {
+    constructor(_id='${model.Name}info',${model.Name}id = 0,formtitle = '', readonly = false) {
+        super(_id, ${model.Name}id && ${model.Name}id > 0 ? "ویرایش" + " " + formtitle : "${model.Name} جدید", ${model.Name}id && ${model.Name}id > 0 ? "fad fa-edit" : "fad fa-plus");
+        this.info = {
+            ...{
+                readonly: readonly || false,
+                id: ${model.Name}id,
+            }
+        };
+        this.forms = [];
+    }
+    afterload() {
+        let pc = new DevinuxClientComponentPanel("panel-container").renderload(this.Root.e).setAbsolutePosition().setFlex().setFlexRows();
+        
+        {
+            let pccstart = new DevinuxClientComponentPanel("pc-formSection").renderload(pc).setFlexCenter();
+            {
+                let pccf = new DevinuxClientComponentForm("pcf-form").renderload(pccstart).makeResponsive();
+                this.forms.push(pccf);
+
+$(model.Items.map(m=>`
+                let txttitle = new DevinuxClientComponentField("${m.Name}").renderload(pccf.Root.container).makeText({ caption: '${m.Name}', id: '${m.Name}', name: '${m.Name}' }).sizeAll(12);
+                if (this.info.id > 0) { txttitle.setValue(this.info.${m.Name}); }
+                if (this.info.readonly) txttitle.setReadonly();
+`))
+            }
+            
+            if (!this.info.readonly) {
+                let pcb = new DevinuxClientComponentPanel("pc-buttonsSection").renderload(pc).setFlexEnd();
+                {
+                    let pcbb = new DevinuxClientComponentButtons("pcb-buttons").renderload(pcb);
+                    {
+                        let btnSave = new DevinuxClientComponentButton("btn-save").renderload(pcbb).setCaption("ذخیره و ارسال").setIcon("fad fa-save");
+                        btnSave.onEvent(DevinuxClientComponentButton._event_enum.click, () => {
+                            if (true) {
+                                this.dialogresult = false;
+                                let _f = this.forms[0].serialize();
+                                if (this.info.id > 0) {
+                                    // Call Api for Update
+                                    Backend.admin_${model.Name}_update({
+                                        ...this.info,
+                                        ..._f
+                                    })
+                                        .setOk((ok) => { this.dialogresult = true; this.findFirst('notify').addSuccess({ msg: 'عملیات با موفقیت انجام شد' }); })
+                                        .setError((err) => { })
+                                        .setDone((done) => { this.normalState(); })
+                                        .setSync()
+                                        .send();
+                                }
+                                else {
+                                    /// Call Api for Save
+                                    Backend.admin_${model.Name}_insert({
+                                            ...this.info,
+                                            ..._f
+                                        })
+                                        .setOk((ok) => { this.dialogresult = true; this.findFirst('notify').addSuccess({ msg: 'عملیات با موفقیت انجام شد' }); })
+                                        .setError((err) => { })
+                                        .setDone((done) => { this.normalState(); })
+                                        .setSync()
+                                        .send();
+                                }
+                                this.doEvent(DevinuxClientComponentPage._event_enum.dialogresult, this.dialogresult);
+                                this.close();
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+    load() {
+        this.loadingState();
+        if (this.info.id > 0) {
+            Backend.admin_${model.Name}_select(this.info,
+                (ok) => {
+                    this.info = { ...this.info, ...ok.data };
+                },
+                (err) => { },
+                (done) => {
+                    this.afterload();
+                    this.normalState();
+                }
+            )
+                .setSync()
+                .send();
+        } else {
+            this.afterload();
+            this.normalState();
+        }
+    }
+    render() {
+        return $(`<div class="page ${model.Name}-info"></div>`);
+    }
+}
+
+
+
+`);
+]]>
+	</operator>
+	
 </database>
