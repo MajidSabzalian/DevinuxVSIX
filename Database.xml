@@ -914,22 +914,20 @@ export class ${model.Name}List extends DevinuxClientComponentPage {
                     let btnUpdate = new DevinuxClientComponentButton("btn-new").setCaption("ویرایش").setIcon("fal fa-edit")
                     let btnDelete = new DevinuxClientComponentButton("btn-new").setCaption("حذف").setIcon("fal fa-times")
                     let btnView = new DevinuxClientComponentButton("btn-new").setCaption("نمایش").setIcon("fal fa-search")
-                    btnNew.onEvent(DevinuxClientComponentButton._event_enum.click, () => {
-                        // let pageshi = new RoleInfo("ri",0,'');
-                        // pageshi.show(this, { width: "80%", height: "80%" });
-                        // pageshi.onEvent(DevinuxClientComponentPage._event_enum.dialogresult, () => {
-                        //     pageshi.close();
-                        //     this.getTable();
-                        // });
-                    });
-                    btnUpdate.onEvent(DevinuxClientComponentButton._event_enum.click, () => {
-                        // let pageshi = new RoleInfo("shi",this.selection.id,this.selection.roleName || '');
-                        // pageshi.show(this, { width: "80%", height: "80%" });
-                        // pageshi.onEvent(DevinuxClientComponentPage._event_enum.dialogresult, () => {
-                        //     pageshi.close();
-                        //     this.getTable();
-                        // });
-                    });
+					btnNew.onEvent(DevinuxClientComponentButton._event_enum.click, () => {
+						let newform = new ${model.Name}Info("new-${model.Name}", 0)
+						.onEvent(DevinuxClientComponentPage._event_enum.dialogresult, () => {
+							newform.close();
+						    this.getTable();
+						}).show(this, { width: "80%", height: "80%" });
+					});
+					btnUpdate.onEvent(DevinuxClientComponentButton._event_enum.click, () => {
+						let editform = new ${model.Name}Info("edit-${model.Name}", this.selection.id,this.selection.name)
+						.onEvent(DevinuxClientComponentPage._event_enum.dialogresult, () => {
+							editform.close();
+						    this.getTable();
+						}).show(this, { width: "80%", height: "80%" });
+					});
                     btnDelete.onEvent(DevinuxClientComponentButton._event_enum.click, () => {
                         let result = confirm("Want to delete ?");
                         if (result) {
