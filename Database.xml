@@ -729,6 +729,9 @@ namespace ${ns}.Persistence.Repositories.${model.Name};
 [DevinuxServiceScope]
 public class ${model.Name}CommandRepository : BaseRepository<Domain.Entities.${model.Name}>, I${model.Name}Repository
 {
+	public ${model.Name}CommandRepository(IDatabaseContext db) : base(db)
+	{
+	}
 }
 `);
 file(`/Persistence/Repositories/${model.Name}/${model.Name}QueryRepository.cs`,`
@@ -740,6 +743,9 @@ namespace ${ns}.Persistence.Repositories.${model.Name};
 [DevinuxServiceScope]
 public class ${model.Name}QueryRepository : BaseRepository<Domain.Entities.${model.Name}>, I${model.Name}Repository
 { 
+	public ${model.Name}QueryRepository(IDatabaseContext db) : base(db)
+	{
+	}
 }
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
