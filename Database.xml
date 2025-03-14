@@ -988,7 +988,7 @@ $(model.Items.map(m=>`
             .send();
     }
     render() {
-        return $(`<div class="page ${model.Name}-list"></div>`);
+        return $('<div class="page ${model.Name}-list"></div>');
     }
 }
 export class ${model.Name}Info extends DevinuxClientComponentPage {
