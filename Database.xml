@@ -948,7 +948,7 @@ export class ${model.Name}List extends DevinuxClientComponentPage {
                         .addColumn(new DevinuxClientComponentGridColumn({ Fill: false, Caption: 'شناسه', Name: 'id', Id: 'id', Type: 'number', Value: (m) => m.id }))
 $(model.Items.map(m=>`
 .addColumn(new DevinuxClientComponentGridColumn({ Fill: false, Caption: '${m.Name}', Name: '${m.Name}', Id: '${m.Name}', Type: 'string', Value: (m) => m.${m.Name} }))
-`))						
+`).join(''))						
                         .setRowCheck((tr,r) => { })
                         .onEvent(DevinuxClientComponentGrid._event_enum.page, (p) => { this.filter.page = p; this.getTable(); })
                         .onEvent(DevinuxClientComponentGrid._event_enum.pagesize, (p) => { this.filter.page = 1; this.filter.pagesize = p; this.getTable(); })
@@ -1082,7 +1082,7 @@ $(model.Items.map(m=>`
         }
     }
     render() {
-        return $(`<div class="page ${model.Name}-info"></div>`);
+        return $('<div class="page ${model.Name}-info"></div>');
     }
 }
 
