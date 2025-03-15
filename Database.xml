@@ -265,7 +265,7 @@ file(`/Application/Services/${model.Name}/Queries/ListQuery.cs`,`
 using ${ns}.Common.Interfaces;
 namespace ${ns}.Application.Service.${model.Name}.Queries.List;
 
-public class ListQuery : IQuery , IPagination
+public class ListQuery : PaginationQuery , IQuery
 {
 	public int Id { set; get; }
 }
@@ -386,6 +386,11 @@ namespace ${ns}.Common.Interfaces;
 	public interface IPagination { 
 		public int Page { set; get; }
 		public int PageSize { set; get; }
+	}
+	public class PaginationQuery : IPagination
+	{
+		public int Page { get; set; } = 1;
+		public int PageSize { get; set; } = 20;
 	}
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
