@@ -1077,18 +1077,13 @@ ${model.Items.map(m=>`
     load() {
         this.loadingState();
         if (this.info.id > 0) {
-            Backend.admin_${model.Name}_select(this.info.id,
-                (ok) => {
-                    this.info = { ...this.info, ...ok.data };
-                },
-                (err) => { },
-                (done) => {
-                    this.afterload();
-                    this.normalState();
-                }
-            )
+            Backend.admin_${model.Name}_select(this.info.id)
+                .setOk((ok) => {this.info = { ...this.info, ...ok.data };})
+                .setError((err) => { })
+				.setDone((done) => { this.afterload(); this.normalState(); })
                 .setSync()
                 .send();
+            
         } else {
             this.afterload();
             this.normalState();
