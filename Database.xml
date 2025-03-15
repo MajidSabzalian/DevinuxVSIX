@@ -267,7 +267,7 @@ namespace ${ns}.Application.Service.${model.Name}.Queries.List;
 
 public class ListQuery : PaginationQuery , IQuery
 {
-	public string SearchText{ set; get; }
+	public string SearchText{ set; get; } = "";
 }
 public class ListQueryDto
 {
