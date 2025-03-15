@@ -960,7 +960,7 @@ export class ${model.Name}List extends DevinuxClientComponentPage {
                     let grid = new DevinuxClientComponentGrid('Role-list-container-gridcontainer-list').renderload(pgridform)
                         .addColumn(new DevinuxClientComponentGridColumn({ Fill: false, Caption: 'شناسه', Name: 'id', Id: 'id', Type: 'number', Value: (m) => m.id }))
 ${model.Items.map(m=>`
-.addColumn(new DevinuxClientComponentGridColumn({ Fill: false, Caption: '${m.Name}', Name: '${m.Name}', Id: '${m.Name}', Type: 'string', Value: (m) => m.${m.Name} }))
+.addColumn(new DevinuxClientComponentGridColumn({ Fill: false, Caption: '${m.Name}', Name: '${m.Name}', Id: '${m.Name}', Type: 'string', Value: (m) => m.${m.Name.toLowerCase()} }))
 `).join('')}
                         .setRowCheck((tr,r) => { })
                         .onEvent(DevinuxClientComponentGrid._event_enum.page, (p) => { this.filter.page = p; this.getTable(); })
@@ -1026,7 +1026,7 @@ export class ${model.Name}Info extends DevinuxClientComponentPage {
 
 ${model.Items.map(m=>`
                 let inp_${m.Name} = new DevinuxClientComponentField("${m.Name}").renderload(pccf.Root.container).makeText({ caption: '${m.Name}', id: '${m.Name}', name: '${m.Name}' }).sizeAll(12);
-                if (this.info.id > 0) { inp_${m.Name}.setValue(this.info.${m.Name}); }
+                if (this.info.id > 0) { inp_${m.Name}.setValue(this.info.${m.Name.toLowerCase()}); }
                 if (this.info.readonly) inp_${m.Name}.setReadonly();
 `).join('')}
             }
