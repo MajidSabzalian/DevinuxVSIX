@@ -335,7 +335,7 @@ namespace ${ns}.Application.Mapper
 {
     public class ${model.Name}Mapper : Profile
     {
-        public UserMapper()
+        public ${model.Name}Mapper()
         {
             this.CreateMap<${model.Name}, InsertCommand>().ReverseMap();
             this.CreateMap<${model.Name}, UpdateCommand>().ReverseMap();
