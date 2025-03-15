@@ -101,6 +101,7 @@ using ${ns}.Common.Application;
 using ${ns}.Common.Interfaces;
 using ${ns}.Common.Interfaces.${model.Name};
 
+
 namespace ${ns}.Application.Service.${model.Name}.Commands.Update;
 
 [DevinuxServiceScope]
@@ -165,6 +166,7 @@ using ${ns}.Common.Application;
 using ${ns}.Common.Interfaces;
 using ${ns}.Common.Interfaces.${model.Name};
 
+
 namespace ${ns}.Application.Service.${model.Name}.Commands.Delete;
 
 [DevinuxServiceScope]
@@ -226,7 +228,7 @@ using AutoMapper;
 using Devinux.AutoDI;
 using ${ns}.Common.Application;
 using ${ns}.Common.Interfaces;
-using ${ns}.Common.Interfaces.User;
+using ${ns}.Common.Interfaces.${model.Name};
 
 
 namespace ${ns}.Application.Service.${model.Name}.Queries.Select;
@@ -287,7 +289,7 @@ using AutoMapper;
 using Devinux.AutoDI;
 using ${ns}.Common.Application;
 using ${ns}.Common.Interfaces;
-using ${ns}.Common.Interfaces.User;
+using ${ns}.Common.Interfaces.${model.Name};
 
 namespace ${ns}.Application.Service.${model.Name}.Queries.List;
 
