@@ -899,7 +899,7 @@ namespace ${ns}.Controllers
 file(`/wwwroot/app/pages/${model.Name}/${model.Name}.js`,`
 
 import { DevinuxClientCommon, DevinuxClientComponentButton, DevinuxClientComponentButtons, DevinuxClientComponentField, DevinuxClientComponentForm, DevinuxClientComponentGrid, DevinuxClientComponentGridColumn, DevinuxClientComponentPage, DevinuxClientComponentPanel } from "../../../scripts/clientcomponent.js";
-import Backend, { Api } from "../backend.js";
+import Backend from "../backend.js";
 
 export class ${model.Name}List extends DevinuxClientComponentPage {
     constructor(Id = '${model.Name}list') {
@@ -941,7 +941,7 @@ export class ${model.Name}List extends DevinuxClientComponentPage {
                         let result = confirm("Want to delete ?");
                         if (result) {
                             let ci = DevinuxClientCommon.CreateTask();
-                            Api.${model.Name}_delete(this.selection.id)
+                            Backend.admin_${model.Name}_delete(this.selection.id)
                             .setOk((ok) => {
                                 this.findFirst("notify").addSuccess({msg: "عملیات حذف با موفقیت انجام شد"});
                             }).setError((e) => {
