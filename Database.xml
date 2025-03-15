@@ -948,7 +948,7 @@ export class ${model.Name}List extends DevinuxClientComponentPage {
                                 this.findFirst("notify").addError({ msg: e && e.msg || 'عملیات ناموفق انجام گردید' });
                             }).setDone((done) => {
                                 this.getTable();
-                                RBCommon.RemoveTask(ci);
+                                DevinuxClientCommon.RemoveTask(ci);
                             }).send();
                         }
                     });
