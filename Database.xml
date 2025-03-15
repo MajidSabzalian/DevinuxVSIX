@@ -729,6 +729,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Persistence/Repositories/${model.Name}/${model.Name}CommandRepository.cs`,`
 using Devinux.AutoDI;
+using ${ns}.Common.Interfaces;
 using ${ns}.Common.Interfaces.${model.Name};
 
 namespace ${ns}.Persistence.Repositories.${model.Name};
@@ -743,6 +744,7 @@ public class ${model.Name}CommandRepository : BaseRepository<Domain.Entities.${m
 `);
 file(`/Persistence/Repositories/${model.Name}/${model.Name}QueryRepository.cs`,`
 using Devinux.AutoDI;
+using ${ns}.Common.Interfaces;
 using ${ns}.Common.Interfaces.${model.Name};
 
 namespace ${ns}.Persistence.Repositories.${model.Name};
