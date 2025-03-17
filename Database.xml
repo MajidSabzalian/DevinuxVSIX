@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 <database>
-	<operator id="" title="Application Services Insert Model" group="Devinux Clean" description="">
+	<operator id="" title="Application Services Insert Model" group="Devinux Clean" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -24,7 +24,7 @@ public class InsertCommandDto
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 ]]>
 	</operator>
-	<operator id="" title="Application Services Insert Handler" group="Devinux Clean" description="">
+	<operator id="" title="Application Services Insert Handler" group="Devinux Clean" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -63,7 +63,7 @@ public class InsertCommandHandler : ICommandHandler<InsertCommand,InsertCommandD
 	
 ]]>
 	</operator>
-	<operator id="" title="Application Services Update Model" group="Devinux Clean" description="">
+	<operator id="" title="Application Services Update Model" group="Devinux Clean" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -88,7 +88,7 @@ public class UpdateCommandDto
 	
 ]]>
 	</operator>
-	<operator id="" title="Application Services Update Handler" group="Devinux Clean" description="">
+	<operator id="" title="Application Services Update Handler" group="Devinux Clean" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -129,7 +129,7 @@ ${model.Items.map(m=>`if (cmd.${m.Name} != null ) _model.${m.Name} = cmd.${m.Nam
 		
 ]]>
 	</operator>
-	<operator id="" title="Application Services Delete Model" group="Devinux Clean" description="">
+	<operator id="" title="Application Services Delete Model" group="Devinux Clean" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -153,7 +153,7 @@ public class DeleteCommandDto
 	
 ]]>
 	</operator>
-	<operator id="" title="Application Services Delete Handler" group="Devinux Clean" description="">
+	<operator id="" title="Application Services Delete Handler" group="Devinux Clean" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -193,7 +193,7 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand,DeleteCommandD
 		
 ]]>
 	</operator>
-	<operator id="" title="Application Services Select Model" group="Devinux Clean" description="">
+	<operator id="" title="Application Services Select Model" group="Devinux Clean" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -217,7 +217,7 @@ ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('
 	
 ]]>
 	</operator>
-	<operator id="" title="Application Services Select Handler" group="Devinux Clean" description="">
+	<operator id="" title="Application Services Select Handler" group="Devinux Clean" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -255,7 +255,7 @@ public class SelectQueryHandler : IQueryHandler<SelectQuery,SelectQueryDto>
 		
 ]]>
 	</operator>
-	<operator id="" title="Application Services List Model" group="Devinux Clean" description="">
+	<operator id="" title="Application Services List Model" group="Devinux Clean" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -278,7 +278,7 @@ ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('
 	
 ]]>
 	</operator>
-	<operator id="" title="Application Services List Handler" group="Devinux Clean" description="">
+	<operator id="" title="Application Services List Handler" group="Devinux Clean" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -316,7 +316,7 @@ public class ListQueryHandler : IQueryHandler<ListQuery,List<ListQueryDto>>
 		
 ]]>
 	</operator>
-	<operator id="" title="Application Mapper Class" group="Devinux Clean" description="">
+	<operator id="" title="Application Mapper Class" group="Devinux Clean" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -351,7 +351,7 @@ namespace ${ns}.Application.Mapper
 ]]>
 	</operator>
 	
-	<operator id="" title="Common Application Interfaces ICommand/IQuery Handlers" group="Devinux Clean" description="">
+	<operator id="" title="Common Application Interfaces ICommand/IQuery Handlers" group="Devinux Clean" description="" base="common">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -374,7 +374,7 @@ namespace ${ns}.Common.Interfaces;
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Application Interfaces IPagination" group="Devinux Clean" description="">
+	<operator id="" title="Common Application Interfaces IPagination" group="Devinux Clean" description="" base="common">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -397,7 +397,7 @@ namespace ${ns}.Common.Interfaces;
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Persistence Interfaces Repository" group="Devinux Clean" description="">
+	<operator id="" title="Common Persistence Interfaces Repository" group="Devinux Clean" description="" base="common">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -415,7 +415,7 @@ public interface I${model.Name}Repository : IBaseRepository<Domain.Entities.${mo
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Persistence Interfaces DatabaseContext" group="Devinux Clean" description="">
+	<operator id="" title="Common Persistence Interfaces DatabaseContext" group="Devinux Clean" description="" base="common">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -441,7 +441,7 @@ public interface IDatabaseContext : IDisposable
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Persistence Generic Interfaces Repository" group="Devinux Clean" description="">
+	<operator id="" title="Common Persistence Generic Interfaces Repository" group="Devinux Clean" description="" base="common">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -477,7 +477,7 @@ public interface IBaseRepository<TEntity> where TEntity : class
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Application Result" group="Devinux Clean" description="">
+	<operator id="" title="Common Application Result" group="Devinux Clean" description="" base="common">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -500,7 +500,7 @@ public class ApplicationResult<T> : IApplicationResult
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Endpoint ActionResult" group="Devinux Clean" description="">
+	<operator id="" title="Common Endpoint ActionResult" group="Devinux Clean" description="" base="common">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -539,7 +539,7 @@ public class ${ns}ActionResult : IActionResult
 `);
 ]]>
 	</operator>
-	<operator id="" title="Common Endpoint CQRS Bus" group="Devinux Clean" description="">
+	<operator id="" title="Common Endpoint CQRS Bus" group="Devinux Clean" description="" base="common">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -594,7 +594,7 @@ namespace ${ns}.Common.EndPoint
 ]]>
 	</operator>
 	
-	<operator id="" title="Persistence Generic Repository" group="Devinux Clean" description="">
+	<operator id="" title="Persistence Generic Repository" group="Devinux Clean" description="" base="persistence">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -721,7 +721,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 		
 ]]>
 	</operator>
-	<operator id="" title="Persistence Repositories (Generic)" group="Devinux Clean" description="">
+	<operator id="" title="Persistence Repositories (Generic)" group="Devinux Clean" description="" base="persistence">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -762,7 +762,7 @@ public class ${model.Name}QueryRepository : BaseRepository<Domain.Entities.${mod
 ]]>
 	</operator>
 	
-	<operator id="" title="Domain Base Entity" group="Devinux Clean" description="">
+	<operator id="" title="Domain Base Entity" group="Devinux Clean" description=""  base="domain">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -789,7 +789,7 @@ namespace ${ns}.Domain.Entities
 ]]>
 	</operator>
 	
-	<operator id="" title="Interface Base Controller" group="Devinux Clean" description="">
+	<operator id="" title="Interface Base Controller" group="Devinux Clean" description="" base="endpoint">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -825,7 +825,7 @@ namespace ${ns}.Controllers
 		
 ]]>
 	</operator>
-	<operator id="" title="Interface Controller" group="Devinux Clean" description="">
+	<operator id="" title="Interface Controller" group="Devinux Clean" description="" base="endpoint">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -890,7 +890,7 @@ namespace ${ns}.Controllers
 		
 ]]>
 	</operator>
-	<operator id="" title="UI Forms" group="Devinux Javascript Form" description="">
+	<operator id="" title="UI Forms" group="Devinux Javascript Form" description=""  base="endpoint">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };

@@ -69,14 +69,6 @@ namespace DevinuxVSIXGenerator
 
     public static class Ext
     {
-        public static void ShowMessage(this Exception ex)
-        {
-            System.Windows.Forms.MessageBox.Show(ex.Message);
-        }
-        public static void ShowMessage(this string ex)
-        {
-            System.Windows.Forms.MessageBox.Show(ex);
-        }
         public static EnvDTE.ProjectItem GetSelectedItem(this EnvDTE.DTE dte)
         {
             if (dte.SelectedItems.Count > 0)
@@ -84,20 +76,6 @@ namespace DevinuxVSIXGenerator
                 return dte.SelectedItems.Item(1).ProjectItem;
             }
             return null;
-        }
-        public static string StringJoin(this string[] arr , string seprator = ",")
-        {
-            return string.Join(seprator, arr);
-        }
-        public static void SaveFile(this string Content , string path)
-        {
-            var dp = System.IO.Path.GetDirectoryName(path);
-            if (!System.IO.Directory.Exists(dp)) System.IO.Directory.CreateDirectory(dp);
-            System.IO.File.WriteAllText(path, Content, Encoding.UTF8);
-        }
-        public static void SaveFile(this byte[] Content, string path)
-        {
-            System.IO.File.WriteAllBytes(path, Encoding.UTF8.GetPreamble().Concat(Content.ToArray()).ToArray());
         }
     }
 }

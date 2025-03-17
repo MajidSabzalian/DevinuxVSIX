@@ -1,4 +1,5 @@
-﻿using DevinuxVSIXGenerator.Forms;
+﻿using DevinuxGeneratorForms;
+using DevinuxVSIXGenerator.Forms;
 using EnvDTE;
 using System;
 using System.Linq;
@@ -359,8 +360,13 @@ using Devinux.AutoDI;
         {
             dte = _dte;
         }
+
+        
         public override void OnClick(object sender, EventArgs e)
         {
+            string solutionPath = System.IO.Path.GetDirectoryName(dte.Solution.FullName);
+            var _configPath = solutionPath + "\\.devinux";
+            if (!System.IO.Directory.Exists(_configPath)) { System.IO.Directory.CreateDirectory(_configPath); }
             string selectedText = GetSelectionText();
             string _using = @"
 using Devinux.AutoDI;
@@ -368,7 +374,7 @@ using Devinux.AutoDI;
             var _props = GetEntitiesFromClassDefinitions(selectedText);
             if (_props != null && _props.Count() > 0)
             {
-                Generator g = new Generator(_props.ToArray(),GetActiveProjectNameSpace() , GetActiveProjectFolderPath());
+                Generator g = new Generator(_props.ToArray(),GetActiveProjectNameSpace() , GetActiveProjectFolderPath(), _configPath);
                 g.ShowDialog();
             }
             else
