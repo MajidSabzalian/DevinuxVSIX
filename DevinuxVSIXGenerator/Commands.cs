@@ -1,5 +1,4 @@
-﻿using DevinuxGeneratorForms;
-using DevinuxVSIXGenerator.Forms;
+﻿using DevinuxVSIXGenerator.Forms;
 using EnvDTE;
 using System;
 using System.Linq;

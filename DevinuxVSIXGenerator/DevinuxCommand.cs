@@ -1,4 +1,4 @@
-﻿using DevinuxGeneratorForms;
+﻿using DevinuxVSIXGenerator.Forms;
 using EnvDTE;
 using EnvDTE80;
 using ICSharpCode.NRefactory.CSharp;
