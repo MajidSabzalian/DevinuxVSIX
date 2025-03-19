@@ -68,19 +68,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigFile.cs" />
-    <Compile Include="Extentions.cs" />
-    <Compile Include="Generator.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Generator.Designer.cs">
-      <DependentUpon>Generator.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Generator.resx">
-      <DependentUpon>Generator.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -104,15 +93,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\accept_button.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\add.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\folder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

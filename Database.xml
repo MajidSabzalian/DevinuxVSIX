@@ -7,7 +7,7 @@
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Application/Services/${model.Name}/Commands/InsertCommand.cs`,`
+file(`/Services/${model.Name}/Commands/Insert/InsertCommand.cs`,`
 using ${ns}.Common.Interfaces;
 namespace ${ns}.Application.Service.${model.Name}.Commands.Insert;
 
@@ -30,12 +30,12 @@ public class InsertCommandDto
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Application/Services/${model.Name}/Commands/InsertCommandHandler.cs`,`
+file(`/Services/${model.Name}/Commands/Insert/InsertCommandHandler.cs`,`
 using AutoMapper;
 using Devinux.AutoDI;
-using ${ns}.Common.Application;
-using ${ns}.Common.Interfaces;
-using ${ns}.Common.Interfaces.${model.Name};
+using ${ns}.Application.Interfaces;
+using ${ns}.Application.Models;
+using ${ns}.Domain.Interfaces.Repositories.${model.Name};
 
 
 namespace ${ns}.Application.Service.${model.Name}.Commands.Insert;
@@ -69,7 +69,7 @@ public class InsertCommandHandler : ICommandHandler<InsertCommand,InsertCommandD
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Application/Services/${model.Name}/Commands/UpdateCommand.cs`,`
+file(`/Services/${model.Name}/Commands/Update/UpdateCommand.cs`,`
 using ${ns}.Common.Interfaces;
 namespace ${ns}.Application.Service.${model.Name}.Commands.Update;
 
@@ -94,12 +94,12 @@ public class UpdateCommandDto
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Application/Services/${model.Name}/Commands/UpdateCommandHandler.cs`,`
+file(`/Services/${model.Name}/Commands/Update/UpdateCommandHandler.cs`,`
 using AutoMapper;
 using Devinux.AutoDI;
-using ${ns}.Common.Application;
-using ${ns}.Common.Interfaces;
-using ${ns}.Common.Interfaces.${model.Name};
+using ${ns}.Application.Interfaces;
+using ${ns}.Application.Models;
+using ${ns}.Domain.Interfaces.Repositories.${model.Name};
 
 
 namespace ${ns}.Application.Service.${model.Name}.Commands.Update;
@@ -135,7 +135,7 @@ ${model.Items.map(m=>`if (cmd.${m.Name} != null ) _model.${m.Name} = cmd.${m.Nam
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Application/Services/${model.Name}/Commands/DeleteCommand.cs`,`
+file(`/Services/${model.Name}/Commands/Delete/DeleteCommand.cs`,`
 using ${ns}.Common.Interfaces;
 namespace ${ns}.Application.Service.${model.Name}.Commands.Delete;
 
@@ -159,12 +159,13 @@ public class DeleteCommandDto
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Application/Services/${model.Name}/Commands/DeleteCommandHandler.cs`,`
+file(`/Services/${model.Name}/Commands/Delete/DeleteCommandHandler.cs`,`
 using AutoMapper;
 using Devinux.AutoDI;
-using ${ns}.Common.Application;
-using ${ns}.Common.Interfaces;
-using ${ns}.Common.Interfaces.${model.Name};
+using ${ns}.Application.Interfaces;
+using ${ns}.Application.Models;
+using ${ns}.Domain.Interfaces.Repositories.${model.Name};
+
 
 
 namespace ${ns}.Application.Service.${model.Name}.Commands.Delete;
@@ -199,7 +200,7 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand,DeleteCommandD
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Application/Services/${model.Name}/Queries/SelectQuery.cs`,`
+file(`/Services/${model.Name}/Queries/Select/SelectQuery.cs`,`
 using ${ns}.Common.Interfaces;
 namespace ${ns}.Application.Service.${model.Name}.Queries.Select;
 
@@ -223,12 +224,13 @@ ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Application/Services/${model.Name}/Queries/SelectQueryHandler.cs`,`
+file(`/Services/${model.Name}/Queries/Select/SelectQueryHandler.cs`,`
 using AutoMapper;
 using Devinux.AutoDI;
-using ${ns}.Common.Application;
-using ${ns}.Common.Interfaces;
-using ${ns}.Common.Interfaces.${model.Name};
+using ${ns}.Application.Interfaces;
+using ${ns}.Application.Models;
+using ${ns}.Domain.Interfaces.Repositories.${model.Name};
+
 
 
 namespace ${ns}.Application.Service.${model.Name}.Queries.Select;
@@ -261,7 +263,7 @@ public class SelectQueryHandler : IQueryHandler<SelectQuery,SelectQueryDto>
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Application/Services/${model.Name}/Queries/ListQuery.cs`,`
+file(`/Services/${model.Name}/Queries/List/ListQuery.cs`,`
 using ${ns}.Common.Interfaces;
 namespace ${ns}.Application.Service.${model.Name}.Queries.List;
 
@@ -284,12 +286,12 @@ ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Application/Services/${model.Name}/Queries/ListQueryHandler.cs`,`using AutoMapper;
+file(`/Services/${model.Name}/Queries/List/ListQueryHandler.cs`,`using AutoMapper;
 using AutoMapper;
 using Devinux.AutoDI;
-using ${ns}.Common.Application;
-using ${ns}.Common.Interfaces;
-using ${ns}.Common.Interfaces.${model.Name};
+using ${ns}.Application.Interfaces;
+using ${ns}.Application.Models;
+using ${ns}.Domain.Interfaces.Repositories.${model.Name};
 
 namespace ${ns}.Application.Service.${model.Name}.Queries.List;
 
@@ -322,7 +324,7 @@ public class ListQueryHandler : IQueryHandler<ListQuery,List<ListQueryDto>>
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Application/Mapper/${model.Name}Mapper.cs`,
+file(`/Mapper/${model.Name}Mapper.cs`,
 `
 using AutoMapper;
 using ${ns}.Application.Service.${model.Name}.Commands.Insert;
@@ -350,61 +352,62 @@ namespace ${ns}.Application.Mapper
 		
 ]]>
 	</operator>
-	
-	<operator id="" title="Common Application Interfaces ICommand/IQuery Handlers" group="Devinux Clean" description="" base="common">
+	<operator id="" title="Application Interfaces ICommand/IQuery Handlers" group="Framework" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Common/Interfaces/ICommandQuery.cs`,`
-namespace ${ns}.Common.Interfaces;
+file(`/Interfaces/ICommandQuery.cs`,`
+namespace ${ns}.Application.Interfaces;
 
-	public interface IQuery { }
-	public interface IListQuery : IQuery { }
-	public interface ICommand { }
-	public interface IQueryHandler<TQuery,TResponse> where TQuery : IQuery { 
-		Task<TResponse> Handle(TQuery qry , CancellationToken ct);
-	}
-	public interface ICommandHandler<TCommand,TResponse> where TCommand : ICommand {
-		Task<TResponse> Handle(TCommand cmd, CancellationToken ct);
-	}
+public interface IQuery { }
+public interface ICommand { }
+public interface IQueryHandler<TQuery, TResponse> where TQuery : IQuery
+{
+    Task<IApplicationResult<TResponse>> Handle(TQuery qry, CancellationToken ct);
+}
+public interface ICommandHandler<TCommand, TResponse> where TCommand : ICommand
+{
+    Task<IApplicationResult<TResponse>> Handle(TCommand cmd, CancellationToken ct);
+}
+
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Application Interfaces IPagination" group="Devinux Clean" description="" base="common">
+	<operator id="" title="Application Interfaces IPagination" group="Framework" description=""  base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Common/Interfaces/IPagination.cs`,`
-namespace ${ns}.Common.Interfaces;
+file(`/Interfaces/IPagination.cs`,`
+namespace ${ns}.Application.Interfaces;
 
-	public interface IPagination { 
-		public int Page { set; get; }
-		public int PageSize { set; get; }
-	}
-	public class PaginationQuery : IPagination
-	{
-		public int Page { get; set; } = 1;
-		public int PageSize { get; set; } = 20;
-	}
+public interface IPagination { 
+	public int Page { set; get; }
+	public int PageSize { set; get; }
+}
+public class PaginationQuery : IPagination
+{
+	public int Page { get; set; } = 1;
+	public int PageSize { get; set; } = 20;
+}
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Persistence Interfaces Repository" group="Devinux Clean" description="" base="common">
+	<operator id="" title="Domain Interfaces Repository" group="Devinux Clean" description="" base="domain">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Common/Interfaces/Repositories/${model.Name}/I${model.Name}Repository.cs`,`
-namespace ${ns}.Common.Interfaces.${model.Name};
+file(`/Interfaces/Repositories/${model.Name}/I${model.Name}Repository.cs`,`
+namespace ${ns}.Domain.Interfaces.${model.Name};
 
 public interface I${model.Name}Repository : IBaseRepository<Domain.Entities.${model.Name}>
 {
@@ -415,15 +418,15 @@ public interface I${model.Name}Repository : IBaseRepository<Domain.Entities.${mo
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Persistence Interfaces DatabaseContext" group="Devinux Clean" description="" base="common">
+	<operator id="" title="Domain Interfaces DatabaseContext" group="Framework" description="" base="domain">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Common/Interfaces/IDatabaseContext.cs`,`
+file(`/Interfaces/IDatabaseContext.cs`,`
 using Microsoft.EntityFrameworkCore;
-namespace ${ns}.Common.Interfaces;
+namespace ${ns}.Domain.Interfaces;
 
 public interface IDatabaseContext : IDisposable
 {
@@ -441,16 +444,16 @@ public interface IDatabaseContext : IDisposable
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Persistence Generic Interfaces Repository" group="Devinux Clean" description="" base="common">
+	<operator id="" title="Domain Interfaces Base Repository" group="Framework" description="" base="domain">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Common/Interfaces/IBaseRepository.cs`,`
+file(`/Interfaces/IBaseRepository.cs`,`
 using System.Linq.Expressions;
 
-namespace ${ns}.Common.Interfaces;
+namespace ${ns}.Domain.Interfaces;
 
 public interface IBaseRepository<TEntity> where TEntity : class
 {
@@ -472,21 +475,31 @@ public interface IBaseRepository<TEntity> where TEntity : class
     void Update(TEntity objModel);
     void Remove(TEntity objModel);
     void Dispose(); 
-}`);
+}
+`);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Application Result" group="Devinux Clean" description="" base="common">
+	
+	<operator id="" title="Application Result" group="Framework" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Common/Application/Result.cs`,`
-namespace ${ns}.Common.Application;
+file(`/Interfaces/IApplicationResult.cs`,`
+namespace ${ns}.Application.Interfaces;
 
-public interface IApplicationResult { }
+public interface IApplicationResult<T>
+{
+    T Data { set; get; }
+    int Count { set; get; }
+}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Models/ApplicationResult.cs`,`
+namespace ${ns}.Application.Models;
 
 public class ApplicationResult<T> : IApplicationResult
 {
@@ -500,62 +513,94 @@ public class ApplicationResult<T> : IApplicationResult
 		
 ]]>
 	</operator>
-	<operator id="" title="Common Endpoint ActionResult" group="Devinux Clean" description="" base="common">
+	<operator id="" title="Application Action Result" group="Framework" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Common/Endpoint/ActionResult.cs`,`
+file(`/Models/ActionResult.cs`,`
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
-namespace ${ns}.Common.Endpoint;
+namespace ${ns}.Application.Models;
 
-public enum ${ns}ActionResultStatusType {
-	Success = 1 , Error = 2 
-}
-public class ${ns}ActionResult : IActionResult
+
+public enum PronodeActionResultStatusType
 {
-	public ${ns}ActionResult(${ns}ActionResultStatusType status, Object data, string msg = "")
-	{
-		Status = status;
-		Data = data;
-	}
-	public ${ns}ActionResultStatusType Status { set; get; }
-	public object Data { set; get; }
-	public string Message { set; get; } = "";
-	public Task ExecuteResultAsync(ActionContext context)
-	{
-		context.HttpContext.Response.WriteAsJsonAsync(new { @status = Status, @data = Data, @msg = Message });
-		return Task.CompletedTask;
-	}
+    Success = 1, Error = 2
+}
+public class PronodeActionResult : IActionResult
+{
+    public PronodeActionResult(PronodeActionResultStatusType status, object data, string msg = "")
+    {
+        Status = status;
+        Data = data;
+        Message = msg;
+    }
+    public PronodeActionResultStatusType Status { set; get; }
+    public object Data { set; get; }
+    public string Message { set; get; } = "";
+    public async Task ExecuteResultAsync(ActionContext context)
+    {
+        await HttpContextAsync(context.HttpContext);
+        //return Task.CompletedTask;
+    }
+    public async Task HttpContextAsync(HttpContext context)
+    {
+        var str = JsonConvert.SerializeObject(new { @status = Status, @data = Data, @msg = Message }, Formatting.None, new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            PreserveReferencesHandling = PreserveReferencesHandling.None,
+            Formatting = Formatting.None
+        });
+        var r = context.Response;
+        r.ContentType = "application/json";
+        await r.WriteAsync(str);
+        //return Task.CompletedTask;
+    }
 
-	public static ${ns}ActionResult Success(Object data) => new ${ns}ActionResult( ${ns}ActionResultStatusType.Success , data);
-	public static ${ns}ActionResult Error(string msg) => new ${ns}ActionResult(${ns}ActionResultStatusType.Error, null, msg);
-	public static ${ns}ActionResult Exception(Exception ex) => new ${ns}ActionResult(${ns}ActionResultStatusType.Error, ex, ex.Message);
+    public static PronodeActionResult Success(object data) => new PronodeActionResult(PronodeActionResultStatusType.Success, data);
+    public static PronodeActionResult Error(string msg) => new PronodeActionResult(PronodeActionResultStatusType.Error, null, msg);
+    public static PronodeActionResult Exception(Exception ex) => new PronodeActionResult(PronodeActionResultStatusType.Error, ex.StackTrace, ex.Message);
 }
 	
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 `);
 ]]>
 	</operator>
-	<operator id="" title="Common Endpoint CQRS Bus" group="Devinux Clean" description="" base="common">
+	<operator id="" title="Application CQRS Bus Service and Interfaces" group="Framework" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Common/Endpoint/ActionResult.cs`,`
+file(`/Interfaces/ICommandQueryBus.cs`,`
+namespace ${ns}.Application.Interfaces
+{
+    public interface IQueryBus
+    {
+        Task<IApplicationResult<TResult>> RunService<TQuery, TResult>(TQuery r, CancellationToken c = default) where TQuery : IQuery;
+    }
+    public interface ICommandBus
+    {
+        Task<IApplicationResult<TResult>> RunService<TCommand, TResult>(TCommand r, CancellationToken c = default) where TCommand : ICommand;
+    }
+}
+
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Services/CommandQueryBus.cs`,`
 
 using Devinux.AutoDI;
-using ${ns}.Common.Application;
-using ${ns}.Common.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using ${ns}.Application.Interfaces;
 
-namespace ${ns}.Common.EndPoint
+namespace ${ns}.Application.Services
 {
-    public interface IQueryBus { 
-        Task<ApplicationResult<TResult>> RunService<TQuery, TResult>(TQuery r, CancellationToken c = default) where TQuery : IQuery;
-    }
+
     [DevinuxServiceScope(Devinux.AutoDI.Enums.DevinuxServiceScopeType.Singleton)]
     public class QueryBus : IQueryBus
     {
@@ -564,23 +609,22 @@ namespace ${ns}.Common.EndPoint
         {
             _sp = sp;
         }
-        public async Task<ApplicationResult<TResult>> RunService<TQuery, TResult>(TQuery r, CancellationToken c = default) where TQuery : IQuery
+        public async Task<IApplicationResult<TResult>> RunService<TQuery, TResult>(TQuery r, CancellationToken c = default) where TQuery : IQuery
         {
             var s = _sp.CreateScope().ServiceProvider.GetRequiredService<IQueryHandler<TQuery, TResult>>();
             return await s.Handle(r, c);
         }
     }
-    public interface ICommandBus {
-        Task<ApplicationResult<TResult>> RunService<TCommand, TResult>(TCommand r, CancellationToken c = default) where TCommand : ICommand;
-    }
+
     [DevinuxServiceScope(Devinux.AutoDI.Enums.DevinuxServiceScopeType.Singleton)]
-    public class CommandBus :ICommandBus {
+    public class CommandBus : ICommandBus
+    {
         private readonly IServiceProvider _sp;
         public CommandBus(IServiceProvider sp)
         {
             _sp = sp;
         }
-        public async Task<ApplicationResult<TResult>> RunService<TCommand, TResult>(TCommand r, CancellationToken c = default) where TCommand : ICommand
+        public async Task<IApplicationResult<TResult>> RunService<TCommand, TResult>(TCommand r, CancellationToken c = default) where TCommand : ICommand
         {
             var s = _sp.CreateScope().ServiceProvider.GetRequiredService<ICommandHandler<TCommand, TResult>>();
             return await s.Handle(r, c);
@@ -594,14 +638,14 @@ namespace ${ns}.Common.EndPoint
 ]]>
 	</operator>
 	
-	<operator id="" title="Persistence Generic Repository" group="Devinux Clean" description="" base="persistence">
+	<operator id="" title="Persistence Base Repository" group="Framework" description="" base="persistence">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 
-file(`/Persistence/Repositories/BaseRepository.cs`,`
+file(`/Repositories/BaseRepository.cs`,`
 
 using Microsoft.EntityFrameworkCore;
 using ${ns}.Common.Interfaces;
@@ -721,16 +765,16 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 		
 ]]>
 	</operator>
-	<operator id="" title="Persistence Repositories (Generic)" group="Devinux Clean" description="" base="persistence">
+	<operator id="" title="Persistence Repositories" group="Devinux Clean" description="" base="persistence">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Persistence/Repositories/${model.Name}/${model.Name}CommandRepository.cs`,`
+file(`/Repositories/${model.Name}/${model.Name}CommandRepository.cs`,`
 using Devinux.AutoDI;
-using ${ns}.Common.Interfaces;
-using ${ns}.Common.Interfaces.${model.Name};
+using ${ns}.Domain.Interfaces;
+using ${ns}.Domain.Interfaces.Repositories.${model.Name};
 
 namespace ${ns}.Persistence.Repositories.${model.Name};
 
@@ -742,10 +786,10 @@ public class ${model.Name}CommandRepository : BaseRepository<Domain.Entities.${m
 	}
 }
 `);
-file(`/Persistence/Repositories/${model.Name}/${model.Name}QueryRepository.cs`,`
+file(`/Repositories/${model.Name}/${model.Name}QueryRepository.cs`,`
 using Devinux.AutoDI;
-using ${ns}.Common.Interfaces;
-using ${ns}.Common.Interfaces.${model.Name};
+using ${ns}.Domain.Interfaces;
+using ${ns}.Domain.Interfaces.Repositories.${model.Name};
 
 namespace ${ns}.Persistence.Repositories.${model.Name};
 
@@ -762,22 +806,24 @@ public class ${model.Name}QueryRepository : BaseRepository<Domain.Entities.${mod
 ]]>
 	</operator>
 	
-	<operator id="" title="Domain Base Entity" group="Devinux Clean" description=""  base="domain">
+	<operator id="" title="Domain Base Entity" group="Framework" description="" base="domain">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Domain/Entities/BaseEntity.cs`,`
+file(`/Domain/Base/BaseEntity.cs`,`
 
 using System.ComponentModel.DataAnnotations;
 
-namespace ${ns}.Domain.Entities
+namespace ${ns}.Domain.Base
 {
     public abstract class BaseEntity
     {
         [Key]
         public int Id { get; set; }
+		public DateTime CreatedDate { set; get; } = DateTime.Now;
+        public bool SoftDelete { set; get; } = false;
     }
 }
 
@@ -789,7 +835,7 @@ namespace ${ns}.Domain.Entities
 ]]>
 	</operator>
 	
-	<operator id="" title="Interface Base Controller" group="Devinux Clean" description="" base="endpoint">
+	<operator id="" title="Endpoint Base Controller" group="Framework" description="" base="endpoint">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -797,7 +843,11 @@ namespace ${ns}.Domain.Entities
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Controller/_BaseController.cs`,`
 
+using AutoMapper;
+using Devinux.AutoDI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using ${ns}.Application.Interfaces;
+using ${ns}.Domain.Interfaces;
 
 namespace ${ns}.Controllers
 {
@@ -825,7 +875,7 @@ namespace ${ns}.Controllers
 		
 ]]>
 	</operator>
-	<operator id="" title="Interface Controller" group="Devinux Clean" description="" base="endpoint">
+	<operator id="" title="Endpoint Controller" group="Devinux Clean" description="" base="endpoint">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
@@ -838,13 +888,13 @@ file(`/Controllers/${model.Name}Controller.cs`,`
 
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using ${ns}.Application.Service.${model.Name}.Commands.Delete;
+using ${ns}.Application.Interfaces;
+using ${ns}.Application.Models;
 using ${ns}.Application.Service.${model.Name}.Commands.Insert;
 using ${ns}.Application.Service.${model.Name}.Commands.Update;
-using ${ns}.Application.Service.${model.Name}.Queries.List;
+using ${ns}.Application.Service.${model.Name}.Commands.Delete;
 using ${ns}.Application.Service.${model.Name}.Queries.Select;
-using ${ns}.Common;
-using ${ns}.Common.Endpoint;
+using ${ns}.Application.Service.${model.Name}.Queries.List;
 
 namespace ${ns}.Controllers
 {
@@ -856,9 +906,7 @@ namespace ${ns}.Controllers
         [HttpGet]
         public async Task<IActionResult> Select([FromQuery] SelectQuery qry, CancellationToken cancellationToken)
         {
-            return ${ns}ActionResult.Success(
-                (await qbus.RunService<SelectQuery, SelectQueryDto>(qry, cancellationToken))
-                );
+            return ${ns}ActionResult.Success((await qbus.RunService<SelectQuery, SelectQueryDto>(qry, cancellationToken)));
         }
         [HttpPost]
         public async Task<IActionResult> List([FromBody] ListQuery qry, CancellationToken cancellationToken)
@@ -890,13 +938,13 @@ namespace ${ns}.Controllers
 		
 ]]>
 	</operator>
-	<operator id="" title="UI Forms" group="Devinux Javascript Form" description=""  base="endpoint">
+	<operator id="" title="UI Forms" group="Devinux Javascript Form" description="" base="ui">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/wwwroot/app/pages/${model.Name}/${model.Name}.js`,`
+file(`/app/pages/${model.Name}/${model.Name}.js`,`
 
 import { DevinuxClientCommon, DevinuxClientComponentButton, DevinuxClientComponentButtons, DevinuxClientComponentField, DevinuxClientComponentForm, DevinuxClientComponentGrid, DevinuxClientComponentGridColumn, DevinuxClientComponentPage, DevinuxClientComponentPanel } from "../../../scripts/clientcomponent.js";
 import Backend from "../backend.js";
@@ -948,7 +996,7 @@ export class ${model.Name}List extends DevinuxClientComponentPage {
                                 this.findFirst("notify").addError({ msg: e && e.msg || 'عملیات ناموفق انجام گردید' });
                             }).setDone((done) => {
                                 this.getTable();
-                                DevinuxClientCommon.RemoveTask(ci);
+                                RBCommon.RemoveTask(ci);
                             }).send();
                         }
                     });
@@ -1077,13 +1125,18 @@ ${model.Items.map(m=>`
     load() {
         this.loadingState();
         if (this.info.id > 0) {
-            Backend.admin_${model.Name}_select(this.info.id)
-                .setOk((ok) => {this.info = { ...this.info, ...ok.data };})
-                .setError((err) => { })
-				.setDone((done) => { this.afterload(); this.normalState(); })
+            Backend.admin_${model.Name}_select(this.info.id,
+                (ok) => {
+                    this.info = { ...this.info, ...ok.data };
+                },
+                (err) => { },
+                (done) => {
+                    this.afterload();
+                    this.normalState();
+                }
+            )
                 .setSync()
                 .send();
-            
         } else {
             this.afterload();
             this.normalState();
