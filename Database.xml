@@ -8,7 +8,7 @@
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Services/${model.Name}/Commands/Insert/InsertCommand.cs`,`
-using ${ns}.Common.Interfaces;
+using ${ns}.Application.Interfaces;
 namespace ${ns}.Application.Service.${model.Name}.Commands.Insert;
 
 public class InsertCommand : ICommand
@@ -51,7 +51,7 @@ public class InsertCommandHandler : ICommandHandler<InsertCommand,InsertCommandD
         _mapper = mapper;
 	}
 
-	public async Task<ApplicationResult<InsertCommandDto>> Handle(InsertCommand cmd , CancellationToken ct)
+	public async Task<IApplicationResult<InsertCommandDto>> Handle(InsertCommand cmd , CancellationToken ct)
 	{
 		var _model = _mapper.Map<Domain.Entities.${model.Name}>(cmd);
         _cmdRepo.Add(_model);
@@ -70,7 +70,8 @@ public class InsertCommandHandler : ICommandHandler<InsertCommand,InsertCommandD
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Services/${model.Name}/Commands/Update/UpdateCommand.cs`,`
-using ${ns}.Common.Interfaces;
+using ${ns}.Application.Interfaces;
+
 namespace ${ns}.Application.Service.${model.Name}.Commands.Update;
 
 public class UpdateCommand : ICommand
@@ -115,7 +116,7 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand,UpdateCommandD
         _mapper = mapper;
 	}
 
-	public async Task<ApplicationResult<UpdateCommandDto>> Handle(UpdateCommand cmd , CancellationToken ct)
+	public async Task<IApplicationResult<UpdateCommandDto>> Handle(UpdateCommand cmd , CancellationToken ct)
 	{
 		var _model = _cmdRepo.GetId(cmd.Id);
 		if (_model == null) throw new Exception("Record Not Found");
@@ -136,7 +137,8 @@ ${model.Items.map(m=>`if (cmd.${m.Name} != null ) _model.${m.Name} = cmd.${m.Nam
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Services/${model.Name}/Commands/Delete/DeleteCommand.cs`,`
-using ${ns}.Common.Interfaces;
+using ${ns}.Application.Interfaces;
+
 namespace ${ns}.Application.Service.${model.Name}.Commands.Delete;
 
 public class DeleteCommand : ICommand
@@ -181,7 +183,7 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand,DeleteCommandD
         _mapper = mapper;
 	}
 
-	public async Task<ApplicationResult<DeleteCommandDto>> Handle(DeleteCommand cmd , CancellationToken ct)
+	public async Task<IApplicationResult<DeleteCommandDto>> Handle(DeleteCommand cmd , CancellationToken ct)
 	{
         var _model = _cmdRepo.GetId(cmd.Id);
 		if (_model == null) throw new Exception("Record Not Found");
@@ -201,7 +203,8 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand,DeleteCommandD
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Services/${model.Name}/Queries/Select/SelectQuery.cs`,`
-using ${ns}.Common.Interfaces;
+using ${ns}.Application.Interfaces;
+
 namespace ${ns}.Application.Service.${model.Name}.Queries.Select;
 
 public class SelectQuery : IQuery
@@ -246,7 +249,7 @@ public class SelectQueryHandler : IQueryHandler<SelectQuery,SelectQueryDto>
         _mapper = mapper;
 	}
 
-	public async Task<ApplicationResult<SelectQueryDto>> Handle(SelectQuery qry , CancellationToken ct)
+	public async Task<IApplicationResult<SelectQueryDto>> Handle(SelectQuery qry , CancellationToken ct)
 	{
         var result = _qryRepo.GetId(qry.Id);
         return new ApplicationResult<SelectQueryDto>(_mapper.Map<SelectQueryDto>(result));
@@ -264,7 +267,8 @@ public class SelectQueryHandler : IQueryHandler<SelectQuery,SelectQueryDto>
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Services/${model.Name}/Queries/List/ListQuery.cs`,`
-using ${ns}.Common.Interfaces;
+using ${ns}.Application.Interfaces;
+
 namespace ${ns}.Application.Service.${model.Name}.Queries.List;
 
 public class ListQuery : PaginationQuery , IQuery
@@ -306,7 +310,7 @@ public class ListQueryHandler : IQueryHandler<ListQuery,List<ListQueryDto>>
         _mapper = mapper;
 	}
 
-	public async Task<ApplicationResult<List<ListQueryDto>>> Handle(ListQuery qry , CancellationToken ct)
+	public async Task<IApplicationResult<List<ListQueryDto>>> Handle(ListQuery qry , CancellationToken ct)
 	{
 		var allCount = _qryRepo.GetListCount(null);
         var result = await _qryRepo.GetPagedListAsync(null, qry.Page, qry.PageSize);
@@ -318,6 +322,7 @@ public class ListQueryHandler : IQueryHandler<ListQuery,List<ListQueryDto>>
 		
 ]]>
 	</operator>
+	
 	<operator id="" title="Application Mapper Class" group="Devinux Clean" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
@@ -407,7 +412,7 @@ public class PaginationQuery : IPagination
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Interfaces/Repositories/${model.Name}/I${model.Name}Repository.cs`,`
-namespace ${ns}.Domain.Interfaces.${model.Name};
+namespace ${ns}.Domain.Interfaces.Repositories.${model.Name};
 
 public interface I${model.Name}Repository : IBaseRepository<Domain.Entities.${model.Name}>
 {
