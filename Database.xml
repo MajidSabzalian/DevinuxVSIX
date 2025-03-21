@@ -214,6 +214,8 @@ public class SelectQuery : IQuery
 
 public class SelectQueryDto
 {
+	public int Id { set; get; }
+
 ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('\n')}
 }
 `);	
@@ -277,6 +279,7 @@ public class ListQuery : PaginationQuery , IQuery
 }
 public class ListQueryDto
 {
+	public int Id { set; get; }
 ${model.Items.map(m=>`    public ${m.TypeName} ${m.Name} { set; get; } `).join('\n')}
 }
 `);	
@@ -895,11 +898,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ${ns}.Application.Interfaces;
 using ${ns}.Application.Models;
-using ${ns}.Application.Service.${model.Name}.Commands.Insert;
-using ${ns}.Application.Service.${model.Name}.Commands.Update;
-using ${ns}.Application.Service.${model.Name}.Commands.Delete;
-using ${ns}.Application.Service.${model.Name}.Queries.Select;
-using ${ns}.Application.Service.${model.Name}.Queries.List;
+using ${ns}.Application.Services.${model.Name}.Commands.Insert;
+using ${ns}.Application.Services.${model.Name}.Commands.Update;
+using ${ns}.Application.Services.${model.Name}.Commands.Delete;
+using ${ns}.Application.Services.${model.Name}.Queries.Select;
+using ${ns}.Application.Services.${model.Name}.Queries.List;
 
 namespace ${ns}.Controllers
 {
@@ -1154,5 +1157,7 @@ ${model.Items.map(m=>`
 `);
 ]]>
 	</operator>
-	
+	<![CDATA[
+		
+	]]>
 </database>
