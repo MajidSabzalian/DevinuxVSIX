@@ -9,7 +9,7 @@
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Services/${model.Name}/Commands/Insert/InsertCommand.cs`,`
 using ${ns}.Application.Interfaces;
-namespace ${ns}.Application.Service.${model.Name}.Commands.Insert;
+namespace ${ns}.Application.Services.${model.Name}.Commands.Insert;
 
 public class InsertCommand : ICommand
 {
@@ -38,7 +38,7 @@ using ${ns}.Application.Models;
 using ${ns}.Domain.Interfaces.Repositories.${model.Name};
 
 
-namespace ${ns}.Application.Service.${model.Name}.Commands.Insert;
+namespace ${ns}.Application.Services.${model.Name}.Commands.Insert;
 
 [DevinuxServiceScope]
 public class InsertCommandHandler : ICommandHandler<InsertCommand,InsertCommandDto>
@@ -72,7 +72,7 @@ public class InsertCommandHandler : ICommandHandler<InsertCommand,InsertCommandD
 file(`/Services/${model.Name}/Commands/Update/UpdateCommand.cs`,`
 using ${ns}.Application.Interfaces;
 
-namespace ${ns}.Application.Service.${model.Name}.Commands.Update;
+namespace ${ns}.Application.Services.${model.Name}.Commands.Update;
 
 public class UpdateCommand : ICommand
 {
@@ -103,7 +103,7 @@ using ${ns}.Application.Models;
 using ${ns}.Domain.Interfaces.Repositories.${model.Name};
 
 
-namespace ${ns}.Application.Service.${model.Name}.Commands.Update;
+namespace ${ns}.Application.Services.${model.Name}.Commands.Update;
 
 [DevinuxServiceScope]
 public class UpdateCommandHandler : ICommandHandler<UpdateCommand,UpdateCommandDto>
@@ -139,7 +139,7 @@ ${model.Items.map(m=>`if (cmd.${m.Name} != null ) _model.${m.Name} = cmd.${m.Nam
 file(`/Services/${model.Name}/Commands/Delete/DeleteCommand.cs`,`
 using ${ns}.Application.Interfaces;
 
-namespace ${ns}.Application.Service.${model.Name}.Commands.Delete;
+namespace ${ns}.Application.Services.${model.Name}.Commands.Delete;
 
 public class DeleteCommand : ICommand
 {
@@ -170,7 +170,7 @@ using ${ns}.Domain.Interfaces.Repositories.${model.Name};
 
 
 
-namespace ${ns}.Application.Service.${model.Name}.Commands.Delete;
+namespace ${ns}.Application.Services.${model.Name}.Commands.Delete;
 
 [DevinuxServiceScope]
 public class DeleteCommandHandler : ICommandHandler<DeleteCommand,DeleteCommandDto>
@@ -205,7 +205,7 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand,DeleteCommandD
 file(`/Services/${model.Name}/Queries/Select/SelectQuery.cs`,`
 using ${ns}.Application.Interfaces;
 
-namespace ${ns}.Application.Service.${model.Name}.Queries.Select;
+namespace ${ns}.Application.Services.${model.Name}.Queries.Select;
 
 public class SelectQuery : IQuery
 {
@@ -238,7 +238,7 @@ using ${ns}.Domain.Interfaces.Repositories.${model.Name};
 
 
 
-namespace ${ns}.Application.Service.${model.Name}.Queries.Select;
+namespace ${ns}.Application.Services.${model.Name}.Queries.Select;
 
 [DevinuxServiceScope]
 public class SelectQueryHandler : IQueryHandler<SelectQuery,SelectQueryDto>
@@ -271,7 +271,7 @@ public class SelectQueryHandler : IQueryHandler<SelectQuery,SelectQueryDto>
 file(`/Services/${model.Name}/Queries/List/ListQuery.cs`,`
 using ${ns}.Application.Interfaces;
 
-namespace ${ns}.Application.Service.${model.Name}.Queries.List;
+namespace ${ns}.Application.Services.${model.Name}.Queries.List;
 
 public class ListQuery : PaginationQuery , IQuery
 {
@@ -300,7 +300,7 @@ using ${ns}.Application.Interfaces;
 using ${ns}.Application.Models;
 using ${ns}.Domain.Interfaces.Repositories.${model.Name};
 
-namespace ${ns}.Application.Service.${model.Name}.Queries.List;
+namespace ${ns}.Application.Services.${model.Name}.Queries.List;
 
 [DevinuxServiceScope]
 public class ListQueryHandler : IQueryHandler<ListQuery,List<ListQueryDto>>
@@ -335,10 +335,10 @@ public class ListQueryHandler : IQueryHandler<ListQuery,List<ListQueryDto>>
 file(`/Mapper/${model.Name}Mapper.cs`,
 `
 using AutoMapper;
-using ${ns}.Application.Service.${model.Name}.Commands.Insert;
-using ${ns}.Application.Service.${model.Name}.Commands.Update;
-using ${ns}.Application.Service.${model.Name}.Queries.List;
-using ${ns}.Application.Service.${model.Name}.Queries.Select;
+using ${ns}.Application.Services.${model.Name}.Commands.Insert;
+using ${ns}.Application.Services.${model.Name}.Commands.Update;
+using ${ns}.Application.Services.${model.Name}.Queries.List;
+using ${ns}.Application.Services.${model.Name}.Queries.Select;
 using ${ns}.Domain.Entities;
 
 namespace ${ns}.Application.Mapper
@@ -466,23 +466,25 @@ namespace ${ns}.Domain.Interfaces;
 public interface IBaseRepository<TEntity> where TEntity : class
 {
     void Add(TEntity objModel);
-    void AddRange(IEnumerable<TEntity> objModel);
-    TEntity GetId(int id);
-    Task<TEntity> GetIdAsync(int id);
-    TEntity Get(Expression<Func<TEntity, bool>> predicate);
-    Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate);
-    IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate = null);
-    Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate = null);
-    IEnumerable<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20);
-    Task<IEnumerable<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20);
+	void AddRange(IEnumerable<TEntity> objModel);
 	int GetListCount(Expression<Func<TEntity, bool>> predicate = null);
-    IEnumerable<TEntity> GetAll();
-    Task<IEnumerable<TEntity>> GetAllAsync();
-    int Count();
-    Task<int> CountAsync();
-    void Update(TEntity objModel);
-    void Remove(TEntity objModel);
-    void Dispose(); 
+	TEntity GetId(int id);
+	TEntity Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+	IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+	IEnumerable<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+	IEnumerable<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+
+	Task<TEntity> GetIdAsync(int id);
+	Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+	Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+	Task<IEnumerable<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>,IQueryable<TEntity>> target = null);
+	Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+
+	int Count();
+	Task<int> CountAsync();
+	void Update(TEntity objModel);
+	void Remove(TEntity objModel);
+	void Dispose();
 }
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
@@ -663,110 +665,136 @@ namespace ${ns}.Persistence.Repositories;
 
 public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
 {
-    #region Fields
 
-    protected readonly IDatabaseContext _context;
+public BaseRepository(IDatabaseContext db)
+{
+    _context = db;
+}
+#region Fields
 
-    #endregion
+protected readonly IDatabaseContext _context;
 
-    #region Methods
+#endregion
 
-    public void Add(TEntity objModel)
-    {
-        _context.Set<TEntity>().Add(objModel);
-        _context.SaveChanges();
-    }
+#region Methods
 
-    public void AddRange(IEnumerable<TEntity> objModel)
-    {
-        _context.Set<TEntity>().AddRange(objModel);
-        _context.SaveChanges();
-    }
+public void Add(TEntity objModel)
+{
+    _context.Set<TEntity>().Add(objModel);
+    _context.SaveChanges();
+}
 
-    public TEntity GetId(int id)
-    {
-        return _context.Set<TEntity>().Find(id);
-    }
+public void AddRange(IEnumerable<TEntity> objModel)
+{
+    _context.Set<TEntity>().AddRange(objModel);
+    _context.SaveChanges();
+}
 
-    public async Task<TEntity> GetIdAsync(int id)
-    {
-        return await _context.Set<TEntity>().FindAsync(id);
-    }
+public TEntity GetId(int id)
+{
+    var dbset = _context.Set<TEntity>();
+    return dbset.Find(id);
+}
 
-    public TEntity Get(Expression<Func<TEntity, bool>> predicate)
-    {
-        return _context.Set<TEntity>().FirstOrDefault(predicate);
-    }
+public async Task<TEntity> GetIdAsync(int id)
+{
+    var dbset = _context.Set<TEntity>();
+    return await dbset.FindAsync(id);
+}
 
-    public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate)
-    {
-        return await _context.Set<TEntity>().FirstOrDefaultAsync(predicate);
-    }
-    public IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate = null)
-    {
-        if (predicate == null) _context.Set<TEntity>().ToList();
-        return _context.Set<TEntity>().Where<TEntity>(predicate).ToList();
-    }
-    public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate = null)
-    {
-        return await Task.Run(() => GetList(predicate));
-    }
-    public IEnumerable<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20) {
-        var q = _context.Set<TEntity>().AsQueryable();
-        if (predicate != null) q = q.Where<TEntity>(predicate);
-        if (pageindex > 1) return q.Skip((pageindex - 1) * pagesize).Take(pagesize).ToList();
-        else return q.Take(pagesize).ToList();
-    }
-    public async Task<IEnumerable<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20) {
+public TEntity Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+{
+    var dbset = _context.Set<TEntity>();
+    var q = dbset.AsQueryable();
+    if (target != null) q = target(q);
+    return q.FirstOrDefault(predicate);
+}
 
-        return await Task.Run(() => {
-           return GetPagedList(predicate, pageindex, pagesize);
-        });
-    }
-	public int GetListCount(Expression<Func<TEntity, bool>> predicate = null)
-    {
-        var s = _context.Set<TEntity>();
-        return (predicate == null) ? s.Count() : s.Where(predicate).Count();
-    }
+public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+{
+    var dbset = _context.Set<TEntity>().AsQueryable();
+    if (target != null) dbset = target(dbset);
+    return await dbset.FirstOrDefaultAsync(predicate);
+}
 
-    public IEnumerable<TEntity> GetAll()
-    {
-        return _context.Set<TEntity>().ToList();
-    }
+public IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate = null , Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+{
+    var dbset = _context.Set<TEntity>();
+    var q = dbset.AsQueryable();
+    if (target != null) q = target(q);
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync()
-    {
-        return await Task.Run(() => _context.Set<TEntity>());
-    }
+    if (predicate == null) q.ToList();
+    return q.Where<TEntity>(predicate).ToList();
+}
+public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate = null , Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+{
+    return await Task.Run(() => GetList(predicate));
+}
+public IEnumerable<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null) {
+    var dbset = _context.Set<TEntity>();
+    var q = dbset.AsQueryable();
+    if (target != null) q = target(q);
+    if (predicate != null) q = q.Where<TEntity>(predicate);
+    if (pageindex > 1) return q.Skip((pageindex - 1) * pagesize).Take(pagesize).ToList();
+    else return q.Take(pagesize).ToList();
+}
+public async Task<IEnumerable<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null) {
 
-    public int Count()
-    {
-        return _context.Set<TEntity>().Count();
-    }
+    return await Task.Run(() => {
+       return GetPagedList(predicate, pageindex, pagesize , target);
+    });
+}
 
-    public async Task<int> CountAsync()
-    {
-        return await _context.Set<TEntity>().CountAsync();
-    }
+public int GetListCount(Expression<Func<TEntity, bool>> predicate = null)
+{
+    var s = _context.Set<TEntity>();
+    return (predicate == null) ? s.Count() : s.Where(predicate).Count();
+}
+public IEnumerable<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+{
+    var dbset = _context.Set<TEntity>();
+    var q = dbset.AsQueryable();
+    if (target != null) q = target(q);
+    return q.ToList();
+}
 
-    public void Update(TEntity objModel)
-    {
-        _context.Entry(objModel).State = EntityState.Modified;
-        _context.SaveChanges();
-    }
+public async Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+{
+    var dbset = _context.Set<TEntity>();
+    var q = dbset.AsQueryable();
+    if (target != null) q = target(q);
+    return await q.ToListAsync();
+}
 
-    public void Remove(TEntity objModel)
-    {
-        _context.Set<TEntity>().Remove(objModel);
-        _context.SaveChanges();
-    }
+public int Count()
+{
+    return _context.Set<TEntity>().Count();
+}
 
-    public void Dispose()
-    {
-        _context.Dispose();
-    }
+public async Task<int> CountAsync()
+{
+    return await _context.Set<TEntity>().CountAsync();
+}
 
-    #endregion
+public void Update(TEntity objModel)
+{
+    _context.Entry(objModel).State = EntityState.Modified;
+    _context.SaveChanges();
+}
+
+public void Remove(TEntity objModel)
+{
+    _context.Set<TEntity>().Remove(objModel);
+    _context.SaveChanges();
+}
+
+public void Dispose()
+{
+    _context.Dispose();
+}
+
+#endregion    
+	
 }
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
@@ -959,7 +987,7 @@ import Backend from "../backend.js";
 
 export class ${model.Name}List extends DevinuxClientComponentPage {
     constructor(Id = '${model.Name}list') {
-        super(Id, '${model.Name}طلاعات کاربران', 'fad fa-cogs');
+        super(Id, 'فهرست اطلاعات ${model.Name}', 'fad fa-cogs');
         this.filter = {
             pagesize: 20,
             page: 1,
@@ -1133,16 +1161,15 @@ ${model.Items.map(m=>`
     load() {
         this.loadingState();
         if (this.info.id > 0) {
-            Backend.admin_${model.Name}_select(this.info.id,
-                (ok) => {
+            Backend.admin_${model.Name}_select(this.info.id)
+                .setOk((ok) => {
                     this.info = { ...this.info, ...ok.data };
-                },
-                (err) => { },
-                (done) => {
+                })
+                .setError((err) => { })
+                .setDone((done) => {
                     this.afterload();
                     this.normalState();
-                }
-            )
+                })
                 .setSync()
                 .send();
         } else {
