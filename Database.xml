@@ -1003,6 +1003,7 @@ export class ${model.Name}List extends DevinuxClientComponentPage {
 
                 let pgridform = new DevinuxClientComponentForm('Role-list-container-grid-form').renderload(pgrid).setCaption('').setAbsolutePosition(true);
                 {
+					let showInfoProps = { width: "80%", height: "80%" };
                     let btnNew = new DevinuxClientComponentButton("btn-new").setCaption("جدید").setIcon("fal fa-plus")
                     let btnUpdate = new DevinuxClientComponentButton("btn-new").setCaption("ویرایش").setIcon("fal fa-edit")
                     let btnDelete = new DevinuxClientComponentButton("btn-new").setCaption("حذف").setIcon("fal fa-times")
@@ -1012,14 +1013,14 @@ export class ${model.Name}List extends DevinuxClientComponentPage {
 						newform.onEvent(DevinuxClientComponentPage._event_enum.dialogresult, () => {
 							newform.close();
 						    this.getTable();
-						}).show(this, { width: "80%", height: "80%" });
+						}).show(this, showInfoProps);
 					});
 					btnUpdate.onEvent(DevinuxClientComponentButton._event_enum.click, () => {
 						let editform = new ${model.Name}Info("edit-${model.Name}", this.selection.id,this.selection.name);
 						editform.onEvent(DevinuxClientComponentPage._event_enum.dialogresult, () => {
 							editform.close();
 						    this.getTable();
-						}).show(this, { width: "80%", height: "80%" });
+						}).show(this, showInfoProps);
 					});
                     btnDelete.onEvent(DevinuxClientComponentButton._event_enum.click, () => {
                         let result = confirm("Want to delete ?");
