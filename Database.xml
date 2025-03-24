@@ -399,7 +399,7 @@ using ${ns}.Domain.Interfaces.Repositories.${model.Name};
 namespace ${ns}.Persistence.Repositories.${model.Name};
 
 [DevinuxServiceScope]
-public class ${model.Name}CommandRepository : BaseRepository<Domain.Entities.${model.Name}>, I${model.Name}Repository
+public class ${model.Name}CommandRepository : BaseRepository<Domain.Entities.${model.Name}>, I${model.Name}CommandRepository
 {
 	public ${model.Name}CommandRepository(IDatabaseContext db) : base(db)
 	{
@@ -414,7 +414,7 @@ using ${ns}.Domain.Interfaces.Repositories.${model.Name};
 namespace ${ns}.Persistence.Repositories.${model.Name};
 
 [DevinuxServiceScope]
-public class ${model.Name}QueryRepository : BaseRepository<Domain.Entities.${model.Name}>, I${model.Name}Repository
+public class ${model.Name}QueryRepository : BaseRepository<Domain.Entities.${model.Name}>, I${model.Name}QueryRepository
 { 
 	public ${model.Name}QueryRepository(IDatabaseContext db) : base(db)
 	{
@@ -589,12 +589,16 @@ public enum PronodeActionResultStatusType
 }
 public class PronodeActionResult : IActionResult
 {
-    public PronodeActionResult(PronodeActionResultStatusType status, object data, string msg = "")
+    public static JsonNamingPolicy JSONNamingPolicy = JsonNamingPolicy.CamelCase;
+
+    public PronodeActionResult(PronodeActionResultStatusType status, object data, string msg = "", bool pasteAsJsonString = false)
     {
         Status = status;
         Data = data;
         Message = msg;
     }
+	private string PasteAsJsonStringTag = "[--mydata--]";
+    private bool PasteAsJsonString = false;
     public PronodeActionResultStatusType Status { set; get; }
     public object Data { set; get; }
     public string Message { set; get; } = "";
@@ -605,7 +609,7 @@ public class PronodeActionResult : IActionResult
     }
     public async Task HttpContextAsync(HttpContext context)
     {
-        var str = JsonConvert.SerializeObject(new { @status = Status, @data = Data, @msg = Message }, Formatting.None, new JsonSerializerSettings
+        var str = JsonConvert.SerializeObject(new { @status = Status, @data = PasteAsJsonString ? PasteAsJsonStringTag : Data, @msg = Message }, Formatting.None, new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
             PreserveReferencesHandling = PreserveReferencesHandling.None,
@@ -613,11 +617,13 @@ public class PronodeActionResult : IActionResult
         });
         var r = context.Response;
         r.ContentType = "application/json";
-        await r.WriteAsync(str);
+        await r.WriteAsync(PasteAsJsonString ? str.Replace($@"""{PasteAsJsonStringTag}""", Data.ToString()) : str);
         //return Task.CompletedTask;
     }
 
     public static PronodeActionResult Success(object data) => new PronodeActionResult(PronodeActionResultStatusType.Success, data);
+    public static PronodeActionResult SuccessAsJsonString(object data) => new PronodeActionResult(PronodeActionResultStatusType.Success, data,"",true);
+    public static PronodeActionResult SuccessDropDownList<T>(List<T> data, Func<T, KeyValuePair<object, string>> mapped) => PronodeActionResult.Success(data.Select(m => mapped(m)).ToList());
     public static PronodeActionResult Error(string msg) => new PronodeActionResult(PronodeActionResultStatusType.Error, null, msg);
     public static PronodeActionResult Exception(Exception ex) => new PronodeActionResult(PronodeActionResultStatusType.Error, ex.StackTrace, ex.Message);
 }
@@ -724,12 +730,24 @@ public interface IDatabaseContext : IDisposable
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Interfaces/IBaseCQRepository.cs`,`
+using System.Linq.Expressions;
+
+namespace ${ns}.Domain.Interfaces;
+public interface IBaseCQRepository<TEntity> where TEntity : class
+{
+	TEntity GetId(int id);
+	TEntity Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+	Task<TEntity> GetIdAsync(int id);
+	Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 file(`/Interfaces/IBaseCommandRepository.cs`,`
 using System.Linq.Expressions;
 
 namespace ${ns}.Domain.Interfaces;
-
-public interface IBaseCommandRepository<TEntity> where TEntity : class
+public interface IBaseCommandRepository<TEntity> : IBaseCQRepository<TEntity> where TEntity : class
 {
 
     void Add(TEntity objModel);
@@ -744,19 +762,16 @@ file(`/Interfaces/IBaseQueryRepository.cs`,`
 using System.Linq.Expressions;
 
 namespace ${ns}.Domain.Interfaces;
-public interface IBaseQueryRepository<TEntity> where TEntity : class
+public interface IBaseQueryRepository<TEntity> : IBaseCQRepository<TEntity> where TEntity : class
 {
 	int Count();
 	Task<int> CountAsync();
 	int GetListCount(Expression<Func<TEntity, bool>> predicate = null);
-	TEntity GetId(int id);
-	TEntity Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
-	IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+
+    IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
 	IEnumerable<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
 	IEnumerable<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
 
-	Task<TEntity> GetIdAsync(int id);
-	Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
 	Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
 	Task<IEnumerable<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>,IQueryable<TEntity>> target = null);
 	Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
@@ -765,6 +780,7 @@ public interface IBaseQueryRepository<TEntity> where TEntity : class
 }
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+
 		
 ]]>
 	</operator>
@@ -811,60 +827,13 @@ using System.Linq.Expressions;
 
 namespace ${ns}.Persistence.Repositories;
 
-public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
+public class BaseQueryRepository<TEntity> : BaseCQRepository<TEntity>, IBaseQueryRepository<TEntity> where TEntity : class
 {
-
-    public BaseRepository(IDatabaseContext db)
+    private readonly IDatabaseContext _context;
+    public BaseQueryRepository(IDatabaseContext db) : base(db)
     {
         _context = db;
     }
-    #region Fields
-
-    protected readonly IDatabaseContext _context;
-
-    #endregion
-
-    #region Methods
-
-    public void Add(TEntity objModel)
-    {
-        _context.Set<TEntity>().Add(objModel);
-        _context.SaveChanges();
-    }
-
-    public void AddRange(IEnumerable<TEntity> objModel)
-    {
-        _context.Set<TEntity>().AddRange(objModel);
-        _context.SaveChanges();
-    }
-
-    public TEntity GetId(int id)
-    {
-        var dbset = _context.Set<TEntity>();
-        return dbset.Find(id);
-    }
-
-    public async Task<TEntity> GetIdAsync(int id)
-    {
-        var dbset = _context.Set<TEntity>();
-        return await dbset.FindAsync(id);
-    }
-
-    public TEntity Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
-    {
-        var dbset = _context.Set<TEntity>();
-        var q = dbset.AsQueryable();
-        if (target != null) q = target(q);
-        return q.FirstOrDefault(predicate);
-    }
-
-    public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
-    {
-        var dbset = _context.Set<TEntity>().AsQueryable();
-        if (target != null) dbset = target(dbset);
-        return await dbset.FirstOrDefaultAsync(predicate);
-    }
-
     public IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate = null , Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
     {
         var dbset = _context.Set<TEntity>();
@@ -892,7 +861,6 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
            return GetPagedList(predicate, pageindex, pagesize , target);
         });
     }
-
     public int GetListCount(Expression<Func<TEntity, bool>> predicate = null)
     {
         var s = _context.Set<TEntity>();
@@ -905,7 +873,6 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         if (target != null) q = target(q);
         return q.ToList();
     }
-
     public async Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
     {
         var dbset = _context.Set<TEntity>();
@@ -913,37 +880,65 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         if (target != null) q = target(q);
         return await q.ToListAsync();
     }
-
     public int Count()
     {
         return _context.Set<TEntity>().Count();
     }
-
     public async Task<int> CountAsync()
     {
         return await _context.Set<TEntity>().CountAsync();
     }
-
-    public void Update(TEntity objModel)
-    {
-        _context.Entry(objModel).State = EntityState.Modified;
-        _context.SaveChanges();
-    }
-
-    public void Remove(TEntity objModel)
-    {
-        _context.Set<TEntity>().Remove(objModel);
-        _context.SaveChanges();
-    }
-
     public void Dispose()
     {
         _context.Dispose();
     }
-
-    #endregion    
-	
 }
+public class BaseCommandRepository<TEntity> : BaseCQRepository<TEntity>, IBaseCommandRepository<TEntity> where TEntity : class
+{
+    private readonly IDatabaseContext _context;
+    public BaseCommandRepository(IDatabaseContext db) : base(db)
+    {
+        _context = db;
+    }
+    public void Add(TEntity objModel) { _context.Set<TEntity>().Add(objModel); _context.SaveChanges(); }
+    public void AddRange(IEnumerable<TEntity> objModel) { _context.Set<TEntity>().AddRange(objModel); _context.SaveChanges(); }
+    public void Update(TEntity objModel) { _context.Entry(objModel).State = EntityState.Modified; _context.SaveChanges(); }
+    public void Remove(TEntity objModel) { _context.Set<TEntity>().Remove(objModel); _context.SaveChanges(); }
+    public void Dispose() { _context.Dispose(); }
+}
+public class BaseCQRepository<TEntity> : IBaseCQRepository<TEntity> where TEntity : class
+{
+    private readonly IDatabaseContext _context;
+    public BaseCQRepository(IDatabaseContext db)
+    {
+        _context = db;
+    }
+    public TEntity GetId(int id)
+    {
+        var dbset = _context.Set<TEntity>();
+        return dbset.Find(id);
+    }
+    public async Task<TEntity> GetIdAsync(int id)
+    {
+        var dbset = _context.Set<TEntity>();
+        return await dbset.FindAsync(id);
+    }
+    public TEntity Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+    {
+        var dbset = _context.Set<TEntity>();
+        var q = dbset.AsQueryable();
+        if (target != null) q = target(q);
+        return q.FirstOrDefault(predicate);
+    }
+    public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+    {
+        var dbset = _context.Set<TEntity>().AsQueryable();
+        if (target != null) dbset = target(dbset);
+        return await dbset.FirstOrDefaultAsync(predicate);
+    }   
+}
+
+
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 		
