@@ -44,8 +44,8 @@ namespace ${ns}.Application.Services.${model.Name}.Commands.Insert;
 public class InsertCommandHandler : ICommandHandler<InsertCommand,InsertCommandDto>
 {
 	private readonly IMapper _mapper;
-	private readonly I${model.Name}Repository _cmdRepo;
-	public InsertCommandHandler(I${model.Name}Repository cmdRepo,IMapper mapper)
+	private readonly I${model.Name}CommandRepository _cmdRepo;
+	public InsertCommandHandler(I${model.Name}CommandRepository cmdRepo,IMapper mapper)
 	{
         _cmdRepo = cmdRepo;
         _mapper = mapper;
@@ -109,8 +109,8 @@ namespace ${ns}.Application.Services.${model.Name}.Commands.Update;
 public class UpdateCommandHandler : ICommandHandler<UpdateCommand,UpdateCommandDto>
 {
 	private readonly IMapper _mapper;
-	private readonly I${model.Name}Repository _cmdRepo;
-	public UpdateCommandHandler(I${model.Name}Repository cmdRepo,IMapper mapper)
+	private readonly I${model.Name}CommandRepository _cmdRepo;
+	public UpdateCommandHandler(I${model.Name}CommandRepository cmdRepo,IMapper mapper)
 	{
         _cmdRepo = cmdRepo;
         _mapper = mapper;
@@ -176,8 +176,8 @@ namespace ${ns}.Application.Services.${model.Name}.Commands.Delete;
 public class DeleteCommandHandler : ICommandHandler<DeleteCommand,DeleteCommandDto>
 {
 	private readonly IMapper _mapper;
-	private readonly I${model.Name}Repository _cmdRepo;
-	public DeleteCommandHandler(I${model.Name}Repository cmdRepo,IMapper mapper)
+	private readonly I${model.Name}CommandRepository _cmdRepo;
+	public DeleteCommandHandler(I${model.Name}CommandRepository cmdRepo,IMapper mapper)
 	{
         _cmdRepo = cmdRepo;
         _mapper = mapper;
@@ -244,8 +244,8 @@ namespace ${ns}.Application.Services.${model.Name}.Queries.Select;
 public class SelectQueryHandler : IQueryHandler<SelectQuery,SelectQueryDto>
 {
 	private readonly IMapper _mapper;
-	private readonly I${model.Name}Repository _qryRepo;
-	public SelectQueryHandler(I${model.Name}Repository qryRepo,IMapper mapper)
+	private readonly I${model.Name}QueryRepository _qryRepo;
+	public SelectQueryHandler(I${model.Name}QueryRepository qryRepo,IMapper mapper)
 	{
         _qryRepo = qryRepo;
         _mapper = mapper;
@@ -306,8 +306,8 @@ namespace ${ns}.Application.Services.${model.Name}.Queries.List;
 public class ListQueryHandler : IQueryHandler<ListQuery,List<ListQueryDto>>
 {
 	private readonly IMapper _mapper;
-	private readonly I${model.Name}Repository _qryRepo;
-	public ListQueryHandler(I${model.Name}Repository qryRepo,IMapper mapper)
+	private readonly I${model.Name}QueryRepository _qryRepo;
+	public ListQueryHandler(I${model.Name}QueryRepository qryRepo,IMapper mapper)
 	{
         _qryRepo = qryRepo;
         _mapper = mapper;
@@ -325,7 +325,6 @@ public class ListQueryHandler : IQueryHandler<ListQuery,List<ListQueryDto>>
 		
 ]]>
 	</operator>
-	
 	<operator id="" title="Application Mapper Class" group="Devinux Clean" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
@@ -360,6 +359,136 @@ namespace ${ns}.Application.Mapper
 		
 ]]>
 	</operator>
+	<operator id="" title="Domain Interfaces Repository" group="Devinux Clean" description="" base="domain">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Interfaces/Repositories/${model.Name}/I${model.Name}QueryRepository.cs`,`
+namespace ${ns}.Domain.Interfaces.Repositories.${model.Name};
+
+public interface I${model.Name}QueryRepository : IBaseQueryRepository<Domain.Entities.${model.Name}>
+{
+     //here you can place other implementations your repository doesn't have
+}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Interfaces/Repositories/${model.Name}/I${model.Name}CommandRepository.cs`,`
+namespace ${ns}.Domain.Interfaces.Repositories.${model.Name};
+
+public interface I${model.Name}CommandRepository : IBaseCommandRepository<Domain.Entities.${model.Name}>
+{
+     //here you can place other implementations your repository doesn't have
+}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+]]>
+	</operator>
+	<operator id="" title="Persistence Repositories" group="Devinux Clean" description="" base="persistence">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Repositories/${model.Name}/${model.Name}CommandRepository.cs`,`
+using Devinux.AutoDI;
+using ${ns}.Domain.Interfaces;
+using ${ns}.Domain.Interfaces.Repositories.${model.Name};
+
+namespace ${ns}.Persistence.Repositories.${model.Name};
+
+[DevinuxServiceScope]
+public class ${model.Name}CommandRepository : BaseRepository<Domain.Entities.${model.Name}>, I${model.Name}Repository
+{
+	public ${model.Name}CommandRepository(IDatabaseContext db) : base(db)
+	{
+	}
+}
+`);
+file(`/Repositories/${model.Name}/${model.Name}QueryRepository.cs`,`
+using Devinux.AutoDI;
+using ${ns}.Domain.Interfaces;
+using ${ns}.Domain.Interfaces.Repositories.${model.Name};
+
+namespace ${ns}.Persistence.Repositories.${model.Name};
+
+[DevinuxServiceScope]
+public class ${model.Name}QueryRepository : BaseRepository<Domain.Entities.${model.Name}>, I${model.Name}Repository
+{ 
+	public ${model.Name}QueryRepository(IDatabaseContext db) : base(db)
+	{
+	}
+}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+	<operator id="" title="Endpoint Controller" group="Devinux Clean" description="" base="endpoint">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Controllers/${model.Name}Controller.cs`,`
+
+
+
+
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using ${ns}.Application.Interfaces;
+using ${ns}.Application.Models;
+using ${ns}.Application.Services.${model.Name}.Commands.Insert;
+using ${ns}.Application.Services.${model.Name}.Commands.Update;
+using ${ns}.Application.Services.${model.Name}.Commands.Delete;
+using ${ns}.Application.Services.${model.Name}.Queries.Select;
+using ${ns}.Application.Services.${model.Name}.Queries.List;
+
+namespace ${ns}.Controllers
+{
+    public class ${model.Name}Controller : BaseController
+    {
+        public ${model.Name}Controller(ICommandBus cb, IQueryBus qb, IMapper _mapper) : base(cb, qb, _mapper)
+        {
+        }
+        [HttpGet]
+        public async Task<IActionResult> Select([FromQuery] SelectQuery qry, CancellationToken cancellationToken)
+        {
+            return ${ns}ActionResult.Success((await qbus.RunService<SelectQuery, SelectQueryDto>(qry, cancellationToken)));
+        }
+        [HttpPost]
+        public async Task<IActionResult> List([FromBody] ListQuery qry, CancellationToken cancellationToken)
+        {
+            return ${ns}ActionResult.Success(await qbus.RunService<ListQuery, List<ListQueryDto>>(qry, cancellationToken));
+        }
+        [HttpPost]
+        public async Task<IActionResult> Insert([FromBody] InsertCommand cmd, CancellationToken cancellationToken)
+        {
+            return ${ns}ActionResult.Success(await cbus.RunService<InsertCommand, InsertCommandDto>(cmd, cancellationToken));
+        }
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateCommand cmd, CancellationToken cancellationToken)
+        {
+            return ${ns}ActionResult.Success(await cbus.RunService<UpdateCommand, UpdateCommandDto>(cmd, cancellationToken));
+        }
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] DeleteCommand cmd, CancellationToken cancellationToken)
+        {
+            return ${ns}ActionResult.Success(await cbus.RunService<DeleteCommand, DeleteCommandDto>(cmd, cancellationToken));
+        }
+    }
+}
+
+
+
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+
 	<operator id="" title="Application Interfaces ICommand/IQuery Handlers" group="Framework" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
@@ -408,90 +537,6 @@ public class PaginationQuery : IPagination
 		
 ]]>
 	</operator>
-	<operator id="" title="Domain Interfaces Repository" group="Devinux Clean" description="" base="domain">
-		<![CDATA[
-// ► file(path,content);
-// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
-// ► ns = Default Name Space
-// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Interfaces/Repositories/${model.Name}/I${model.Name}Repository.cs`,`
-namespace ${ns}.Domain.Interfaces.Repositories.${model.Name};
-
-public interface I${model.Name}Repository : IBaseRepository<Domain.Entities.${model.Name}>
-{
-     //here you can place other implementations your repository doesn't have
-}
-`);
-// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-		
-]]>
-	</operator>
-	<operator id="" title="Domain Interfaces DatabaseContext" group="Framework" description="" base="domain">
-		<![CDATA[
-// ► file(path,content);
-// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
-// ► ns = Default Name Space
-// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Interfaces/IDatabaseContext.cs`,`
-using Microsoft.EntityFrameworkCore;
-namespace ${ns}.Domain.Interfaces;
-
-public interface IDatabaseContext : IDisposable
-{
-        public DbSet<TEntity> Set<TEntity>() where TEntity : class;
-        public DbSet<TEntity> Set<TEntity>(string name) where TEntity : class;
-        public int SaveChanges();
-        public int SaveChanges(bool acceptAllChangesOnSuccess);
-        public Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default);
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-        public EntityEntry Entry(object entity);
-        public EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
-
-`);
-// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-		
-]]>
-	</operator>
-	<operator id="" title="Domain Interfaces Base Repository" group="Framework" description="" base="domain">
-		<![CDATA[
-// ► file(path,content);
-// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
-// ► ns = Default Name Space
-// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Interfaces/IBaseRepository.cs`,`
-using System.Linq.Expressions;
-
-namespace ${ns}.Domain.Interfaces;
-
-public interface IBaseRepository<TEntity> where TEntity : class
-{
-    void Add(TEntity objModel);
-	void AddRange(IEnumerable<TEntity> objModel);
-	int GetListCount(Expression<Func<TEntity, bool>> predicate = null);
-	TEntity GetId(int id);
-	TEntity Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
-	IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
-	IEnumerable<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
-	IEnumerable<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
-
-	Task<TEntity> GetIdAsync(int id);
-	Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
-	Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
-	Task<IEnumerable<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>,IQueryable<TEntity>> target = null);
-	Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
-
-	int Count();
-	Task<int> CountAsync();
-	void Update(TEntity objModel);
-	void Remove(TEntity objModel);
-	void Dispose();
-}
-`);
-// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-		
-]]>
-	</operator>
-	
 	<operator id="" title="Application Result" group="Framework" description="" base="application">
 		<![CDATA[
 // ► file(path,content);
@@ -647,201 +692,82 @@ namespace ${ns}.Application.Services
 `);
 ]]>
 	</operator>
-	
-	<operator id="" title="Persistence Base Repository" group="Framework" description="" base="persistence">
+	<operator id="" title="Domain Interfaces DatabaseContext" group="Framework" description="" base="domain">
 		<![CDATA[
 // ► file(path,content);
 // ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
 // ► ns = Default Name Space
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-
-file(`/Repositories/BaseRepository.cs`,`
-
+file(`/Interfaces/IDatabaseContext.cs`,`
 using Microsoft.EntityFrameworkCore;
-using ${ns}.Common.Interfaces;
+namespace ${ns}.Domain.Interfaces;
+
+public interface IDatabaseContext : IDisposable
+{
+        public DbSet<TEntity> Set<TEntity>() where TEntity : class;
+        public DbSet<TEntity> Set<TEntity>(string name) where TEntity : class;
+        public int SaveChanges();
+        public int SaveChanges(bool acceptAllChangesOnSuccess);
+        public Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default);
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        public EntityEntry Entry(object entity);
+        public EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
+
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
+	<operator id="" title="Domain Interfaces Base Repository" group="Framework" description="" base="domain">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Interfaces/IBaseCommandRepository.cs`,`
 using System.Linq.Expressions;
 
-namespace ${ns}.Persistence.Repositories;
+namespace ${ns}.Domain.Interfaces;
 
-public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
+public interface IBaseCommandRepository<TEntity> where TEntity : class
 {
 
-public BaseRepository(IDatabaseContext db)
+    void Add(TEntity objModel);
+	void AddRange(IEnumerable<TEntity> objModel);
+	void Update(TEntity objModel);
+	void Remove(TEntity objModel);
+	void Dispose();
+}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+file(`/Interfaces/IBaseQueryRepository.cs`,`
+using System.Linq.Expressions;
+
+namespace ${ns}.Domain.Interfaces;
+public interface IBaseQueryRepository<TEntity> where TEntity : class
 {
-    _context = db;
-}
-#region Fields
+	int Count();
+	Task<int> CountAsync();
+	int GetListCount(Expression<Func<TEntity, bool>> predicate = null);
+	TEntity GetId(int id);
+	TEntity Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+	IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+	IEnumerable<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+	IEnumerable<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
 
-protected readonly IDatabaseContext _context;
+	Task<TEntity> GetIdAsync(int id);
+	Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+	Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
+	Task<IEnumerable<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>,IQueryable<TEntity>> target = null);
+	Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null);
 
-#endregion
-
-#region Methods
-
-public void Add(TEntity objModel)
-{
-    _context.Set<TEntity>().Add(objModel);
-    _context.SaveChanges();
-}
-
-public void AddRange(IEnumerable<TEntity> objModel)
-{
-    _context.Set<TEntity>().AddRange(objModel);
-    _context.SaveChanges();
-}
-
-public TEntity GetId(int id)
-{
-    var dbset = _context.Set<TEntity>();
-    return dbset.Find(id);
-}
-
-public async Task<TEntity> GetIdAsync(int id)
-{
-    var dbset = _context.Set<TEntity>();
-    return await dbset.FindAsync(id);
-}
-
-public TEntity Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
-{
-    var dbset = _context.Set<TEntity>();
-    var q = dbset.AsQueryable();
-    if (target != null) q = target(q);
-    return q.FirstOrDefault(predicate);
-}
-
-public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
-{
-    var dbset = _context.Set<TEntity>().AsQueryable();
-    if (target != null) dbset = target(dbset);
-    return await dbset.FirstOrDefaultAsync(predicate);
-}
-
-public IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate = null , Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
-{
-    var dbset = _context.Set<TEntity>();
-    var q = dbset.AsQueryable();
-    if (target != null) q = target(q);
-
-    if (predicate == null) q.ToList();
-    return q.Where<TEntity>(predicate).ToList();
-}
-public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate = null , Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
-{
-    return await Task.Run(() => GetList(predicate));
-}
-public IEnumerable<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null) {
-    var dbset = _context.Set<TEntity>();
-    var q = dbset.AsQueryable();
-    if (target != null) q = target(q);
-    if (predicate != null) q = q.Where<TEntity>(predicate);
-    if (pageindex > 1) return q.Skip((pageindex - 1) * pagesize).Take(pagesize).ToList();
-    else return q.Take(pagesize).ToList();
-}
-public async Task<IEnumerable<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null) {
-
-    return await Task.Run(() => {
-       return GetPagedList(predicate, pageindex, pagesize , target);
-    });
-}
-
-public int GetListCount(Expression<Func<TEntity, bool>> predicate = null)
-{
-    var s = _context.Set<TEntity>();
-    return (predicate == null) ? s.Count() : s.Where(predicate).Count();
-}
-public IEnumerable<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
-{
-    var dbset = _context.Set<TEntity>();
-    var q = dbset.AsQueryable();
-    if (target != null) q = target(q);
-    return q.ToList();
-}
-
-public async Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
-{
-    var dbset = _context.Set<TEntity>();
-    var q = dbset.AsQueryable();
-    if (target != null) q = target(q);
-    return await q.ToListAsync();
-}
-
-public int Count()
-{
-    return _context.Set<TEntity>().Count();
-}
-
-public async Task<int> CountAsync()
-{
-    return await _context.Set<TEntity>().CountAsync();
-}
-
-public void Update(TEntity objModel)
-{
-    _context.Entry(objModel).State = EntityState.Modified;
-    _context.SaveChanges();
-}
-
-public void Remove(TEntity objModel)
-{
-    _context.Set<TEntity>().Remove(objModel);
-    _context.SaveChanges();
-}
-
-public void Dispose()
-{
-    _context.Dispose();
-}
-
-#endregion    
-	
+	void Dispose();
 }
 `);
 // ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
 		
 ]]>
 	</operator>
-	<operator id="" title="Persistence Repositories" group="Devinux Clean" description="" base="persistence">
-		<![CDATA[
-// ► file(path,content);
-// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
-// ► ns = Default Name Space
-// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Repositories/${model.Name}/${model.Name}CommandRepository.cs`,`
-using Devinux.AutoDI;
-using ${ns}.Domain.Interfaces;
-using ${ns}.Domain.Interfaces.Repositories.${model.Name};
-
-namespace ${ns}.Persistence.Repositories.${model.Name};
-
-[DevinuxServiceScope]
-public class ${model.Name}CommandRepository : BaseRepository<Domain.Entities.${model.Name}>, I${model.Name}Repository
-{
-	public ${model.Name}CommandRepository(IDatabaseContext db) : base(db)
-	{
-	}
-}
-`);
-file(`/Repositories/${model.Name}/${model.Name}QueryRepository.cs`,`
-using Devinux.AutoDI;
-using ${ns}.Domain.Interfaces;
-using ${ns}.Domain.Interfaces.Repositories.${model.Name};
-
-namespace ${ns}.Persistence.Repositories.${model.Name};
-
-[DevinuxServiceScope]
-public class ${model.Name}QueryRepository : BaseRepository<Domain.Entities.${model.Name}>, I${model.Name}Repository
-{ 
-	public ${model.Name}QueryRepository(IDatabaseContext db) : base(db)
-	{
-	}
-}
-`);
-// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-		
-]]>
-	</operator>
-	
 	<operator id="" title="Domain Base Entity" group="Framework" description="" base="domain">
 		<![CDATA[
 // ► file(path,content);
@@ -870,7 +796,159 @@ namespace ${ns}.Domain.Base
 		
 ]]>
 	</operator>
+	<operator id="" title="Persistence Base Repository" group="Framework" description="" base="persistence">
+		<![CDATA[
+// ► file(path,content);
+// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
+// ► ns = Default Name Space
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+
+file(`/Repositories/BaseRepository.cs`,`
+
+using Microsoft.EntityFrameworkCore;
+using ${ns}.Common.Interfaces;
+using System.Linq.Expressions;
+
+namespace ${ns}.Persistence.Repositories;
+
+public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
+{
+
+    public BaseRepository(IDatabaseContext db)
+    {
+        _context = db;
+    }
+    #region Fields
+
+    protected readonly IDatabaseContext _context;
+
+    #endregion
+
+    #region Methods
+
+    public void Add(TEntity objModel)
+    {
+        _context.Set<TEntity>().Add(objModel);
+        _context.SaveChanges();
+    }
+
+    public void AddRange(IEnumerable<TEntity> objModel)
+    {
+        _context.Set<TEntity>().AddRange(objModel);
+        _context.SaveChanges();
+    }
+
+    public TEntity GetId(int id)
+    {
+        var dbset = _context.Set<TEntity>();
+        return dbset.Find(id);
+    }
+
+    public async Task<TEntity> GetIdAsync(int id)
+    {
+        var dbset = _context.Set<TEntity>();
+        return await dbset.FindAsync(id);
+    }
+
+    public TEntity Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+    {
+        var dbset = _context.Set<TEntity>();
+        var q = dbset.AsQueryable();
+        if (target != null) q = target(q);
+        return q.FirstOrDefault(predicate);
+    }
+
+    public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+    {
+        var dbset = _context.Set<TEntity>().AsQueryable();
+        if (target != null) dbset = target(dbset);
+        return await dbset.FirstOrDefaultAsync(predicate);
+    }
+
+    public IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate = null , Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+    {
+        var dbset = _context.Set<TEntity>();
+        var q = dbset.AsQueryable();
+        if (target != null) q = target(q);
+
+        if (predicate == null) q.ToList();
+        return q.Where<TEntity>(predicate).ToList();
+    }
+    public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate = null , Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+    {
+        return await Task.Run(() => GetList(predicate));
+    }
+    public IEnumerable<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null) {
+        var dbset = _context.Set<TEntity>();
+        var q = dbset.AsQueryable();
+        if (target != null) q = target(q);
+        if (predicate != null) q = q.Where<TEntity>(predicate);
+        if (pageindex > 1) return q.Skip((pageindex - 1) * pagesize).Take(pagesize).ToList();
+        else return q.Take(pagesize).ToList();
+    }
+    public async Task<IEnumerable<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null, int pageindex = 1, int pagesize = 20, Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null) {
+
+        return await Task.Run(() => {
+           return GetPagedList(predicate, pageindex, pagesize , target);
+        });
+    }
+
+    public int GetListCount(Expression<Func<TEntity, bool>> predicate = null)
+    {
+        var s = _context.Set<TEntity>();
+        return (predicate == null) ? s.Count() : s.Where(predicate).Count();
+    }
+    public IEnumerable<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+    {
+        var dbset = _context.Set<TEntity>();
+        var q = dbset.AsQueryable();
+        if (target != null) q = target(q);
+        return q.ToList();
+    }
+
+    public async Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> target = null)
+    {
+        var dbset = _context.Set<TEntity>();
+        var q = dbset.AsQueryable();
+        if (target != null) q = target(q);
+        return await q.ToListAsync();
+    }
+
+    public int Count()
+    {
+        return _context.Set<TEntity>().Count();
+    }
+
+    public async Task<int> CountAsync()
+    {
+        return await _context.Set<TEntity>().CountAsync();
+    }
+
+    public void Update(TEntity objModel)
+    {
+        _context.Entry(objModel).State = EntityState.Modified;
+        _context.SaveChanges();
+    }
+
+    public void Remove(TEntity objModel)
+    {
+        _context.Set<TEntity>().Remove(objModel);
+        _context.SaveChanges();
+    }
+
+    public void Dispose()
+    {
+        _context.Dispose();
+    }
+
+    #endregion    
 	
+}
+`);
+// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+		
+]]>
+	</operator>
 	<operator id="" title="Endpoint Base Controller" group="Framework" description="" base="endpoint">
 		<![CDATA[
 // ► file(path,content);
@@ -911,69 +989,7 @@ namespace ${ns}.Controllers
 		
 ]]>
 	</operator>
-	<operator id="" title="Endpoint Controller" group="Devinux Clean" description="" base="endpoint">
-		<![CDATA[
-// ► file(path,content);
-// ► model {Name : '', Item : [ {Name : '' , TypeName : ''} ] };
-// ► ns = Default Name Space
-// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-file(`/Controllers/${model.Name}Controller.cs`,`
-
-
-
-
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using ${ns}.Application.Interfaces;
-using ${ns}.Application.Models;
-using ${ns}.Application.Services.${model.Name}.Commands.Insert;
-using ${ns}.Application.Services.${model.Name}.Commands.Update;
-using ${ns}.Application.Services.${model.Name}.Commands.Delete;
-using ${ns}.Application.Services.${model.Name}.Queries.Select;
-using ${ns}.Application.Services.${model.Name}.Queries.List;
-
-namespace ${ns}.Controllers
-{
-    public class ${model.Name}Controller : BaseController
-    {
-        public ${model.Name}Controller(ICommandBus cb, IQueryBus qb, IMapper _mapper) : base(cb, qb, _mapper)
-        {
-        }
-        [HttpGet]
-        public async Task<IActionResult> Select([FromQuery] SelectQuery qry, CancellationToken cancellationToken)
-        {
-            return ${ns}ActionResult.Success((await qbus.RunService<SelectQuery, SelectQueryDto>(qry, cancellationToken)));
-        }
-        [HttpPost]
-        public async Task<IActionResult> List([FromBody] ListQuery qry, CancellationToken cancellationToken)
-        {
-            return ${ns}ActionResult.Success(await qbus.RunService<ListQuery, List<ListQueryDto>>(qry, cancellationToken));
-        }
-        [HttpPost]
-        public async Task<IActionResult> Insert([FromBody] InsertCommand cmd, CancellationToken cancellationToken)
-        {
-            return ${ns}ActionResult.Success(await cbus.RunService<InsertCommand, InsertCommandDto>(cmd, cancellationToken));
-        }
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateCommand cmd, CancellationToken cancellationToken)
-        {
-            return ${ns}ActionResult.Success(await cbus.RunService<UpdateCommand, UpdateCommandDto>(cmd, cancellationToken));
-        }
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] DeleteCommand cmd, CancellationToken cancellationToken)
-        {
-            return ${ns}ActionResult.Success(await cbus.RunService<DeleteCommand, DeleteCommandDto>(cmd, cancellationToken));
-        }
-    }
-}
-
-
-
-`);
-// ► -----  ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
-		
-]]>
-	</operator>
+	
 	<operator id="" title="UI Forms" group="Devinux Javascript Form" description="" base="ui">
 		<![CDATA[
 // ► file(path,content);
@@ -996,12 +1012,12 @@ export class ${model.Name}List extends DevinuxClientComponentPage {
     }
     load() {
         let e = $(this.Root.e);
-        let pcontainer = new DevinuxClientComponentPanel('Role-list-container').renderload(e).setFlex().setFlexRows().setFlexGap().setAbsolutePosition();
+        let pcontainer = new DevinuxClientComponentPanel('${model.Name}-list-container').renderload(e).setFlex().setFlexRows().setFlexGap().setAbsolutePosition();
         {
-            let pgrid = new DevinuxClientComponentPanel('Role-list-container-gridcontainer').renderload(pcontainer).setFlexCenter();
+            let pgrid = new DevinuxClientComponentPanel('${model.Name}-list-container-gridcontainer').renderload(pcontainer).setFlexCenter();
             {
 
-                let pgridform = new DevinuxClientComponentForm('Role-list-container-grid-form').renderload(pgrid).setCaption('').setAbsolutePosition(true);
+                let pgridform = new DevinuxClientComponentForm('${model.Name}-list-container-grid-form').renderload(pgrid).setCaption('').setAbsolutePosition(true);
                 {
 					let showInfoProps = { width: "80%", height: "80%" };
                     let btnNew = new DevinuxClientComponentButton("btn-new").setCaption("جدید").setIcon("fal fa-plus")
@@ -1042,7 +1058,7 @@ export class ${model.Name}List extends DevinuxClientComponentPage {
                         // pageshi.show(this, { width: "80%", height: "80%" });
                     });
 
-                    let grid = new DevinuxClientComponentGrid('Role-list-container-gridcontainer-list').renderload(pgridform)
+                    let grid = new DevinuxClientComponentGrid('${model.Name}-list-container-gridcontainer-list').renderload(pgridform)
                         .addColumn(new DevinuxClientComponentGridColumn({ Fill: false, Caption: 'شناسه', Name: 'id', Id: 'id', Type: 'number', Value: (m) => m.id }))
 ${model.Items.map(m=>`
 .addColumn(new DevinuxClientComponentGridColumn({ Fill: false, Caption: '${m.Name}', Name: '${m.Name}', Id: '${m.Name}', Type: 'string', Value: (m) => m.${m.Name.toLowerCase()} }))
