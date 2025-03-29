@@ -997,8 +997,8 @@ import { DevinuxClientCommon, DevinuxClientComponentButton, DevinuxClientCompone
 import Backend from "../backend.js";
 
 export class ${model.Name}List extends DevinuxClientComponentPage {
-    constructor(Id = '${model.Name}list') {
-        super(Id, 'فهرست اطلاعات ${model.Name}', 'fad fa-cogs');
+    constructor(opt = {Id : '${model.Name}list'}) {
+        super(opt.Id, 'فهرست اطلاعات ${model.Name}', 'fad fa-cogs');
         this.filter = {
             pagesize: 20,
             page: 1,
@@ -1101,12 +1101,12 @@ ${model.Items.map(m=>`
     }
 }
 export class ${model.Name}Info extends DevinuxClientComponentPage {
-    constructor(_id='${model.Name}info',${model.Name}id = 0,formtitle = '', readonly = false) {
-        super(_id, ${model.Name}id && ${model.Name}id > 0 ? "ویرایش" + " " + formtitle : "${model.Name} جدید", ${model.Name}id && ${model.Name}id > 0 ? "fad fa-edit" : "fad fa-plus");
+    constructor(opt = {id :'${model.Name}info',  ${model.Name}id : 0,formtitle : '', readonly = false }) {
+        super(opt._id, opt.${model.Name}id && opt.${model.Name}id > 0 ? "ویرایش" + " " + opt.formtitle : "${model.Name} جدید", opt.${model.Name}id && opt.${model.Name}id > 0 ? "fad fa-edit" : "fad fa-plus");
         this.info = {
             ...{
-                readonly: readonly || false,
-                id: ${model.Name}id,
+                readonly: opt.readonly || false,
+                id: opt.${model.Name}id,
             }
         };
         this.forms = [];
