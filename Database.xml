@@ -996,8 +996,12 @@ file(`/app/pages/${model.Name}/${model.Name}.js`,`
 import { DevinuxClientCommon, DevinuxClientComponentButton, DevinuxClientComponentButtons, DevinuxClientComponentField, DevinuxClientComponentForm, DevinuxClientComponentGrid, DevinuxClientComponentGridColumn, DevinuxClientComponentPage, DevinuxClientComponentPanel } from "../../../scripts/clientcomponent.js";
 import Backend from "../backend.js";
 
+export class ${model.Name}ListArgs
+{
+	Id = '${model.Name}list';
+}
 export class ${model.Name}List extends DevinuxClientComponentPage {
-    constructor(opt = {Id : '${model.Name}list'}) {
+    constructor(opt = new ${model.Name}ListArgs()) {
         super(opt.Id, 'فهرست اطلاعات ${model.Name}', 'fad fa-cogs');
         this.filter = {
             pagesize: 20,
@@ -1100,8 +1104,15 @@ ${model.Items.map(m=>`
         return $('<div class="page ${model.Name}-list"></div>');
     }
 }
+export class ${model.Name}InfoArgs
+{
+    id = '';
+    formtitle = '';
+    readonly = '';
+	${model.Name}id = 0;
+};
 export class ${model.Name}Info extends DevinuxClientComponentPage {
-    constructor(opt = {id :'${model.Name}info',  ${model.Name}id : 0,formtitle : '', readonly = false }) {
+    constructor(opt = new ${model.Name}Info()) {
         super(opt._id, opt.${model.Name}id && opt.${model.Name}id > 0 ? "ویرایش" + " " + opt.formtitle : "${model.Name} جدید", opt.${model.Name}id && opt.${model.Name}id > 0 ? "fad fa-edit" : "fad fa-plus");
         this.info = {
             ...{
